@@ -1,1 +1,1 @@
-# GameOfLife
+# JC's Game Of Life
