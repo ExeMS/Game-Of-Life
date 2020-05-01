@@ -1,11 +1,15 @@
 # JC's Game Of Life
 
 # Analysis
-A paragraph to describe the problem area
+A paragraph to describe the problem area:
+Cellular Automata.
 
-A paragraph to describe the specific problem
+A paragraph to describe the specific problem:
+Creating a working version of Conway's Game Of Life using Processing.
 
 A numbered list to describe how the problem was researched
+1) Google Search Conway's Game Of Life.
+2) Do some programming
 
 Full details of the user(s)
 
