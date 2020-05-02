@@ -1,52 +1,59 @@
-class RWalker
+class Cell
 {
-  int x, y;
-  int r, g, b;
+    private int x, y; // x and y for the position
+    private color c;
 
-  RWalker(int x, int y, int r, int g, int b)
-  {
-    this.x = x;
-    this.y = y;
-    this.r = r;
-    this.g = g;
-    this.b = b;
-  }
+    Cell(int x, int y, color c)
+    {
+        this.x = x;
+        this.y = y;
+        this.c = c;
+    }
 
-  void Update()
-  {
-     int rnum = int(random(4));
-     if(rnum == 0)
-     {
-       x += 10;
-     } else if(rnum==1)
-     {
-       x -= 10;
-     }else if(rnum==2)
-     {
-       y -= 10;
-     }else
-     {
-       y += 10;
-     }
-     stroke(r,g,b);
-     fill(r,g,b);
-     ellipse(x,y,10,10);
-  }
+    // Getter functions for the variables
+    int getX() { return x; }
+    int getY() { return y; }
+    color getColour() { return c; }
+
+    void Update()
+    {
+        if(c == color(0, 0, 255)) // Checks if colour is blue
+        {
+            if(x > 1920) {
+                c = color(255, 0, 0); // Sets colour to red
+            } else {
+                c = color(0, 255, 0); // Sets colour to green
+            }
+        }
+    }
 }
 
-RWalker steve;
-RWalker alex;
+void god(cellList)
+{ // This will add and delete cells depending on the rotation
+
+}
+
+void sortList(cellList)
+{
+
+}
+
+ArrayList<Cell> cellList = new ArrayList<Cell>(); // This creates a list that can store cells
 
 void setup()
 {
-  size(500,400);
-  background(255);
-  steve = new RWalker(250,200,255,0,0);
-  alex = new RWalker(250,200,0,0,255);
+    size(1920,1080);
+    background(255);
+    for (int i = 0; i < 20; ++i)
+    { // Need to randomise their x and y value - or give them a set one...
+        //cellList.add(new Cell());
+    }
 }
 
 void draw()
 {
-  steve.Update();
-  alex.Update();
+    for (int i = 0; i < cellList.size(); i++) // This goes through all the cells
+    {
+        // To get an item use: cellList.get(i);
+    }
 }
