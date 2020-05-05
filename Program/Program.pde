@@ -77,7 +77,7 @@ void setup()
     cellList.add(new Cell(20, 10, color(0, 255,0)));
     cellList.add(new Cell(40, 20, color(0, 255,0)));
     cellList.add(new Cell(40, 10, color(0, 255,0)));
-    cellList.add(new Cell(40, 30, color(0, 255,0)));
+    cellList.add(new Cell(40, 30, color(255, 0,0)));
     cellList = sortList(cellList);
     for(Cell each : cellList)
     {
@@ -95,13 +95,18 @@ void setup()
 
 void draw()
 {
+    delay(1000);
     background(255);
-    for (Cell each : cellList) // This goes through all the cells
-    {
+    for (int i = cellList.size() - 1; i >= 0; i--) {
+        Cell each = cellList.get(i);
         stroke(each.getColour());
         fill(each.getColour());
         rect(each.getX(), each.getY(), 10, 10);
-        cellList = god(cellList);
-        // To get an item use: cellList.get(i);
+        each.Update();
+        if(each.getColour() == color(255,0,0))
+        {
+            cellList.remove(i);
+        }
     }
+    cellList = god(cellList);
 }
