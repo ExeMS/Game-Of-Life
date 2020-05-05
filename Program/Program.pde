@@ -28,9 +28,12 @@ class Cell
     }
 }
 
+ArrayList<Cell> cellList = new ArrayList<Cell>(); // This creates a list that can store cells
+
 ArrayList<Cell> god(ArrayList<Cell> cellList)
 { // This will add and delete cells depending on the rotation
-
+    cellList = sortList(cellList);
+    return cellList;
 }
 
 ArrayList<Cell> sortList(ArrayList<Cell> cellList)
@@ -62,12 +65,20 @@ ArrayList<Cell> sortList(ArrayList<Cell> cellList)
     return sortedList;
 }
 
-ArrayList<Cell> cellList = new ArrayList<Cell>(); // This creates a list that can store cells
-
 void setup()
 {
     size(1920,1080);
     background(255);
+    // This is just here for testing purposes
+    cellList.add(new Cell(10, 10, color(0, 255,0)));
+    cellList.add(new Cell(100, 10, color(0, 255,0)));
+    cellList.add(new Cell(50, 10, color(0, 255,0)));
+    cellList.add(new Cell(60, 10, color(0, 255,0)));
+    cellList.add(new Cell(20, 10, color(0, 255,0)));
+    cellList.add(new Cell(40, 20, color(0, 255,0)));
+    cellList.add(new Cell(40, 10, color(0, 255,0)));
+    cellList.add(new Cell(40, 30, color(0, 255,0)));
+    cellList = sortList(cellList);
     for (int i = 0; i < 20; i++)
     { // Need to randomise their x and y value - or give them a set one...
         //cellList.add(new Cell());
@@ -76,8 +87,13 @@ void setup()
 
 void draw()
 {
-    for (int i = 0; i < cellList.size(); i++) // This goes through all the cells
+    background(255);
+    for (Cell each : cellList) // This goes through all the cells
     {
+        stroke(each.getColour());
+        fill(each.getColour());
+        rect(each.getX(), each.getY(), 10, 10);
+        cellList = god(cellList);
         // To get an item use: cellList.get(i);
     }
 }
