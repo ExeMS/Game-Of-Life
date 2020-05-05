@@ -1,4 +1,4 @@
-class Cell
+/*class Cell
 {
     private int x, y; // x and y for the position
     private color c;
@@ -27,6 +27,8 @@ class Cell
         }
     }
 }
+
+
 
 ArrayList<Cell> cellList = new ArrayList<Cell>(); // This creates a list that can store cells
 
@@ -111,4 +113,43 @@ void draw()
         }
     }
     cellList = god(cellList); // Calls god to update to update the board
+}*/
+
+// 0: empty, 2: cell
+int[][] board = new int[100][100];
+
+void god()
+{
+}
+
+void setup()
+{
+    size(1000,1000);
+    background(255);
+    for(int i = 0; i < 100; i++)
+    {
+        for(int j = 0; j < 100; j++)
+        {
+            board[i][j] = 0;
+        }
+    }
+    board[1][1] = 1;
+}
+
+void draw()
+{
+    delay(1000); // Just waits a second
+    background(255);
+    for(int i = 0; i < 100; i++)
+    {
+        for(int j = 0; j < 100; j++)
+        {
+            if(board[i][j] == 1)
+            {
+                stroke(0, 255, 0);
+                fill(0, 255, 0);
+                rect(i*10, j*10, 10, 10);
+            }
+        }
+    }
 }

@@ -14,12 +14,12 @@ import java.io.IOException;
 
 public class Program extends PApplet {
 
-class Cell
+/*class Cell
 {
     private int x, y; // x and y for the position
-    private int c;
+    private color c;
 
-    Cell(int x, int y, int c)
+    Cell(int x, int y, color c)
     {
         this.x = x;
         this.y = y;
@@ -27,11 +27,11 @@ class Cell
     }
 
     // Getter functions for the variables
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public int getColour() { return c; }
+    int getX() { return x; }
+    int getY() { return y; }
+    color getColour() { return c; }
 
-    public void Update()
+    void Update()
     {
         if(c == color(0, 0, 255)) // Checks if colour is blue
         {
@@ -44,44 +44,46 @@ class Cell
     }
 }
 
+
+
 ArrayList<Cell> cellList = new ArrayList<Cell>(); // This creates a list that can store cells
 
-public ArrayList<Cell> god(ArrayList<Cell> cellList)
+ArrayList<Cell> god(ArrayList<Cell> cellList)
 { // This will add and delete cells depending on the rotation
     cellList = sortList(cellList);
     return cellList;
 }
 
-public ArrayList<Cell> sortList(ArrayList<Cell> cellList)
-{
-    ArrayList<Cell> sortedList = new ArrayList<Cell>();
+ArrayList<Cell> sortList(ArrayList<Cell> cellList)
+{ // This sorts the list by the x and y values
+    ArrayList<Cell> sortedList = new ArrayList<Cell>(); // Creates a new sorted list
     for(Cell each : cellList)
-    {
+    { // Goes through each cell in the cellList
         int pos = -1;
-        for(int j = 0; j < sortedList.size(); j++)
+        for(int j = 0; j < sortedList.size(); j++) // Goes through the sortedList
         {
-            if(each.getX() < sortedList.get(j).getX())
+            if(each.getX() < sortedList.get(j).getX()) // Checks if X is smaller than the cell in the sortedList
             {
                 pos = j;
                 break;
             } else if(each.getX() == sortedList.get(j).getX() && each.getY() < sortedList.get(j).getY())
-            {
+            { // This checks if the x values are equal and the y value is smaller than the sortedList one
                 pos = j;
                 break;
             }
         }
         if(pos == -1)
-        {
+        { // If it didn't find a position, it adds the cell onto the end
             sortedList.add(each);
         }else
-        {
+        { // Otherwise it inserts the cell at the position found for it
             sortedList.add(pos, each);
         }
     }
     return sortedList;
 }
 
-public void setup()
+void setup()
 {
     
     background(255);
@@ -93,7 +95,7 @@ public void setup()
     cellList.add(new Cell(20, 10, color(0, 255,0)));
     cellList.add(new Cell(40, 20, color(0, 255,0)));
     cellList.add(new Cell(40, 10, color(0, 255,0)));
-    cellList.add(new Cell(40, 30, color(255, 0,0)));
+    cellList.add(new Cell(40, 30, color(255, 0,0))); // This one is set to red (so will be deleted instantly)
     cellList = sortList(cellList);
     for(Cell each : cellList)
     {
@@ -109,22 +111,63 @@ public void setup()
     }
 }
 
-public void draw()
+void draw()
 {
-    delay(1000);
+    delay(1000); // Just waits a second
     background(255);
     for (int i = cellList.size() - 1; i >= 0; i--) {
         Cell each = cellList.get(i);
+        // Draws each cell
         stroke(each.getColour());
         fill(each.getColour());
         rect(each.getX(), each.getY(), 10, 10);
+        // Updates the cell
         each.Update();
-        if(each.getColour() == color(255,0,0))
+        if(each.getColour() == color(255,0,0)) // Checks if the cell is red and should be deleted
         {
-            cellList.remove(i);
+            cellList.remove(i); // Removes the cell from the list
         }
     }
-    cellList = god(cellList);
+    cellList = god(cellList); // Calls god to update to update the board
+}*/
+
+// 0: empty, 2: cell
+int[][] board = new int[100][100];
+
+public void god()
+{
+}
+
+public void setup()
+{
+    size(1000,1000);
+    background(255);
+    for(int i = 0; i < 100; i++)
+    {
+        for(int j = 0; j < 100; j++)
+        {
+            board[i][j] = 0;
+        }
+    }
+    board[1][1] = 1;
+}
+
+public void draw()
+{
+    delay(1000); // Just waits a second
+    background(255);
+    for(int i = 0; i < 100; i++)
+    {
+        for(int j = 0; j < 100; j++)
+        {
+            if(board[i][j] == 1)
+            {
+                stroke(0, 255, 0);
+                fill(0, 255, 0);
+                rect(i*10, j*10, 10, 10);
+            }
+        }
+    }
 }
   public void settings() {  size(1000,1000); }
   static public void main(String[] passedArgs) {
