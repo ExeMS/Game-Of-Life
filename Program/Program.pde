@@ -37,28 +37,28 @@ ArrayList<Cell> god(ArrayList<Cell> cellList)
 }
 
 ArrayList<Cell> sortList(ArrayList<Cell> cellList)
-{
-    ArrayList<Cell> sortedList = new ArrayList<Cell>();
+{ // This sorts the list by the x and y values
+    ArrayList<Cell> sortedList = new ArrayList<Cell>(); // Creates a new sorted list
     for(Cell each : cellList)
-    {
+    { // Goes through each cell in the cellList
         int pos = -1;
-        for(int j = 0; j < sortedList.size(); j++)
+        for(int j = 0; j < sortedList.size(); j++) // Goes through the sortedList
         {
-            if(each.getX() < sortedList.get(j).getX())
+            if(each.getX() < sortedList.get(j).getX()) // Checks if X is smaller than the cell in the sortedList
             {
                 pos = j;
                 break;
             } else if(each.getX() == sortedList.get(j).getX() && each.getY() < sortedList.get(j).getY())
-            {
+            { // This checks if the x values are equal and the y value is smaller than the sortedList one
                 pos = j;
                 break;
             }
         }
         if(pos == -1)
-        {
+        { // If it didn't find a position, it adds the cell onto the end
             sortedList.add(each);
         }else
-        {
+        { // Otherwise it inserts the cell at the position found for it
             sortedList.add(pos, each);
         }
     }
