@@ -77,7 +77,7 @@ void setup()
     cellList.add(new Cell(20, 10, color(0, 255,0)));
     cellList.add(new Cell(40, 20, color(0, 255,0)));
     cellList.add(new Cell(40, 10, color(0, 255,0)));
-    cellList.add(new Cell(40, 30, color(255, 0,0)));
+    cellList.add(new Cell(40, 30, color(255, 0,0))); // This one is set to red (so will be deleted instantly)
     cellList = sortList(cellList);
     for(Cell each : cellList)
     {
@@ -95,18 +95,20 @@ void setup()
 
 void draw()
 {
-    delay(1000);
+    delay(1000); // Just waits a second
     background(255);
     for (int i = cellList.size() - 1; i >= 0; i--) {
         Cell each = cellList.get(i);
+        // Draws each cell
         stroke(each.getColour());
         fill(each.getColour());
         rect(each.getX(), each.getY(), 10, 10);
+        // Updates the cell
         each.Update();
-        if(each.getColour() == color(255,0,0))
+        if(each.getColour() == color(255,0,0)) // Checks if the cell is red and should be deleted
         {
-            cellList.remove(i);
+            cellList.remove(i); // Removes the cell from the list
         }
     }
-    cellList = god(cellList);
+    cellList = god(cellList); // Calls god to update to update the board
 }
