@@ -28,12 +28,12 @@ class Cell
     }
 }
 
-void god(ArrayList<Cell> cellList)
+ArrayList<Cell> god(ArrayList<Cell> cellList)
 { // This will add and delete cells depending on the rotation
 
 }
 
-void sortList(ArrayList<Cell> cellList)
+ArrayList<Cell> sortList(ArrayList<Cell> cellList)
 {
     ArrayList<Cell> sortedList = new ArrayList<Cell>();
     for(Cell each : cellList)
