@@ -48,7 +48,8 @@ ArrayList<Cell> cellList = new ArrayList<Cell>(); // This creates a list that ca
 
 public ArrayList<Cell> god(ArrayList<Cell> cellList)
 { // This will add and delete cells depending on the rotation
-    return new ArrayList<Cell>();
+    cellList = sortList(cellList);
+    return cellList;
 }
 
 public ArrayList<Cell> sortList(ArrayList<Cell> cellList)
@@ -84,6 +85,7 @@ public void setup()
 {
     
     background(255);
+    // This is just here for testing purposes
     cellList.add(new Cell(10, 10, color(0, 255,0)));
     cellList.add(new Cell(100, 10, color(0, 255,0)));
     cellList.add(new Cell(50, 10, color(0, 255,0)));
@@ -93,6 +95,14 @@ public void setup()
     cellList.add(new Cell(40, 10, color(0, 255,0)));
     cellList.add(new Cell(40, 30, color(0, 255,0)));
     cellList = sortList(cellList);
+    for(Cell each : cellList)
+    {
+        println("X value:");
+        println(each.getX());
+        println("Y value:");
+        println(each.getY());
+        println("--------------");
+    }
     for (int i = 0; i < 20; i++)
     { // Need to randomise their x and y value - or give them a set one...
         //cellList.add(new Cell());
@@ -107,10 +117,11 @@ public void draw()
         stroke(each.getColour());
         fill(each.getColour());
         rect(each.getX(), each.getY(), 10, 10);
+        cellList = god(cellList);
         // To get an item use: cellList.get(i);
     }
 }
-  public void settings() {  size(1920,1080); }
+  public void settings() {  size(1000,1000); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Program" };
     if (passedArgs != null) {

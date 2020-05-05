@@ -67,7 +67,7 @@ ArrayList<Cell> sortList(ArrayList<Cell> cellList)
 
 void setup()
 {
-    size(1920,1080);
+    size(1000,1000);
     background(255);
     // This is just here for testing purposes
     cellList.add(new Cell(10, 10, color(0, 255,0)));
@@ -79,6 +79,14 @@ void setup()
     cellList.add(new Cell(40, 10, color(0, 255,0)));
     cellList.add(new Cell(40, 30, color(0, 255,0)));
     cellList = sortList(cellList);
+    for(Cell each : cellList)
+    {
+        println("X value:");
+        println(each.getX());
+        println("Y value:");
+        println(each.getY());
+        println("--------------");
+    }
     for (int i = 0; i < 20; i++)
     { // Need to randomise their x and y value - or give them a set one...
         //cellList.add(new Cell());
