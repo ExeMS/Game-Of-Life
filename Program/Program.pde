@@ -89,6 +89,7 @@ void setup()
             }
         }
     }
+    frame.requestFocus(); // Makes the screen instantly focused
     /*board[50][50] = 1; // THis is setting one thing to be alive
     board[49][50] = 1;
     board[51][50] = 1;

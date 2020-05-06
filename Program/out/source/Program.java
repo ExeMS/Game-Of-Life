@@ -105,6 +105,7 @@ public void setup()
             }
         }
     }
+    frame.requestFocus();
     /*board[50][50] = 1; // THis is setting one thing to be alive
     board[49][50] = 1;
     board[51][50] = 1;
