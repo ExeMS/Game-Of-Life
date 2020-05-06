@@ -1,8 +1,61 @@
 // 0: empty, 2: cell
 int[][] board = new int[100][100];
+int[][] boardcopy = new int[100][100];
 
 void god()
 {
+    for (int i = 0; i < board.length; i++) {
+        for (int j = 0; j < board.length; j++) {
+            boardcopy[i][j] = board[i][j];
+        }
+    }
+    for (int i = 0; i < board.length; i++) {
+        for (int j = 0; j < board.length; j++) {
+            int counter = 0;
+            if ((i != 0) && (j !=0) && (i != 99) && (j != 99)) {
+                // counting the number of alive cells around the cell
+                if (board[i-1][j] == 1) {
+                    counter++;
+                }
+                if (board[i+1][j] == 1) {
+                    counter++;
+                }
+                if (board[i-1][j-1] == 1) {
+                    counter++;
+                }
+                if (board[i][j-1] == 1) {
+                    counter++;
+                }
+                if (board[i+1][j-1] == 1) {
+                    counter++;
+                }
+                if (board[i-1][j+1] == 1) {
+                    counter++;
+                }
+                if (board[i][j+1] == 1) {
+                    counter++;
+                }
+                if (board[i+1][j+1] == 1) {
+                    counter++;
+                }
+            }
+            //Running through the rules
+            if ((counter < 2) && (board[i][j] == 1)) {
+                boardcopy[i][j] = 0;
+            }
+            if ((counter > 3) && (board[i][j] == 1)) {
+                boardcopy[i][j] = 0;
+            }
+            if ((counter == 3) && (board[i][j] == 0)) {
+                boardcopy[i][j] = 1;
+            }
+        }
+    }
+    for (int i = 0; i < 100; i++) {
+        for (int j = 0; j < 100; j++) {
+            board[i][j] = boardcopy[i][j];
+        }
+    }
 }
 
 void setup()
@@ -13,15 +66,25 @@ void setup()
     {
         for(int j = 0; j < 100; j++)
         {
-            board[i][j] = 0;
+            int r = int(random(4));
+            if(r == 0)
+            {
+                board[i][j] = 1;
+            }else {
+                board[i][j] = 0;
+            }
         }
     }
-    board[1][1] = 1; // THis is setting one thing to be alive
+    /*board[50][50] = 1; // THis is setting one thing to be alive
+    board[49][50] = 1;
+    board[51][50] = 1;
+    board[51][49] = 1;
+    board[50][48] = 1;*/
 }
 
 void draw()
 {
-    delay(1000); // Just waits a second
+    delay(100); // Just waits a second
     background(255);
     for(int i = 0; i < 100; i++) // Goes through the 2d matrix and draws the cell if it is alive
     {
