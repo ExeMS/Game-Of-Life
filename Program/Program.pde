@@ -18,7 +18,7 @@ int[][] boardcopy = new int[BOARD_HEIGHT][BOARD_WIDTH];
 
 int timeControl = 0;
 
-void createGliderGun()
+void createGliderGun(int xPos, int yPos)
 {
     board[1][7] = 1;
     board[1][8] = 1;
@@ -63,6 +63,15 @@ void createGliderGun()
     board[38][13] = 1;
 }
 
+void createGlider(int xPos, int yPos)
+{
+    board[xPos + 1][yPos + 2] = 1;
+    board[xPos][yPos + 2] = 1;
+    board[xPos + 2][yPos + 2] = 1;
+    board[xPos + 2][yPos + 1] = 1;
+    board[xPos + 1][yPos] = 1;
+}
+
 void randomStart()
 {
     for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
@@ -79,6 +88,28 @@ void randomStart()
         }
     }
 }
+
+void checkKeys()
+{
+    if(keyPressed) // This senses a key being pressed
+    {
+        if (key == CODED) {
+            if (keyCode == UP && screenYPos - screenSpeed >= 0) { // When a key is pressed, it checks to see if a the screen can more more in that direction
+                screenYPos -= screenSpeed;
+            }
+            if (keyCode == LEFT && screenXPos - screenSpeed >= 0) {
+                screenXPos -= screenSpeed;
+            }
+            if (keyCode == DOWN && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * CELL_SIZE - SCREEN_HEIGHT) {
+                screenYPos += 5;
+            }
+            if (keyCode == RIGHT && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * CELL_SIZE - SCREEN_WIDTH) {
+                screenXPos += 5;
+            }
+        }
+    }
+}
+
 
 void god()
 {
@@ -142,36 +173,16 @@ void setup()
     randomStart();
 
     frame.requestFocus(); // Makes the screen instantly focused
-    /*board[50][50] = 1; // THis is setting one thing to be alive
-    board[49][50] = 1;
-    board[51][50] = 1;
-    board[51][49] = 1;
-    board[50][48] = 1;*/
 }
 
 void draw()
 {
-    if(keyPressed) // This senses a key being pressed
-    {
-        if (key == CODED) {
-            if (keyCode == UP && screenYPos - screenSpeed >= 0) {
-                screenYPos -= screenSpeed;
-            }
-            if (keyCode == LEFT && screenXPos - screenSpeed >= 0) {
-                screenXPos -= screenSpeed;
-            }
-            if (keyCode == DOWN && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * CELL_SIZE - SCREEN_HEIGHT) {
-                screenYPos += 5;
-            }
-            if (keyCode == RIGHT && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * CELL_SIZE - SCREEN_WIDTH) {
-                screenXPos += 5;
-            }
-        }
-    }
+    checkKeys();
 
     background(255);
     int gridX = screenXPos / CELL_SIZE;
     int gridY = screenYPos / CELL_SIZE;
+    // This renders the current part of the matrix that is viewed (Also it renders one cell either side of the boarders to make sure scrolling is smooth)
     for(int i = gridX - 1; i < gridX + SCREEN_GRID_WIDTH + 1; i++) // Goes through the 2d matrix and draws the cell if it is alive
     {
         for(int j = gridY - 1; j < gridY + SCREEN_GRID_HEIGHT + 1; j++)
