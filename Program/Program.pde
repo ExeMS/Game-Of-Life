@@ -25,8 +25,8 @@ void god()
             boardcopy[i][j] = board[i][j];
         }
     }
-    for (int i = 0; i < board.length; i++) {
-        for (int j = 0; j < board.length; j++) {
+    for (int i = 0; i < BOARD_WIDTH; i++) {
+        for (int j = 0; j < BOARD_HEIGHT; j++) {
             int counter = 0;
             // counting the number of alive cells around the cell
             if (i != 0 && board[i-1][j] == 1) {
@@ -65,8 +65,8 @@ void god()
             }
         }
     }
-    for (int i = 0; i < 100; i++) {
-        for (int j = 0; j < 100; j++) {
+    for (int i = 0; i < BOARD_WIDTH; i++) {
+        for (int j = 0; j < BOARD_HEIGHT; j++) {
             board[i][j] = boardcopy[i][j];
         }
     }
