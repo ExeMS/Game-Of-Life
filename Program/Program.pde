@@ -110,6 +110,11 @@ void checkKeys()
     }
 }
 
+void pasteFromFile(filename, xPos, yPos)
+{ // Made a glider file with a glider in it so use that :D position is the top left corner
+
+}
+
 
 void god()
 {
