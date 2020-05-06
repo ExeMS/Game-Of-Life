@@ -18,6 +18,68 @@ int[][] boardcopy = new int[BOARD_HEIGHT][BOARD_WIDTH];
 
 int timeControl = 0;
 
+void createGliderGun()
+{
+    board[1][7] = 1;
+    board[1][8] = 1;
+    board[2][7] = 1;
+    board[2][8] = 1;
+
+    board[9][8] = 1;
+    board[9][9] = 1;
+    board[10][7] = 1;
+    board[10][9] = 1;
+    board[11][7] = 1;
+    board[11][8] = 1;
+
+    board[17][9] = 1;
+    board[17][10] = 1;
+    board[17][11] = 1;
+    board[18][9] = 1;
+    board[19][10] = 1;
+
+    board[23][6] = 1;
+    board[23][7] = 1;
+    board[24][5] = 1;
+    board[24][7] = 1;
+    board[25][5] = 1;
+    board[25][6] = 1;
+
+    board[25][17] = 1;
+    board[25][18] = 1;
+    board[26][17] = 1;
+    board[26][19] = 1;
+    board[27][17] = 1;
+
+    board[35][5] = 1;
+    board[35][6] = 1;
+    board[36][5] = 1;
+    board[36][6] = 1;
+
+    board[36][12] = 1;
+    board[36][13] = 1;
+    board[36][14] = 1;
+    board[37][12] = 1;
+    board[38][13] = 1;
+}
+
+void randomStart()
+{
+    for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
+    {
+        for(int j = 0; j < BOARD_HEIGHT; j++)
+        {
+            int r = int(random(4));
+            if(r == 0)
+            {
+                board[i][j] = 1;
+            }else {
+                board[i][j] = 0;
+            }
+        }
+    }
+}
+
 void god()
 {
     for (int i = 0; i < BOARD_WIDTH; i++) {
@@ -76,19 +138,9 @@ void setup()
 {
     size(1000, 1000);
     background(255);
-    for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
-    {
-        for(int j = 0; j < BOARD_HEIGHT; j++)
-        {
-            int r = int(random(4));
-            if(r == 0)
-            {
-                board[i][j] = 1;
-            }else {
-                board[i][j] = 0;
-            }
-        }
-    }
+
+    randomStart();
+
     frame.requestFocus(); // Makes the screen instantly focused
     /*board[50][50] = 1; // THis is setting one thing to be alive
     board[49][50] = 1;
