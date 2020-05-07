@@ -19,7 +19,10 @@ int[][] board = new int[BOARD_HEIGHT][BOARD_WIDTH];
 int[][] boardcopy = new int[BOARD_HEIGHT][BOARD_WIDTH];
 
 int timeControl = 0;
-Button startButton;
+Button randomStartButton;
+Button gosperGliderGun;
+Button singleGlider;
+Button readFromFile;
 
 
 // This is for when we want to display a button
@@ -70,15 +73,15 @@ class Button
         this.hoverColour = color(150);
     }
 
-    Button(int x, int y, int paddingX, int paddingY, String text, int my_textSize)
+    Button(int x, int y, int my_width, int my_height, String text, int my_textSize)
     {
         this.x = x;
         this.y = y;
         textSize(my_textSize);
-        this.my_width = textWidth(text) + 2 * paddingX;
-        this.my_height = textAscent() * 0.8 + 2 * paddingX;
-        this.paddingX = paddingX;
-        this.paddingY = paddingY;
+        this.my_width = my_width;
+        this.my_height = my_height;
+        this.paddingX = int(my_width - textWidth(text)) / 2;
+        this.paddingY = int(my_height - textAscent()) / 2;
 
         this.my_text = text;
         this.my_textSize = my_textSize;
@@ -147,8 +150,17 @@ void mousePressed()
 {
     if(inMenu)
     {
-        if (startButton.isMouseOver()) {
-            startGame();
+        if (randomStartButton.isMouseOver()) {
+            startGame_random();
+        }
+        if (gosperGliderGun.isMouseOver()) {
+            startGame_gun();
+        }
+        if (singleGlider.isMouseOver()) {
+            startGame_glider();
+        }
+        if (readFromFile.isMouseOver()) {
+            startGame_file();
         }
     }
 }
@@ -321,7 +333,10 @@ void god()
 
 void renderMenu()
 {
-    startButton.update();
+    randomStartButton.update();
+    gosperGliderGun.update();
+    singleGlider.update();
+    readFromFile.update();
 }
 void renderGUI()
 { // Render process for the GUI will go in here
@@ -351,9 +366,27 @@ void renderGame()
 }
 
 
-void startGame()
+void startGame_random()
 {
     randomStart();
+    inMenu = false;
+};
+
+void startGame_gun()
+{
+    createGliderGun(0, 0);
+    inMenu = false;
+};
+
+void startGame_glider()
+{
+    createGlider(0, 0);
+    inMenu = false;
+};
+
+void startGame_file()
+{
+    pasteFromFile("xxx", 0, 0);
     inMenu = false;
 };
 
@@ -367,7 +400,10 @@ void setup()
     // int x, int y, int my_width, int my_height, String text
 
     // Menu setup
-    startButton = new Button(500, 500, "Start", 30);
+    randomStartButton = new Button(360, 475, 280, 50, "Start", 30);
+    gosperGliderGun = new Button(360, 535, 280, 50, "Gosper Glider Gun", 30);
+    singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
+    readFromFile = new Button(360, 655, 280, 50, "Read From File", 30);
     inMenu = true;
 
     frame.requestFocus(); // Makes the screen instantly focused
