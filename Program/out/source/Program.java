@@ -14,30 +14,140 @@ import java.io.IOException;
 
 public class Program extends PApplet {
 
-// Screen
-static final int SCREEN_HEIGHT = 1000;
-static final int SCREEN_WIDTH = 1000;
-int screenXPos = 0;
-int screenYPos = 0;
-int screenSpeed = 5;
-int backgroundColour = color(255);
-boolean inMenu = false;
+// Checks if mouse is pressed and is over any button
+public void mousePressed()
+{
+    if(inMenu)
+    {
+        if (randomStartButton.isMouseOver()) {
+            startGame_random();
+        }
+        if (gosperGliderGun.isMouseOver()) {
+            startGame_gun();
+        }
+        if (singleGlider.isMouseOver()) {
+            startGame_glider();
+        }
+        if (readFromFile.isMouseOver()) {
+            startGame_file();
+        }
+    }
+}
 
-// Board and cell settings
-static final int BOARD_HEIGHT = 1000;
-static final int BOARD_WIDTH = 1000;
-static final int CELL_SIZE = 10;
-static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
-static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
+// Checks if any of the keys are pressed
+public void checkKeys()
+{
+    if(keyPressed) // This senses a key being pressed
+    {
+        if (key == CODED && !inMenu) {
+            if (keyCode == UP && screenYPos - screenSpeed >= 0) { // When a key is pressed, it checks to see if a the screen can more more in that direction
+                screenYPos -= screenSpeed;
+            }
+            if (keyCode == LEFT && screenXPos - screenSpeed >= 0) {
+                screenXPos -= screenSpeed;
+            }
+            if (keyCode == DOWN && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * CELL_SIZE - SCREEN_HEIGHT) {
+                screenYPos += 5;
+            }
+            if (keyCode == RIGHT && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * CELL_SIZE - SCREEN_WIDTH) {
+                screenXPos += 5;
+            }
+        }
+    }
+}
 
-// Boards key: 0: empty, 2: cell
-int[][] board = new int[BOARD_HEIGHT][BOARD_WIDTH];
-int[][] boardcopy = new int[BOARD_HEIGHT][BOARD_WIDTH];
+// Updates the game
+public void god()
+{
+    for (int i = 0; i < BOARD_WIDTH; i++) {
+        for (int j = 0; j < BOARD_HEIGHT; j++) {
+            boardcopy[i][j] = board[i][j];
+        }
+    }
+    for (int i = 0; i < BOARD_WIDTH; i++) {
+        for (int j = 0; j < BOARD_HEIGHT; j++) {
+            int counter = 0;
+            // counting the number of alive cells around the cell
+            if (i != 0 && board[i-1][j] == 1) {
+                counter++;
+            }
+            if (i != BOARD_WIDTH - 1 && board[i+1][j] == 1) {
+                counter++;
+            }
+            if (i != 0 && j != 0 && board[i-1][j-1] == 1) {
+                counter++;
+            }
+            if (j != 0 && board[i][j-1] == 1) {
+                counter++;
+            }
+            if (i != BOARD_WIDTH - 1 && j != 0 && board[i+1][j-1] == 1) {
+                counter++;
+            }
+            if (i != 0 && j != BOARD_HEIGHT - 1 && board[i-1][j+1] == 1) {
+                counter++;
+            }
+            if (j != BOARD_HEIGHT - 1 && board[i][j+1] == 1) {
+                counter++;
+            }
+            if (j != BOARD_HEIGHT - 1 && i != BOARD_WIDTH - 1 && board[i+1][j+1] == 1) {
+                counter++;
+            }
+            //Running through the rules
+            if ((counter < 2) && (board[i][j] == 1)) {
+                boardcopy[i][j] = 0;
+            }
+            if ((counter > 3) && (board[i][j] == 1)) {
+                boardcopy[i][j] = 0;
+            }
+            if ((counter == 3) && (board[i][j] == 0)) {
+                boardcopy[i][j] = 1;
+            }
+        }
+    }
+    for (int i = 0; i < BOARD_WIDTH; i++) {
+        for (int j = 0; j < BOARD_HEIGHT; j++) {
+            board[i][j] = boardcopy[i][j];
+        }
+    }
+}
 
-int timeControl = 0;
-Button startButton;
+public void setup()
+{
+    
+    background(backgroundColour);
 
+    //randomStart();
+    clearBoard();
+    // int x, int y, int my_width, int my_height, String text
 
+    // Menu setup
+    randomStartButton = new Button(360, 475, 280, 50, "Start", 30);
+    gosperGliderGun = new Button(360, 535, 280, 50, "Gosper Glider Gun", 30);
+    singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
+    readFromFile = new Button(360, 655, 280, 50, "Read From File", 30);
+    inMenu = true;
+
+    frame.requestFocus(); // Makes the screen instantly focused
+}
+
+public void draw()
+{
+    checkKeys();
+    background(backgroundColour);
+
+    renderGame();
+    if(inMenu)
+    {
+        renderMenu();
+    }
+
+    timeControl++;
+    if(timeControl == 10) // This limits how much it is updated
+    {
+        timeControl = 0;
+        god();
+    }
+}
 // This is for when we want to display a button
 class Button
 {
@@ -86,15 +196,15 @@ class Button
         this.hoverColour = color(150);
     }
 
-    Button(int x, int y, int paddingX, int paddingY, String text, int my_textSize)
+    Button(int x, int y, int my_width, int my_height, String text, int my_textSize)
     {
         this.x = x;
         this.y = y;
         textSize(my_textSize);
-        this.my_width = textWidth(text) + 2 * paddingX;
-        this.my_height = textAscent() * 0.8f + 2 * paddingX;
-        this.paddingX = paddingX;
-        this.paddingY = paddingY;
+        this.my_width = my_width;
+        this.my_height = my_height;
+        this.paddingX = PApplet.parseInt(my_width - textWidth(text)) / 2;
+        this.paddingY = PApplet.parseInt(my_height - textAscent()) / 2;
 
         this.my_text = text;
         this.my_textSize = my_textSize;
@@ -157,41 +267,6 @@ class Button
         this.hoverColour = hoverColour;
     }
 };
-
-// Checks if mouse is pressed and is over any button
-public void mousePressed()
-{
-    if(inMenu)
-    {
-        if (startButton.isMouseOver()) {
-            startGame();
-        }
-    }
-}
-
-// Checks if any of the keys are pressed
-public void checkKeys()
-{
-    if(keyPressed) // This senses a key being pressed
-    {
-        if (key == CODED && !inMenu) {
-            if (keyCode == UP && screenYPos - screenSpeed >= 0) { // When a key is pressed, it checks to see if a the screen can more more in that direction
-                screenYPos -= screenSpeed;
-            }
-            if (keyCode == LEFT && screenXPos - screenSpeed >= 0) {
-                screenXPos -= screenSpeed;
-            }
-            if (keyCode == DOWN && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * CELL_SIZE - SCREEN_HEIGHT) {
-                screenYPos += 5;
-            }
-            if (keyCode == RIGHT && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * CELL_SIZE - SCREEN_WIDTH) {
-                screenXPos += 5;
-            }
-        }
-    }
-}
-
-// Different creations
 public void createGliderGun(int xPos, int yPos)
 {
     board[1][7] = 1;
@@ -250,8 +325,39 @@ public void pasteFromFile(String filename, int xPos, int yPos)
 { // Made a glider file with a glider in it so use that :D position is the top left corner
 
 }
+public void renderMenu()
+{
+    randomStartButton.update();
+    gosperGliderGun.update();
+    singleGlider.update();
+    readFromFile.update();
+}
+public void renderGUI()
+{ // Render process for the GUI will go in here
+}
 
-// Different starts
+public void renderGame()
+{
+    int gridX = screenXPos / CELL_SIZE;
+    int gridY = screenYPos / CELL_SIZE;
+    // This renders the current part of the matrix that is viewed (Also it renders one cell either side of the boarders to make sure scrolling is smooth)
+    for(int i = gridX - 1; i < gridX + SCREEN_GRID_WIDTH + 1; i++) // Goes through the 2d matrix and draws the cell if it is alive
+    {
+        for(int j = gridY - 1; j < gridY + SCREEN_GRID_HEIGHT + 1; j++)
+        {
+            if(i < 0 || j < 0 || i == SCREEN_GRID_WIDTH || j == SCREEN_GRID_HEIGHT)
+            {
+                continue;
+            }
+            if(board[i][j] == 1) // 1 means that it is alive
+            {
+                stroke(0, 255, 0);
+                fill(0, 255, 0);
+                rect(i*10 - screenXPos, j*10 - screenYPos, 10, 10); // Multiplies the index by 10 because each one is a 10 by 10 pixel
+            }
+        }
+    }
+}
 public void clearBoard()
 {
     for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
@@ -280,133 +386,56 @@ public void randomStart()
     }
 }
 
-// Updates the game
-public void god()
-{
-    for (int i = 0; i < BOARD_WIDTH; i++) {
-        for (int j = 0; j < BOARD_HEIGHT; j++) {
-            boardcopy[i][j] = board[i][j];
-        }
-    }
-    for (int i = 0; i < BOARD_WIDTH; i++) {
-        for (int j = 0; j < BOARD_HEIGHT; j++) {
-            int counter = 0;
-            // counting the number of alive cells around the cell
-            if (i != 0 && board[i-1][j] == 1) {
-                counter++;
-            }
-            if (i != BOARD_WIDTH - 1 && board[i+1][j] == 1) {
-                counter++;
-            }
-            if (i != 0 && j != 0 && board[i-1][j-1] == 1) {
-                counter++;
-            }
-            if (j != 0 && board[i][j-1] == 1) {
-                counter++;
-            }
-            if (i != BOARD_WIDTH - 1 && j != 0 && board[i+1][j-1] == 1) {
-                counter++;
-            }
-            if (i != 0 && j != BOARD_HEIGHT - 1 && board[i-1][j+1] == 1) {
-                counter++;
-            }
-            if (j != BOARD_HEIGHT - 1 && board[i][j+1] == 1) {
-                counter++;
-            }
-            if (j != BOARD_HEIGHT - 1 && i != BOARD_WIDTH - 1 && board[i+1][j+1] == 1) {
-                counter++;
-            }
-            //Running through the rules
-            if ((counter < 2) && (board[i][j] == 1)) {
-                boardcopy[i][j] = 0;
-            }
-            if ((counter > 3) && (board[i][j] == 1)) {
-                boardcopy[i][j] = 0;
-            }
-            if ((counter == 3) && (board[i][j] == 0)) {
-                boardcopy[i][j] = 1;
-            }
-        }
-    }
-    for (int i = 0; i < BOARD_WIDTH; i++) {
-        for (int j = 0; j < BOARD_HEIGHT; j++) {
-            board[i][j] = boardcopy[i][j];
-        }
-    }
-}
-
-public void renderMenu()
-{
-    startButton.update();
-}
-public void renderGUI()
-{ // Render process for the GUI will go in here
-}
-
-public void renderGame()
-{
-    int gridX = screenXPos / CELL_SIZE;
-    int gridY = screenYPos / CELL_SIZE;
-    // This renders the current part of the matrix that is viewed (Also it renders one cell either side of the boarders to make sure scrolling is smooth)
-    for(int i = gridX - 1; i < gridX + SCREEN_GRID_WIDTH + 1; i++) // Goes through the 2d matrix and draws the cell if it is alive
-    {
-        for(int j = gridY - 1; j < gridY + SCREEN_GRID_HEIGHT + 1; j++)
-        {
-            if(i < 0 || j < 0 || i == SCREEN_GRID_WIDTH || j == SCREEN_GRID_HEIGHT)
-            {
-                continue;
-            }
-            if(board[i][j] == 1) // 1 means that it is alive
-            {
-                stroke(0, 255, 0);
-                fill(0, 255, 0);
-                rect(i*10 - screenXPos, j*10 - screenYPos, 10, 10); // Multiplies the index by 10 because each one is a 10 by 10 pixel
-            }
-        }
-    }
-}
-
-
-public void startGame()
+public void startGame_random()
 {
     randomStart();
     inMenu = false;
 };
 
-public void setup()
+public void startGame_gun()
 {
-    
-    background(backgroundColour);
+    createGliderGun(0, 0);
+    inMenu = false;
+};
 
-    //randomStart();
-    clearBoard();
-    // int x, int y, int my_width, int my_height, String text
-
-    // Menu setup
-    startButton = new Button(500, 500, "Start", 30);
-    inMenu = true;
-
-    frame.requestFocus(); // Makes the screen instantly focused
-}
-
-public void draw()
+public void startGame_glider()
 {
-    checkKeys();
-    background(backgroundColour);
+    createGlider(0, 0);
+    inMenu = false;
+};
 
-    renderGame();
-    if(inMenu)
-    {
-        renderMenu();
-    }
+public void startGame_file()
+{
+    pasteFromFile("xxx", 0, 0);
+    inMenu = false;
+};
+// Screen
+static final int SCREEN_HEIGHT = 1000;
+static final int SCREEN_WIDTH = 1000;
+int screenXPos = 0;
+int screenYPos = 0;
+int screenSpeed = 5;
+int backgroundColour = color(255);
+boolean inMenu = false;
 
-    timeControl++;
-    if(timeControl == 10) // This limits how much it is updated
-    {
-        timeControl = 0;
-        god();
-    }
-}
+// Board and cell settings
+static final int BOARD_HEIGHT = 1000;
+static final int BOARD_WIDTH = 1000;
+static final int CELL_SIZE = 10;
+static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
+static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
+
+// Boards key: 0: empty, 2: cell
+int[][] board = new int[BOARD_HEIGHT][BOARD_WIDTH];
+int[][] boardcopy = new int[BOARD_HEIGHT][BOARD_WIDTH];
+
+int timeControl = 0;
+
+// Menu Buttons
+Button randomStartButton;
+Button gosperGliderGun;
+Button singleGlider;
+Button readFromFile;
   public void settings() {  size(1000, 1000); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Program" };
