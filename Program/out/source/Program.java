@@ -20,6 +20,8 @@ static final int SCREEN_WIDTH = 1000;
 int screenXPos = 0;
 int screenYPos = 0;
 int screenSpeed = 5;
+int backgroundColour = color(255);
+boolean inMenu = false;
 
 // Board and cell settings
 static final int BOARD_HEIGHT = 1000;
@@ -33,7 +35,163 @@ int[][] board = new int[BOARD_HEIGHT][BOARD_WIDTH];
 int[][] boardcopy = new int[BOARD_HEIGHT][BOARD_WIDTH];
 
 int timeControl = 0;
+Button startButton;
 
+
+// This is for when we want to display a button
+class Button
+{
+    private int x, y;
+    private float my_width, my_height;
+    private String my_text;
+    private int my_textSize;
+    private int paddingX, paddingY;
+    private int textColour, baseColour, hoverColour, outline;
+
+    // We might also want to pass in a function for when it is pressed
+    Button(int x, int y, String text, int my_textSize)
+    {
+        this.x = x;
+        this.y = y;
+        textSize(my_textSize);
+        this.my_width = textWidth(text) + 20;
+        this.my_height = textAscent() * 0.8f + 20;
+        this.paddingX = 10;
+        this.paddingY = 10;
+
+        this.my_text = text;
+        this.my_textSize = my_textSize;
+        this.textColour = color(0);
+
+        this.outline = color(0);
+        this.baseColour = color(255);
+        this.hoverColour = color(150);
+    }
+
+    Button(int x, int y, float my_width, float my_height)
+    {
+        this.x = x;
+        this.y = y;
+        this.my_width = my_width;
+        this.my_height = my_height;
+        this.paddingX = 10;
+        this.paddingY = 10;
+
+        this.my_text = "";
+        this.my_textSize = 30;
+        this.textColour = color(0);
+
+        this.outline = color(0);
+        this.baseColour = color(255);
+        this.hoverColour = color(150);
+    }
+
+    Button(int x, int y, int paddingX, int paddingY, String text, int my_textSize)
+    {
+        this.x = x;
+        this.y = y;
+        textSize(my_textSize);
+        this.my_width = textWidth(text) + 2 * paddingX;
+        this.my_height = textAscent() * 0.8f + 2 * paddingX;
+        this.paddingX = paddingX;
+        this.paddingY = paddingY;
+
+        this.my_text = text;
+        this.my_textSize = my_textSize;
+        this.textColour = color(0);
+
+        this.outline = color(0);
+        this.baseColour = color(255);
+        this.hoverColour = color(150);
+    }
+
+    Button(int x, int y, int paddingX, int paddingY, String text, int my_textSize, int textColour, int outline, int baseColour, int hoverColour)
+    {
+        this.x = x;
+        this.y = y;
+        textSize(my_textSize);
+        this.my_width = textWidth(text) + 2 * paddingX;
+        this.my_height = textAscent() * 0.8f + 2 * paddingX;
+        this.paddingX = paddingX;
+        this.paddingY = paddingY;
+
+        this.my_text = text;
+        this.my_textSize = my_textSize;
+        this.textColour = textColour;
+
+        this.outline = outline;
+        this.baseColour = baseColour;
+        this.hoverColour = hoverColour;
+    }
+
+    public boolean isMouseOver()
+    {
+        if (mouseX >= x && mouseX <= x+my_width &&
+            mouseY >= y && mouseY <= y+my_height)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void update()
+    {
+        stroke(outline);
+        if(isMouseOver())
+        {
+            fill(hoverColour);
+        }else
+        {
+            fill(baseColour);
+        }
+        rect(x, y, my_width, my_height);
+        fill(textColour);
+        textSize(my_textSize);
+        text(my_text, x + paddingX, y + textAscent() * 0.8f + paddingY);
+    }
+
+    public void setBackgroundColour(int baseColour, int hoverColour)
+    {
+        this.baseColour = baseColour;
+        this.hoverColour = hoverColour;
+    }
+};
+
+// Checks if mouse is pressed and is over any button
+public void mousePressed()
+{
+    if(inMenu)
+    {
+        if (startButton.isMouseOver()) {
+            startGame();
+        }
+    }
+}
+
+// Checks if any of the keys are pressed
+public void checkKeys()
+{
+    if(keyPressed) // This senses a key being pressed
+    {
+        if (key == CODED && !inMenu) {
+            if (keyCode == UP && screenYPos - screenSpeed >= 0) { // When a key is pressed, it checks to see if a the screen can more more in that direction
+                screenYPos -= screenSpeed;
+            }
+            if (keyCode == LEFT && screenXPos - screenSpeed >= 0) {
+                screenXPos -= screenSpeed;
+            }
+            if (keyCode == DOWN && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * CELL_SIZE - SCREEN_HEIGHT) {
+                screenYPos += 5;
+            }
+            if (keyCode == RIGHT && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * CELL_SIZE - SCREEN_WIDTH) {
+                screenXPos += 5;
+            }
+        }
+    }
+}
+
+// Different creations
 public void createGliderGun(int xPos, int yPos)
 {
     board[1][7] = 1;
@@ -88,6 +246,23 @@ public void createGlider(int xPos, int yPos)
     board[xPos + 1][yPos] = 1;
 }
 
+public void pasteFromFile(String filename, int xPos, int yPos)
+{ // Made a glider file with a glider in it so use that :D position is the top left corner
+
+}
+
+// Different starts
+public void clearBoard()
+{
+    for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
+    {
+        for(int j = 0; j < BOARD_HEIGHT; j++)
+        {
+            board[i][j] = 0;
+        }
+    }
+}
+
 public void randomStart()
 {
     for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
@@ -105,33 +280,7 @@ public void randomStart()
     }
 }
 
-public void checkKeys()
-{
-    if(keyPressed) // This senses a key being pressed
-    {
-        if (key == CODED) {
-            if (keyCode == UP && screenYPos - screenSpeed >= 0) { // When a key is pressed, it checks to see if a the screen can more more in that direction
-                screenYPos -= screenSpeed;
-            }
-            if (keyCode == LEFT && screenXPos - screenSpeed >= 0) {
-                screenXPos -= screenSpeed;
-            }
-            if (keyCode == DOWN && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * CELL_SIZE - SCREEN_HEIGHT) {
-                screenYPos += 5;
-            }
-            if (keyCode == RIGHT && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * CELL_SIZE - SCREEN_WIDTH) {
-                screenXPos += 5;
-            }
-        }
-    }
-}
-
-public void pasteFromFile(String filename, int xPos, int yPos)
-{ // Made a glider file with a glider in it so use that :D position is the top left corner
-
-}
-
-
+// Updates the game
 public void god()
 {
     for (int i = 0; i < BOARD_WIDTH; i++) {
@@ -186,21 +335,16 @@ public void god()
     }
 }
 
-public void setup()
+public void renderMenu()
 {
-    
-    background(255);
-
-    randomStart();
-
-    frame.requestFocus(); // Makes the screen instantly focused
+    startButton.update();
+}
+public void renderGUI()
+{ // Render process for the GUI will go in here
 }
 
-public void draw()
+public void renderGame()
 {
-    checkKeys();
-
-    background(255);
     int gridX = screenXPos / CELL_SIZE;
     int gridY = screenYPos / CELL_SIZE;
     // This renders the current part of the matrix that is viewed (Also it renders one cell either side of the boarders to make sure scrolling is smooth)
@@ -220,7 +364,41 @@ public void draw()
             }
         }
     }
+}
 
+
+public void startGame()
+{
+    randomStart();
+    inMenu = false;
+};
+
+public void setup()
+{
+    
+    background(backgroundColour);
+
+    //randomStart();
+    clearBoard();
+    // int x, int y, int my_width, int my_height, String text
+
+    // Menu setup
+    startButton = new Button(500, 500, "Start", 30);
+    inMenu = true;
+
+    frame.requestFocus(); // Makes the screen instantly focused
+}
+
+public void draw()
+{
+    checkKeys();
+    background(backgroundColour);
+
+    renderGame();
+    if(inMenu)
+    {
+        renderMenu();
+    }
 
     timeControl++;
     if(timeControl == 10) // This limits how much it is updated
