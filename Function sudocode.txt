@@ -97,6 +97,7 @@ ENDFUNCTION
 
 function renderBoard
 BEGINFUNCTION
+    Need to do this at some point
 ENDFUNCTION
 
 function renderGUI
@@ -144,7 +145,7 @@ BEGINCLASS
 			return False
 		ENDIF
 	ENDFUNCTION
-	
+
 	function render()
 	BEGINFUNCTION
 		SET stroke to this.outline
