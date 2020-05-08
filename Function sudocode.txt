@@ -1,0 +1,160 @@
+function setup()
+BEGINFUNCTION
+	SET canvas size to 1080x1920
+	SET background to backgroundColour
+	CALL clearBoard()
+	CALL setupMenu()
+	CALL setupGUI
+	SET inMenu to true
+ENDFUNCTION
+
+function draw()
+BEGINFUNCTION
+	CALL checkKeys()
+	CALL render()
+	CALL god()
+ENDFUNCTION
+
+god(cellList)
+BEGINFUNCTION
+	Euan could you please do this for your code please thanks :D
+ENDFUNCTION
+
+function mousePressed
+BEGINFUNCTION
+	IF inMenu THEN
+		IF randomStartButton is pressed THEN
+			CALL startGame_random()
+		ELSE IF gosperGliderGunButton is pressed THEN
+			CALL startGame_gun()
+		ELSE IF singleGliderButton is pressed THEN
+			CALL startGame_glider()
+		ELSE IF readFromFileButton is pressed THEN
+			CALL startGame_file()
+		ENDIF
+	ENDIF
+ENDFUNCTION
+
+function checkKeys
+BEGINFUNCTION
+	IF not inMenu THEN
+		IF upArrow is pressed THEN
+			MINUS screenSpeed from screenYPos
+		ELSE IF downArrow is pressed THEN
+			ADD screenSpeed to screenYPos
+		ELSE IF leftArrow is pressed THEN
+			MINUS screenSpeed from screenXPos
+		ELSE IF rightArrow is pressed THEN
+			ADD screenSpeed to screenXPos
+		ENDIF
+	ENDIF
+ENDFUNCTION
+
+function readFromFile
+BEGINFUNCTION
+	Hey Euan this is you again :D
+ENDFUNCTION
+
+function clearBoard
+BEGINFUNCTION
+	SET ALL values in board to 0
+ENDFUNCTION
+
+function randomBoard
+BEGINFUNCTION
+	SET ALL values in board to random integer between 0 and 1
+ENDFUNCTION
+
+function startGame_random
+BEGINFUNCTION
+	CALL randomBoard()
+	SET inMenu to False
+ENDFUNCTION
+
+Hey Euan, all the rest of the start game things were yours :D
+function startGame_gun
+BEGINFUNCTION
+ENDFUNCTION
+
+function startGame_glider
+BEGINFUNCTION
+ENDFUNCTION
+
+function startGame_file
+BEGINFUNCTION
+	With this one Euan, just write what you think the finished function should do e.g. get user to input file and then set board...
+ENDFUNCTION
+
+function render
+BEGINFUNCTION
+	RENDER background as backgroundColour
+	CALL renderBoard()
+	IF inMenu THEN
+		CALL renderMenu()
+	ELSE
+		CALL renderGUI()
+ENDFUNCTION
+
+function renderBoard
+BEGINFUNCTION
+ENDFUNCTION
+
+function renderGUI
+BEGINFUNCTION
+	FOR button in GUIButtons
+		CALL button.render()
+	ENDFOR
+ENDFUNCTION
+
+function renderMenu
+BEGINFUNCTION
+	FOR button in MenuButtons
+		CALL button.render()
+	ENDFOR
+ENDFUNCTION
+
+function saveGame
+BEGINFUNCTION
+	CAST board to String
+	SET filename to INPUT
+	SAVE board to filename
+ENDFUNCTION
+
+function setupMenu
+BEGINFUNCTION
+	CREATE randomStartButton
+	CREATE gosperGliderGunButton
+	CREATE singleGliderButton
+	CREATE readFromFileButton
+ENDFUNCTION
+
+function setupGUI
+BEGINFUNCTION
+	// NEED TO FILL THIS IN WHEN WE PLAN IT!!!
+ENDFUNCTION
+
+
+class Button
+BEGINCLASS
+	function isMouseOver()
+	BEGINFUNCTION
+		IF mouse is over this THEN
+			return True
+		ELSE
+			return False
+		ENDIF
+	ENDFUNCTION
+	
+	function render()
+	BEGINFUNCTION
+		SET stroke to this.outline
+		IF isMouseOver() THEN
+			SET fill to this.hoverColour
+		ELSE
+			SET fill to this.baseColour
+		ENDIF
+		DRAW rectangle
+		SET textSize to this.my_textSize
+		DRAW text
+	ENDFUNCTION
+ENDCLASS
