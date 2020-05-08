@@ -9,7 +9,7 @@ void clearBoard()
     }
 }
 
-void randomStart()
+void randomBoard()
 {
     for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
     {
@@ -28,7 +28,7 @@ void randomStart()
 
 void startGame_random()
 {
-    randomStart();
+    randomBoard();
     inMenu = false;
 };
 
@@ -45,7 +45,7 @@ void startGame_glider()
 };
 
 void startGame_file()
-{
-    pasteFromFile("xxx", 0, 0);
+{ // We might need do this at some point :D
+    readFromFile("xxx");
     inMenu = false;
 };

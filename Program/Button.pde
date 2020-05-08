@@ -95,7 +95,7 @@ class Button
         }
     }
 
-    void update()
+    void render()
     {
         stroke(outline);
         if(isMouseOver())
@@ -109,11 +109,5 @@ class Button
         fill(textColour);
         textSize(my_textSize);
         text(my_text, x + paddingX, y + textAscent() * 0.8 + paddingY);
-    }
-
-    void setBackgroundColour(color baseColour, color hoverColour)
-    {
-        this.baseColour = baseColour;
-        this.hoverColour = hoverColour;
     }
 };

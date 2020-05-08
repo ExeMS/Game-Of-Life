@@ -52,7 +52,12 @@ void createGlider(int xPos, int yPos)
     board[xPos + 1][yPos] = 1;
 }
 
-void pasteFromFile(String filename, int xPos, int yPos)
-{ // Made a glider file with a glider in it so use that :D position is the top left corner
+int[][] readFromFile(String filename)
+{ // This should return a 2d array of the file (same layout as the board but just smaller)
+    return new int[10][10];
+}
 
+void placeStructure(int[][] structure, int xPos, int yPos)
+{
+    // This will place in a structure (given in the form of a 2d array)
 }

@@ -95,20 +95,27 @@ void god()
     }
 }
 
+void setupMenu()
+{
+    randomStartButton = new Button(360, 475, 280, 50, "Start", 30);
+    gosperGliderGun = new Button(360, 535, 280, 50, "Gosper Glider Gun", 30);
+    singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
+    readFromFile = new Button(360, 655, 280, 50, "Read From File", 30);
+}
+
+void setupGUI()
+{
+
+}
+
 void setup()
 {
     size(1000, 1000);
     background(backgroundColour);
 
-    //randomStart();
     clearBoard();
-    // int x, int y, int my_width, int my_height, String text
 
-    // Menu setup
-    randomStartButton = new Button(360, 475, 280, 50, "Start", 30);
-    gosperGliderGun = new Button(360, 535, 280, 50, "Gosper Glider Gun", 30);
-    singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
-    readFromFile = new Button(360, 655, 280, 50, "Read From File", 30);
+    setupMenu();
     inMenu = true;
 
     frame.requestFocus(); // Makes the screen instantly focused
@@ -117,13 +124,8 @@ void setup()
 void draw()
 {
     checkKeys();
-    background(backgroundColour);
 
-    renderGame();
-    if(inMenu)
-    {
-        renderMenu();
-    }
+    render();
 
     timeControl++;
     if(timeControl == 10) // This limits how much it is updated

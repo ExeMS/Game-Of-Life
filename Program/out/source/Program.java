@@ -111,20 +111,27 @@ public void god()
     }
 }
 
+public void setupMenu()
+{
+    randomStartButton = new Button(360, 475, 280, 50, "Start", 30);
+    gosperGliderGun = new Button(360, 535, 280, 50, "Gosper Glider Gun", 30);
+    singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
+    readFromFile = new Button(360, 655, 280, 50, "Read From File", 30);
+}
+
+public void setupGUI()
+{
+
+}
+
 public void setup()
 {
     
     background(backgroundColour);
 
-    //randomStart();
     clearBoard();
-    // int x, int y, int my_width, int my_height, String text
 
-    // Menu setup
-    randomStartButton = new Button(360, 475, 280, 50, "Start", 30);
-    gosperGliderGun = new Button(360, 535, 280, 50, "Gosper Glider Gun", 30);
-    singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
-    readFromFile = new Button(360, 655, 280, 50, "Read From File", 30);
+    setupMenu();
     inMenu = true;
 
     frame.requestFocus(); // Makes the screen instantly focused
@@ -133,13 +140,8 @@ public void setup()
 public void draw()
 {
     checkKeys();
-    background(backgroundColour);
 
-    renderGame();
-    if(inMenu)
-    {
-        renderMenu();
-    }
+    render();
 
     timeControl++;
     if(timeControl == 10) // This limits how much it is updated
@@ -245,7 +247,7 @@ class Button
         }
     }
 
-    public void update()
+    public void render()
     {
         stroke(outline);
         if(isMouseOver())
@@ -259,12 +261,6 @@ class Button
         fill(textColour);
         textSize(my_textSize);
         text(my_text, x + paddingX, y + textAscent() * 0.8f + paddingY);
-    }
-
-    public void setBackgroundColour(int baseColour, int hoverColour)
-    {
-        this.baseColour = baseColour;
-        this.hoverColour = hoverColour;
     }
 };
 public void createGliderGun(int xPos, int yPos)
@@ -321,22 +317,27 @@ public void createGlider(int xPos, int yPos)
     board[xPos + 1][yPos] = 1;
 }
 
-public void pasteFromFile(String filename, int xPos, int yPos)
-{ // Made a glider file with a glider in it so use that :D position is the top left corner
+public int[][] readFromFile(String filename)
+{ // This should return a 2d array of the file (same layout as the board but just smaller)
+    return new int[10][10];
+}
 
+public void placeStructure(int[][] structure, int xPos, int yPos)
+{
+    // This will place in a structure (given in the form of a 2d array)
 }
 public void renderMenu()
 {
-    randomStartButton.update();
-    gosperGliderGun.update();
-    singleGlider.update();
-    readFromFile.update();
+    randomStartButton.render();
+    gosperGliderGun.render();
+    singleGlider.render();
+    readFromFile.render();
 }
 public void renderGUI()
 { // Render process for the GUI will go in here
 }
 
-public void renderGame()
+public void renderBoard()
 {
     int gridX = screenXPos / CELL_SIZE;
     int gridY = screenYPos / CELL_SIZE;
@@ -358,6 +359,18 @@ public void renderGame()
         }
     }
 }
+
+public void render()
+{
+    background(backgroundColour);
+    renderBoard();
+    if(inMenu)
+    {
+        renderMenu();
+    }else {
+        renderGUI();
+    }
+}
 public void clearBoard()
 {
     for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
@@ -369,7 +382,7 @@ public void clearBoard()
     }
 }
 
-public void randomStart()
+public void randomBoard()
 {
     for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
     {
@@ -388,7 +401,7 @@ public void randomStart()
 
 public void startGame_random()
 {
-    randomStart();
+    randomBoard();
     inMenu = false;
 };
 
@@ -405,8 +418,8 @@ public void startGame_glider()
 };
 
 public void startGame_file()
-{
-    pasteFromFile("xxx", 0, 0);
+{ // We might need do this at some point :D
+    readFromFile("xxx");
     inMenu = false;
 };
 // Screen

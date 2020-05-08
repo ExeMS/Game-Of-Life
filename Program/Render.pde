@@ -1,15 +1,15 @@
 void renderMenu()
 {
-    randomStartButton.update();
-    gosperGliderGun.update();
-    singleGlider.update();
-    readFromFile.update();
+    randomStartButton.render();
+    gosperGliderGun.render();
+    singleGlider.render();
+    readFromFile.render();
 }
 void renderGUI()
 { // Render process for the GUI will go in here
 }
 
-void renderGame()
+void renderBoard()
 {
     int gridX = screenXPos / CELL_SIZE;
     int gridY = screenYPos / CELL_SIZE;
@@ -29,5 +29,17 @@ void renderGame()
                 rect(i*10 - screenXPos, j*10 - screenYPos, 10, 10); // Multiplies the index by 10 because each one is a 10 by 10 pixel
             }
         }
+    }
+}
+
+void render()
+{
+    background(backgroundColour);
+    renderBoard();
+    if(inMenu)
+    {
+        renderMenu();
+    }else {
+        renderGUI();
     }
 }
