@@ -25,7 +25,7 @@ void renderBoard()
     {
         for(int j = gridY - 1; j < gridY + SCREEN_GRID_HEIGHT + 1; j++)
         {
-            if(i < 0 || j < 0 || i == SCREEN_GRID_WIDTH || j == SCREEN_GRID_HEIGHT) // This is just safe guards just so it doesn't through an error
+            if(i < 0 || j < 0 || i >= BOARD_WIDTH || j >= BOARD_HEIGHT) // This is just safe guards just so it doesn't through an error
             {
                 continue;
             }
