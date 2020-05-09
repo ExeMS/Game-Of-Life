@@ -15,6 +15,13 @@ void mousePressed()
         if (readFromFile.isMouseOver()) {
             startGame_file();
         }
+    } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
+        if (spawnGliderButton.isMouseOver()) {
+            currentStructureActive = 0;
+        }
+        if (cancelButton.isMouseOver() && currentStructureActive != -1) {
+            currentStructureActive = -1;
+        }
     }
 }
 
@@ -105,7 +112,12 @@ void setupMenu()
 
 void setupGUI()
 {
+    spawnGliderButton = new Button(0, 0, "Glider", 30);
+    cancelButton = new Button(SCREEN_WIDTH - 150, 0, "Cancel", 30);
 
+    // Structures
+    structures.add(new Structure("glider.txt"));
+    currentStructureActive = -1;
 }
 
 void setup()
@@ -116,6 +128,8 @@ void setup()
     clearBoard();
 
     setupMenu();
+    setupGUI();
+
     inMenu = true;
 
     frame.requestFocus(); // Makes the screen instantly focused

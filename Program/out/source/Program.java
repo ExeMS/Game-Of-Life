@@ -31,6 +31,13 @@ public void mousePressed()
         if (readFromFile.isMouseOver()) {
             startGame_file();
         }
+    } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
+        if (spawnGliderButton.isMouseOver()) {
+            currentStructureActive = 0;
+        }
+        if (cancelButton.isMouseOver() && currentStructureActive != -1) {
+            currentStructureActive = -1;
+        }
     }
 }
 
@@ -121,7 +128,12 @@ public void setupMenu()
 
 public void setupGUI()
 {
+    spawnGliderButton = new Button(0, 0, "Glider", 30);
+    cancelButton = new Button(SCREEN_WIDTH - 150, 0, "Cancel", 30);
 
+    // Structures
+    structures.add(new Structure("glider.txt"));
+    currentStructureActive = -1;
 }
 
 public void setup()
@@ -132,6 +144,8 @@ public void setup()
     clearBoard();
 
     setupMenu();
+    setupGUI();
+
     inMenu = true;
 
     frame.requestFocus(); // Makes the screen instantly focused
@@ -317,14 +331,23 @@ public void createGlider(int xPos, int yPos)
     board[xPos + 1][yPos] = 1;
 }
 
-public int[][] readFromFile(String filename)
+public boolean[][] readFromFile(String filename)
 { // This should return a 2d array of the file (same layout as the board but just smaller)
-    return new int[10][10];
-}
-
-public void placeStructure(int[][] structure, int xPos, int yPos)
-{
-    // This will place in a structure (given in the form of a 2d array)
+    // This is temporary just so I can test the GUI structures
+    boolean[][] struct = new boolean[3][3];
+    for(int i = 0; i < 3; i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
+            struct[i][j] = false;
+        }
+    }
+    struct[1][2] = true;
+    struct[0][2] = true;
+    struct[2][2] = true;
+    struct[2][1] = true;
+    struct[1][0] = true;
+    return struct;
 }
 public void renderMenu()
 {
@@ -335,10 +358,17 @@ public void renderMenu()
 }
 public void renderGUI()
 { // Render process for the GUI will go in here
+    spawnGliderButton.render();
+    if(currentStructureActive != -1)
+    {
+        cancelButton.render();
+        structures.get(currentStructureActive).update();
+    }
 }
 
 public void renderBoard()
 {
+    boolean notDrawnStructuresLines = true; // This makes sure that we don't draw the lines around the structure multiple times
     int gridX = screenXPos / CELL_SIZE;
     int gridY = screenYPos / CELL_SIZE;
     // This renders the current part of the matrix that is viewed (Also it renders one cell either side of the boarders to make sure scrolling is smooth)
@@ -346,15 +376,62 @@ public void renderBoard()
     {
         for(int j = gridY - 1; j < gridY + SCREEN_GRID_HEIGHT + 1; j++)
         {
-            if(i < 0 || j < 0 || i == SCREEN_GRID_WIDTH || j == SCREEN_GRID_HEIGHT)
+            if(i < 0 || j < 0 || i == SCREEN_GRID_WIDTH || j == SCREEN_GRID_HEIGHT) // This is just safe guards just so it doesn't through an error
             {
                 continue;
             }
-            if(board[i][j] == 1) // 1 means that it is alive
+            // This renders a structure, if the user is trying to place one (and also checks if things are in the right place)
+            if(currentStructureActive != -1
+                && i >= structures.get(currentStructureActive).getX()
+                && i < structures.get(currentStructureActive).getX() + structures.get(currentStructureActive).getWidth()
+                && j >= structures.get(currentStructureActive).getY()
+                && j < structures.get(currentStructureActive).getY() + structures.get(currentStructureActive).getHeight())
+            {
+                if (notDrawnStructuresLines)
+                { // This draws the lines around the structure
+                    stroke(0);
+                    int structScreenX = structures.get(currentStructureActive).getX() * CELL_SIZE - screenXPos;
+                    int structScreenY = structures.get(currentStructureActive).getY() * CELL_SIZE - screenYPos;
+                    line(structScreenX,
+                         structScreenY,
+                         structScreenX + structures.get(currentStructureActive).getWidth() * CELL_SIZE,
+                         structScreenY
+                    );
+                    line(structScreenX,
+                         structScreenY,
+                         structScreenX,
+                         structScreenY + structures.get(currentStructureActive).getHeight() * CELL_SIZE
+                    );
+                    line(structScreenX,
+                         structScreenY + structures.get(currentStructureActive).getHeight() * CELL_SIZE,
+                         structScreenX + structures.get(currentStructureActive).getWidth() * CELL_SIZE,
+                         structScreenY + structures.get(currentStructureActive).getHeight() * CELL_SIZE
+                    );
+                    line(structScreenX + structures.get(currentStructureActive).getWidth() * CELL_SIZE,
+                         structScreenY,
+                         structScreenX + structures.get(currentStructureActive).getWidth() * CELL_SIZE,
+                         structScreenY + structures.get(currentStructureActive).getHeight() * CELL_SIZE
+                    );
+                    notDrawnStructuresLines = false;
+                }
+                int structX = i - structures.get(currentStructureActive).getX(); // This gets the x and y value for which section it is looking at for the structure
+                int structY = j - structures.get(currentStructureActive).getY();
+                if(structures.get(currentStructureActive).get(structX, structY))
+                { // This renders the squares as blue (as they will be created when the structure is placed)
+                    stroke(0, 0, 255);
+                    fill(0, 0, 255);
+                    rect(i*CELL_SIZE - screenXPos, j*CELL_SIZE - screenYPos, CELL_SIZE, CELL_SIZE);
+                } else if(board[i][j] == 1)
+                { // This renders the squares as red (as they will be destroyed when the structure is placed)
+                    stroke(255, 0, 0);
+                    fill(255, 0, 0);
+                    rect(i*CELL_SIZE - screenXPos, j*CELL_SIZE - screenYPos, CELL_SIZE, CELL_SIZE);
+                }
+            } else if(board[i][j] == 1) // 1 means that it is alive
             {
                 stroke(0, 255, 0);
                 fill(0, 255, 0);
-                rect(i*10 - screenXPos, j*10 - screenYPos, 10, 10); // Multiplies the index by 10 because each one is a 10 by 10 pixel
+                rect(i*CELL_SIZE - screenXPos, j*CELL_SIZE - screenYPos, CELL_SIZE, CELL_SIZE); // Multiplies the index by 10 because each one is a 10 by 10 pixel
             }
         }
     }
@@ -422,6 +499,52 @@ public void startGame_file()
     readFromFile("xxx");
     inMenu = false;
 };
+class Structure
+{
+    private boolean[][] structure;
+    private int gridX, gridY; // Stores the grid location of the structure
+    private int my_width, my_height;
+
+    Structure(String filename)
+    {
+        structure = readFromFile(filename);
+        my_width = structure.length;
+        my_height = structure[0].length;
+        gridX = 0;
+        gridY = 0;
+    }
+
+    public void update()
+    {
+        gridX = screenXPos / 10 + (mouseX - (my_width * CELL_SIZE / 2)) / CELL_SIZE;
+        gridY = screenYPos / 10 + (mouseY - (my_height * CELL_SIZE / 2)) / CELL_SIZE;
+    }
+
+    public int getWidth()
+    {
+        return my_width;
+    }
+
+    public int getHeight()
+    {
+        return my_height;
+    }
+
+    public int getX()
+    {
+        return gridX;
+    }
+
+    public int getY()
+    {
+        return gridY;
+    }
+
+    public boolean get(int x, int y)
+    {
+        return structure[x][y];
+    }
+}
 // Screen
 static final int SCREEN_HEIGHT = 1000;
 static final int SCREEN_WIDTH = 1000;
@@ -438,8 +561,8 @@ static final int CELL_SIZE = 10;
 static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
 static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
 
-// Boards key: 0: empty, 2: cell
-int[][] board = new int[BOARD_HEIGHT][BOARD_WIDTH];
+// Boards key: 0: empty, 1: cell
+int[][] board = new int[BOARD_HEIGHT][BOARD_WIDTH]; // Will probably change this to a boolean later
 int[][] boardcopy = new int[BOARD_HEIGHT][BOARD_WIDTH];
 
 int timeControl = 0;
@@ -449,6 +572,12 @@ Button randomStartButton;
 Button gosperGliderGun;
 Button singleGlider;
 Button readFromFile;
+
+// GUI Stuff
+Button spawnGliderButton;
+ArrayList<Structure> structures = new ArrayList<Structure>();
+Button cancelButton;
+int currentStructureActive = -1;
   public void settings() {  size(1000, 1000); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Program" };
