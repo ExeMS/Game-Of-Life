@@ -1,55 +1,55 @@
 void createGliderGun(int xPos, int yPos)
 {
-    board[1][7] = 1;
-    board[1][8] = 1;
-    board[2][7] = 1;
-    board[2][8] = 1;
+    board[1][7] = true;
+    board[1][8] = true;
+    board[2][7] = true;
+    board[2][8] = true;
 
-    board[9][8] = 1;
-    board[9][9] = 1;
-    board[10][7] = 1;
-    board[10][9] = 1;
-    board[11][7] = 1;
-    board[11][8] = 1;
+    board[9][8] = true;
+    board[9][9] = true;
+    board[10][7] = true;
+    board[10][9] = true;
+    board[11][7] = true;
+    board[11][8] = true;
 
-    board[17][9] = 1;
-    board[17][10] = 1;
-    board[17][11] = 1;
-    board[18][9] = 1;
-    board[19][10] = 1;
+    board[17][9] = true;
+    board[17][10] = true;
+    board[17][11] = true;
+    board[18][9] = true;
+    board[19][10] = true;
 
-    board[23][6] = 1;
-    board[23][7] = 1;
-    board[24][5] = 1;
-    board[24][7] = 1;
-    board[25][5] = 1;
-    board[25][6] = 1;
+    board[23][6] = true;
+    board[23][7] = true;
+    board[24][5] = true;
+    board[24][7] = true;
+    board[25][5] = true;
+    board[25][6] = true;
 
-    board[25][17] = 1;
-    board[25][18] = 1;
-    board[26][17] = 1;
-    board[26][19] = 1;
-    board[27][17] = 1;
+    board[25][17] = true;
+    board[25][18] = true;
+    board[26][17] = true;
+    board[26][19] = true;
+    board[27][17] = true;
 
-    board[35][5] = 1;
-    board[35][6] = 1;
-    board[36][5] = 1;
-    board[36][6] = 1;
+    board[35][5] = true;
+    board[35][6] = true;
+    board[36][5] = true;
+    board[36][6] = true;
 
-    board[36][12] = 1;
-    board[36][13] = 1;
-    board[36][14] = 1;
-    board[37][12] = 1;
-    board[38][13] = 1;
+    board[36][12] = true;
+    board[36][13] = true;
+    board[36][14] = true;
+    board[37][12] = true;
+    board[38][13] = true;
 }
 
 void createGlider(int xPos, int yPos)
 {
-    board[xPos + 1][yPos + 2] = 1;
-    board[xPos][yPos + 2] = 1;
-    board[xPos + 2][yPos + 2] = 1;
-    board[xPos + 2][yPos + 1] = 1;
-    board[xPos + 1][yPos] = 1;
+    board[xPos + 1][yPos + 2] = true;
+    board[xPos][yPos + 2] = true;
+    board[xPos + 2][yPos + 2] = true;
+    board[xPos + 2][yPos + 1] = true;
+    board[xPos + 1][yPos] = true;
 }
 
 boolean[][] readFromFile(String filename)

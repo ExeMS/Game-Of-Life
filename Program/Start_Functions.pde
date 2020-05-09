@@ -4,7 +4,7 @@ void clearBoard()
     {
         for(int j = 0; j < BOARD_HEIGHT; j++)
         {
-            board[i][j] = 0;
+            board[i][j] = false;
         }
     }
 }
@@ -18,9 +18,9 @@ void randomBoard()
             int r = int(random(4));
             if(r == 0)
             {
-                board[i][j] = 1;
+                board[i][j] = true;
             }else {
-                board[i][j] = 0;
+                board[i][j] = false;
             }
         }
     }

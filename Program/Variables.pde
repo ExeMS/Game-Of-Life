@@ -15,8 +15,8 @@ static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
 static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
 
 // Boards key: 0: empty, 1: cell
-int[][] board = new int[BOARD_HEIGHT][BOARD_WIDTH]; // Will probably change this to a boolean later
-int[][] boardcopy = new int[BOARD_HEIGHT][BOARD_WIDTH];
+boolean[][] board = new boolean[BOARD_HEIGHT][BOARD_WIDTH]; // Will probably change this to a boolean later
+boolean[][] boardcopy = new boolean[BOARD_HEIGHT][BOARD_WIDTH];
 
 int timeControl = 0;
 
@@ -28,6 +28,6 @@ Button readFromFile;
 
 // GUI Stuff
 Button spawnGliderButton;
-ArrayList<Structure> structures = new ArrayList<Structure>();
+ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
 Button cancelButton;
 int currentStructureActive = -1;

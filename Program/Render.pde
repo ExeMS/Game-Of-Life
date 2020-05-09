@@ -70,13 +70,13 @@ void renderBoard()
                     stroke(0, 0, 255);
                     fill(0, 0, 255);
                     rect(i*CELL_SIZE - screenXPos, j*CELL_SIZE - screenYPos, CELL_SIZE, CELL_SIZE);
-                } else if(board[i][j] == 1)
+                } else if(board[i][j])
                 { // This renders the squares as red (as they will be destroyed when the structure is placed)
                     stroke(255, 0, 0);
                     fill(255, 0, 0);
                     rect(i*CELL_SIZE - screenXPos, j*CELL_SIZE - screenYPos, CELL_SIZE, CELL_SIZE);
                 }
-            } else if(board[i][j] == 1) // 1 means that it is alive
+            } else if(board[i][j]) // 1 means that it is alive
             {
                 stroke(0, 255, 0);
                 fill(0, 255, 0);

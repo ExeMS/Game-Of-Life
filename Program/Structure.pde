@@ -19,6 +19,17 @@ class Structure
         gridY = screenYPos / 10 + (mouseY - (my_height * CELL_SIZE / 2)) / CELL_SIZE;
     }
 
+    void place()
+    {
+        for(int i = 0; i < my_width; i++)
+        {
+            for(int j = 0; j < my_height; j++)
+            {
+                board[i + gridX][j + gridY] = structure[i][j];
+            }
+        }
+    }
+
     int getWidth()
     {
         return my_width;

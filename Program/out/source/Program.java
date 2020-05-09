@@ -34,8 +34,11 @@ public void mousePressed()
     } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
         if (spawnGliderButton.isMouseOver()) {
             currentStructureActive = 0;
-        }
-        if (cancelButton.isMouseOver() && currentStructureActive != -1) {
+        }else if (currentStructureActive != -1) {
+            if(!cancelButton.isMouseOver())
+            {
+                structures.get(currentStructureActive).place();
+            }
             currentStructureActive = -1;
         }
     }
@@ -69,45 +72,41 @@ public void god()
     for (int i = 0; i < BOARD_WIDTH; i++) {
         for (int j = 0; j < BOARD_HEIGHT; j++) {
             boardcopy[i][j] = board[i][j];
-        }
-    }
-    for (int i = 0; i < BOARD_WIDTH; i++) {
-        for (int j = 0; j < BOARD_HEIGHT; j++) {
             int counter = 0;
             // counting the number of alive cells around the cell
-            if (i != 0 && board[i-1][j] == 1) {
+            if (i != 0 && board[i-1][j]) {
                 counter++;
             }
-            if (i != BOARD_WIDTH - 1 && board[i+1][j] == 1) {
+            if (i != BOARD_WIDTH - 1 && board[i+1][j]) {
                 counter++;
             }
-            if (i != 0 && j != 0 && board[i-1][j-1] == 1) {
+            if (i != 0 && j != 0 && board[i-1][j-1]) {
                 counter++;
             }
-            if (j != 0 && board[i][j-1] == 1) {
+            if (j != 0 && board[i][j-1]) {
                 counter++;
             }
-            if (i != BOARD_WIDTH - 1 && j != 0 && board[i+1][j-1] == 1) {
+            if (i != BOARD_WIDTH - 1 && j != 0 && board[i+1][j-1]) {
                 counter++;
             }
-            if (i != 0 && j != BOARD_HEIGHT - 1 && board[i-1][j+1] == 1) {
+            if (i != 0 && j != BOARD_HEIGHT - 1 && board[i-1][j+1]) {
                 counter++;
             }
-            if (j != BOARD_HEIGHT - 1 && board[i][j+1] == 1) {
+            if (j != BOARD_HEIGHT - 1 && board[i][j+1]) {
                 counter++;
             }
-            if (j != BOARD_HEIGHT - 1 && i != BOARD_WIDTH - 1 && board[i+1][j+1] == 1) {
+            if (j != BOARD_HEIGHT - 1 && i != BOARD_WIDTH - 1 && board[i+1][j+1]) {
                 counter++;
             }
             //Running through the rules
-            if ((counter < 2) && (board[i][j] == 1)) {
-                boardcopy[i][j] = 0;
+            if ((counter < 2) && (board[i][j])) {
+                boardcopy[i][j] = false;
             }
-            if ((counter > 3) && (board[i][j] == 1)) {
-                boardcopy[i][j] = 0;
+            if ((counter > 3) && (board[i][j])) {
+                boardcopy[i][j] = false;
             }
-            if ((counter == 3) && (board[i][j] == 0)) {
-                boardcopy[i][j] = 1;
+            if ((counter == 3) && (board[i][j] == false)) {
+                boardcopy[i][j] = true;
             }
         }
     }
@@ -279,56 +278,56 @@ class Button
 };
 public void createGliderGun(int xPos, int yPos)
 {
-    board[1][7] = 1;
-    board[1][8] = 1;
-    board[2][7] = 1;
-    board[2][8] = 1;
+    board[1][7] = true;
+    board[1][8] = true;
+    board[2][7] = true;
+    board[2][8] = true;
 
-    board[9][8] = 1;
-    board[9][9] = 1;
-    board[10][7] = 1;
-    board[10][9] = 1;
-    board[11][7] = 1;
-    board[11][8] = 1;
+    board[9][8] = true;
+    board[9][9] = true;
+    board[10][7] = true;
+    board[10][9] = true;
+    board[11][7] = true;
+    board[11][8] = true;
 
-    board[17][9] = 1;
-    board[17][10] = 1;
-    board[17][11] = 1;
-    board[18][9] = 1;
-    board[19][10] = 1;
+    board[17][9] = true;
+    board[17][10] = true;
+    board[17][11] = true;
+    board[18][9] = true;
+    board[19][10] = true;
 
-    board[23][6] = 1;
-    board[23][7] = 1;
-    board[24][5] = 1;
-    board[24][7] = 1;
-    board[25][5] = 1;
-    board[25][6] = 1;
+    board[23][6] = true;
+    board[23][7] = true;
+    board[24][5] = true;
+    board[24][7] = true;
+    board[25][5] = true;
+    board[25][6] = true;
 
-    board[25][17] = 1;
-    board[25][18] = 1;
-    board[26][17] = 1;
-    board[26][19] = 1;
-    board[27][17] = 1;
+    board[25][17] = true;
+    board[25][18] = true;
+    board[26][17] = true;
+    board[26][19] = true;
+    board[27][17] = true;
 
-    board[35][5] = 1;
-    board[35][6] = 1;
-    board[36][5] = 1;
-    board[36][6] = 1;
+    board[35][5] = true;
+    board[35][6] = true;
+    board[36][5] = true;
+    board[36][6] = true;
 
-    board[36][12] = 1;
-    board[36][13] = 1;
-    board[36][14] = 1;
-    board[37][12] = 1;
-    board[38][13] = 1;
+    board[36][12] = true;
+    board[36][13] = true;
+    board[36][14] = true;
+    board[37][12] = true;
+    board[38][13] = true;
 }
 
 public void createGlider(int xPos, int yPos)
 {
-    board[xPos + 1][yPos + 2] = 1;
-    board[xPos][yPos + 2] = 1;
-    board[xPos + 2][yPos + 2] = 1;
-    board[xPos + 2][yPos + 1] = 1;
-    board[xPos + 1][yPos] = 1;
+    board[xPos + 1][yPos + 2] = true;
+    board[xPos][yPos + 2] = true;
+    board[xPos + 2][yPos + 2] = true;
+    board[xPos + 2][yPos + 1] = true;
+    board[xPos + 1][yPos] = true;
 }
 
 public boolean[][] readFromFile(String filename)
@@ -421,13 +420,13 @@ public void renderBoard()
                     stroke(0, 0, 255);
                     fill(0, 0, 255);
                     rect(i*CELL_SIZE - screenXPos, j*CELL_SIZE - screenYPos, CELL_SIZE, CELL_SIZE);
-                } else if(board[i][j] == 1)
+                } else if(board[i][j])
                 { // This renders the squares as red (as they will be destroyed when the structure is placed)
                     stroke(255, 0, 0);
                     fill(255, 0, 0);
                     rect(i*CELL_SIZE - screenXPos, j*CELL_SIZE - screenYPos, CELL_SIZE, CELL_SIZE);
                 }
-            } else if(board[i][j] == 1) // 1 means that it is alive
+            } else if(board[i][j]) // 1 means that it is alive
             {
                 stroke(0, 255, 0);
                 fill(0, 255, 0);
@@ -454,7 +453,7 @@ public void clearBoard()
     {
         for(int j = 0; j < BOARD_HEIGHT; j++)
         {
-            board[i][j] = 0;
+            board[i][j] = false;
         }
     }
 }
@@ -468,9 +467,9 @@ public void randomBoard()
             int r = PApplet.parseInt(random(4));
             if(r == 0)
             {
-                board[i][j] = 1;
+                board[i][j] = true;
             }else {
-                board[i][j] = 0;
+                board[i][j] = false;
             }
         }
     }
@@ -520,6 +519,17 @@ class Structure
         gridY = screenYPos / 10 + (mouseY - (my_height * CELL_SIZE / 2)) / CELL_SIZE;
     }
 
+    public void place()
+    {
+        for(int i = 0; i < my_width; i++)
+        {
+            for(int j = 0; j < my_height; j++)
+            {
+                board[i + gridX][j + gridY] = structure[i][j];
+            }
+        }
+    }
+
     public int getWidth()
     {
         return my_width;
@@ -562,8 +572,8 @@ static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
 static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
 
 // Boards key: 0: empty, 1: cell
-int[][] board = new int[BOARD_HEIGHT][BOARD_WIDTH]; // Will probably change this to a boolean later
-int[][] boardcopy = new int[BOARD_HEIGHT][BOARD_WIDTH];
+boolean[][] board = new boolean[BOARD_HEIGHT][BOARD_WIDTH]; // Will probably change this to a boolean later
+boolean[][] boardcopy = new boolean[BOARD_HEIGHT][BOARD_WIDTH];
 
 int timeControl = 0;
 
@@ -575,7 +585,7 @@ Button readFromFile;
 
 // GUI Stuff
 Button spawnGliderButton;
-ArrayList<Structure> structures = new ArrayList<Structure>();
+ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
 Button cancelButton;
 int currentStructureActive = -1;
   public void settings() {  size(1000, 1000); }
