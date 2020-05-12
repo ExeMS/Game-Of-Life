@@ -43,7 +43,7 @@ void checkMousePressed()
         }
     }else
     {
-        if(!shiftPressed)
+        if(!shiftPressed) // This is what happens when the mouse is released
         {
             mousePressedDelay = 0;
         }
