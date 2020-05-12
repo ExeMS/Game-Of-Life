@@ -29,23 +29,27 @@ void randomBoard()
 void startGame_random()
 {
     randomBoard();
+    mode = 1;
     inMenu = false;
 };
 
 void startGame_gun()
 {
     createGliderGun(0, 0);
+    mode = 2;
     inMenu = false;
 };
 
 void startGame_glider()
 {
     createGlider(0, 0);
+    mode = 3;
     inMenu = false;
 };
 
 void startGame_file()
 { // We might need do this at some point :D
     readFromFile("xxx");
+    mode = 4;
     inMenu = false;
 };
