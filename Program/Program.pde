@@ -43,7 +43,7 @@ void checkMousePressed()
         }
     }else
     {
-        if(!pauseButton.isMouseOver() && !shiftPressed)
+        if(!shiftPressed)
         {
             mousePressedDelay = 0;
         }
