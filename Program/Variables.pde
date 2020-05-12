@@ -34,7 +34,9 @@ Button readFromFile;
 Button sandbox;
 
 // GUI Stuff
-Button spawnGliderButton;
+//Button spawnGliderButton;
+Button spawnStructureButton;
+boolean inStructureMenu = false;
 Button spawnCellButton;
 ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
 Button cancelButton;

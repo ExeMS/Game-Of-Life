@@ -8,12 +8,21 @@ void renderMenu()
 void renderGUI()
 { // Render process for the GUI will go in here
     if(mode == 2 || mode == 3 || mode == 4){
-      spawnGliderButton.render();
-      if(currentStructureActive != -1)
-      {
-          cancelButton.render();
-          structures.get(currentStructureActive).update();
-      }
+        if(inStructureMenu)
+        {
+            for(int i = 1; i < structures.size(); i++)
+            {
+                structures.get(i).render((i - 1) * 102 + 50, 50);
+            }
+        } else
+        {
+            spawnStructureButton.render();
+        }
+        if(currentStructureActive != -1)
+        {
+            cancelButton.render();
+            structures.get(currentStructureActive).update();
+        }
     }
     if(mode == 1 || mode == 2 || mode == 3 || mode == 4){
       if(paused == false){

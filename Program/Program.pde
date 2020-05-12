@@ -21,24 +21,25 @@ void checkMousePressed()
                 startGame_sandbox();
             }
         } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
-            if (spawnGliderButton.isMouseOver() && mode != 1) {
-                currentStructureActive = 0;
-            }else if (currentStructureActive != -1 && mousePressedDelay == 0) {
-                if(!cancelButton.isMouseOver())
+            if (spawnStructureButton.isMouseOver() && !inStructureMenu) {
+                inStructureMenu = true;
+                mousePressedDelay = 20;
+            } else if(inStructureMenu && mousePressedDelay == 0)
+            {
+                for(int i = 1; i < structures.size(); i++)
                 {
-                    structures.get(currentStructureActive).place();
+                    if(structures.get(i).isMouseOver((i - 1) * 102 + 50, 50))
+                    {
+                        currentStructureActive = i;
+                        break;
+                    }
                 }
-                if(shiftPressed)
-                {
-                    mousePressedDelay = 20;
-                }else
-                {
-                    currentStructureActive = -1;
-                }
+                inStructureMenu = false;
+                mousePressedDelay = 20;
             }
-            if (spawnCellButton.isMouseOver() && mode == 5) {
-                currentStructureActive = 1;
-            }else if (currentStructureActive != -1 && mousePressedDelay == 0) {
+            else if (spawnCellButton.isMouseOver() && mode == 5) {
+                currentStructureActive = 0;
+            } else if (currentStructureActive != -1 && mousePressedDelay == 0) {
                 if(!cancelButton.isMouseOver())
                 {
                     structures.get(currentStructureActive).place();
@@ -200,15 +201,17 @@ void setupMenu()
 
 void setupGUI()
 {
-    spawnGliderButton = new Button(0, 0, 120, 50, "Glider", 30);
+    //spawnGliderButton = new Button(0, 0, 120, 50, "Glider", 30);
+    spawnStructureButton = new Button(1, 1, 140, 50, "Structure", 30);
+    inStructureMenu = false;
     spawnCellButton = new Button(0, 60, 120, 50, "Cell", 30);
     cancelButton = new Button(SCREEN_WIDTH - 150, 0, "Cancel", 30);
     pauseButton = new Button(0, 800, 120, 50, "PAUSE", 30);
     playButton = new Button(0, 800, 120, 50, "PLAY", 30);
 
     // Structures
-    structures.add(new Structure("glider.txt"));
-    structures.add(new Structure("cell.txt"));
+    structures.add(new Structure("cell.txt")); // This will now be index 0
+    structures.add(new Structure("glider.txt")); // This will be index 1
     currentStructureActive = -1;
 }
 

@@ -33,10 +33,29 @@ public void checkMousePressed()
             if (readFromFile.isMouseOver()) {
                 startGame_file();
             }
+            if (sandbox.isMouseOver()) {
+                startGame_sandbox();
+            }
         } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
-            if (spawnGliderButton.isMouseOver() && mode != 1) {
+            if (spawnStructureButton.isMouseOver() && !inStructureMenu) {
+                inStructureMenu = true;
+                mousePressedDelay = 20;
+            } else if(inStructureMenu && mousePressedDelay == 0)
+            {
+                for(int i = 1; i < structures.size(); i++)
+                {
+                    if(structures.get(i).isMouseOver((i - 1) * 102 + 50, 50))
+                    {
+                        currentStructureActive = i;
+                        break;
+                    }
+                }
+                inStructureMenu = false;
+                mousePressedDelay = 20;
+            }
+            else if (spawnCellButton.isMouseOver() && mode == 5) {
                 currentStructureActive = 0;
-            }else if (currentStructureActive != -1 && mousePressedDelay == 0) {
+            } else if (currentStructureActive != -1 && mousePressedDelay == 0) {
                 if(!cancelButton.isMouseOver())
                 {
                     structures.get(currentStructureActive).place();
@@ -59,7 +78,7 @@ public void checkMousePressed()
         }
     }else
     {
-        if(!shiftPressed)
+        if(!shiftPressed) // This is what happens when the mouse is released
         {
             mousePressedDelay = 0;
         }
@@ -193,17 +212,22 @@ public void setupMenu()
     gosperGliderGun = new Button(360, 535, 280, 50, "Gosper Glider Gun", 30);
     singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
     readFromFile = new Button(360, 655, 280, 50, "Read From File", 30);
+    sandbox = new Button(360, 715, 280, 50, "Sandbox", 30);
 }
 
 public void setupGUI()
 {
-    spawnGliderButton = new Button(0, 0, "Glider", 30);
+    //spawnGliderButton = new Button(0, 0, 120, 50, "Glider", 30);
+    spawnStructureButton = new Button(1, 1, 140, 50, "Structure", 30);
+    inStructureMenu = false;
+    spawnCellButton = new Button(0, 60, 120, 50, "Cell", 30);
     cancelButton = new Button(SCREEN_WIDTH - 150, 0, "Cancel", 30);
     pauseButton = new Button(0, 800, 120, 50, "PAUSE", 30);
     playButton = new Button(0, 800, 120, 50, "PLAY", 30);
 
     // Structures
-    structures.add(new Structure("glider.txt"));
+    structures.add(new Structure("cell.txt")); // This will now be index 0
+    structures.add(new Structure("glider.txt")); // This will be index 1
     currentStructureActive = -1;
 }
 
@@ -430,12 +454,21 @@ public void renderMenu()
 public void renderGUI()
 { // Render process for the GUI will go in here
     if(mode == 2 || mode == 3 || mode == 4){
-      spawnGliderButton.render();
-      if(currentStructureActive != -1)
-      {
-          cancelButton.render();
-          structures.get(currentStructureActive).update();
-      }
+        if(inStructureMenu)
+        {
+            for(int i = 1; i < structures.size(); i++)
+            {
+                structures.get(i).render((i - 1) * 102 + 50, 50);
+            }
+        } else
+        {
+            spawnStructureButton.render();
+        }
+        if(currentStructureActive != -1)
+        {
+            cancelButton.render();
+            structures.get(currentStructureActive).update();
+        }
     }
     if(mode == 1 || mode == 2 || mode == 3 || mode == 4){
       if(paused == false){
@@ -557,6 +590,9 @@ public void randomBoard()
     }
 }
 
+public void sandboxStart() {
+}
+
 public void startGame_random()
 {
     randomBoard();
@@ -584,15 +620,24 @@ public void startGame_file()
     mode = 4;
     inMenu = false;
 };
+
+public void startGame_sandbox()
+{
+    sandboxStart();
+    mode = 5;
+    inMenu = false;
+};
 class Structure
 {
     private boolean[][] structure;
     private int gridX, gridY; // Stores the grid location of the structure
     private int my_width, my_height;
+    private String name;
 
     Structure(String filename)
     {
         structure = readFromFile(filename);
+        name = filename;
         my_width = structure.length;
         my_height = structure[0].length;
         gridX = 0;
@@ -640,6 +685,54 @@ class Structure
     {
         return structure[x][y];
     }
+
+    public boolean isMouseOver(int x, int y)
+    {
+        if (mouseX >= x && mouseX <= x+100 &&
+            mouseY >= y && mouseY <= y+100)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void render(int x, int y)
+    {
+        int my_boardSize = 100;
+        int my_cellSize;
+        if(my_width > my_height)
+        {
+            my_cellSize = my_boardSize / (my_width + 2);
+        }else {
+            my_cellSize = my_boardSize / (my_width + 2);
+        }
+        stroke(0);
+        if(isMouseOver(x, y))
+        {
+            fill(150);
+        }else{
+            fill(255);
+        }
+        rect(x, y, my_boardSize, my_boardSize);
+        for(int i = 0; i < my_width; i++)
+        {
+            for(int j = 0; j < my_height; j++)
+            {
+                if(structure[i][j])
+                {
+                    stroke(0,0,255);
+                    fill(0,0,255);
+                    rect(x + i*my_cellSize + my_cellSize, y + j*my_cellSize + my_cellSize, my_cellSize, my_cellSize);
+                }
+            }
+        }
+        stroke(0);
+        fill(0);
+        textSize(20);
+        int xGap = PApplet.parseInt((my_boardSize - textWidth(name)) / 2);
+        text(name, x + xGap, y + my_boardSize - 2);
+    }
 }
 // Screen
 static final int SCREEN_HEIGHT = 1000;
@@ -674,9 +767,13 @@ Button randomStartButton;
 Button gosperGliderGun;
 Button singleGlider;
 Button readFromFile;
+Button sandbox;
 
 // GUI Stuff
-Button spawnGliderButton;
+//Button spawnGliderButton;
+Button spawnStructureButton;
+boolean inStructureMenu = false;
+Button spawnCellButton;
 ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
 Button cancelButton;
 int currentStructureActive = -1;
