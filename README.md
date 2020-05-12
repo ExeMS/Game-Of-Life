@@ -25,14 +25,10 @@ For each objective, a measure of the extent to which it has been achieved
 A model of a representation of the problem, possibly a drawing.
 
 # Design
-Statement of language used
+In design.docx
 
-Naming of all necessary libraries
+# Evaluation
+Suggest Improvements
+... I have no idea for the rest of it
 
-System diagram
 
-Full outline of each function
-
-Pseudo Code or Flowcharts for each function
-
-Sketch of User Interface
