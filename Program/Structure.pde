@@ -1,16 +1,21 @@
 class Structure
 {
     private boolean[][] structure;
+    private boolean[][] rotatedStructure;
     private int gridX, gridY; // Stores the grid location of the structure
     private int my_width, my_height;
+    private int my_RWidth, my_RHeight; // Stores the height and width of the rotated structure
     private String name;
 
     Structure(String filename, String name)
     {
         structure = readFromFile(filename);
+        rotatedStructure = structure;
         this.name = name;
         my_width = structure.length;
         my_height = structure[0].length;
+        my_RHeight = my_height;
+        my_RWidth = my_width;
         gridX = 0;
         gridY = 0;
     }
@@ -23,23 +28,23 @@ class Structure
 
     void place()
     {
-        for(int i = 0; i < my_width; i++)
+        for(int i = 0; i < my_RWidth; i++)
         {
-            for(int j = 0; j < my_height; j++)
+            for(int j = 0; j < my_RHeight; j++)
             {
-                board[i + gridX][j + gridY] = structure[i][j];
+                board[i + gridX][j + gridY] = rotatedStructure[i][j];
             }
         }
     }
 
     int getWidth()
     {
-        return my_width;
+        return my_RWidth;
     }
 
     int getHeight()
     {
-        return my_height;
+        return my_RHeight;
     }
 
     int getX()
@@ -54,7 +59,7 @@ class Structure
 
     boolean get(int x, int y)
     {
-        return structure[x][y];
+        return rotatedStructure[x][y];
     }
 
     boolean isMouseOver(int x, int y)
@@ -66,6 +71,35 @@ class Structure
         } else {
             return false;
         }
+    }
+
+    void resetRotated()
+    {
+        rotatedStructure = structure;
+        my_RHeight = my_height;
+        my_RWidth = my_width;
+    }
+
+    void rotate(int r)
+    {
+        int temp = my_RHeight;
+        my_RHeight = my_RWidth;
+        my_RWidth = temp;
+        boolean[][] tempStructure = new boolean[my_RWidth][my_RHeight];
+        for(int i = 0; i < my_RHeight; i++)
+        {
+            for(int j = 0; j < my_RWidth; j++)
+            {
+                if(r == 1)
+                {
+                    tempStructure[j][i] = rotatedStructure[i][my_RWidth - j - 1];
+                } else
+                {
+                    tempStructure[j][i] = rotatedStructure[my_RHeight - i - 1][j];
+                }
+            }
+        }
+        rotatedStructure = tempStructure;
     }
 
     void render(int x, int y)

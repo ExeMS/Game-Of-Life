@@ -14,6 +14,14 @@ import java.io.IOException;
 
 public class Program extends PApplet {
 
+public void mouseWheel(MouseEvent event) {
+    if(currentStructureActive != -1)
+    {
+        int e = PApplet.parseInt(event.getCount());
+        structures.get(currentStructureActive).rotate(e);
+    }
+}
+
 // Checks if mouse is pressed and is over any button
 public void checkMousePressed()
 {
@@ -40,7 +48,11 @@ public void checkMousePressed()
             if (spawnStructureButton.isMouseOver() && !inStructureMenu) {
                 inStructureMenu = true;
                 mousePressedDelay = 20;
-                currentStructureActive = -1;
+                if(currentStructureActive != -1)
+                {
+                    structures.get(currentStructureActive).resetRotated();
+                    currentStructureActive = -1;
+                }
             } else if(inStructureMenu && mousePressedDelay == 0)
             {
                 for(int i = 1; i < structures.size(); i++)
@@ -66,6 +78,7 @@ public void checkMousePressed()
                     mousePressedDelay = 20;
                 }else
                 {
+                    structures.get(currentStructureActive).resetRotated();
                     currentStructureActive = -1;
                 }
             }
@@ -643,16 +656,21 @@ public void startGame_sandbox()
 class Structure
 {
     private boolean[][] structure;
+    private boolean[][] rotatedStructure;
     private int gridX, gridY; // Stores the grid location of the structure
     private int my_width, my_height;
+    private int my_RWidth, my_RHeight; // Stores the height and width of the rotated structure
     private String name;
 
     Structure(String filename, String name)
     {
         structure = readFromFile(filename);
+        rotatedStructure = structure;
         this.name = name;
         my_width = structure.length;
         my_height = structure[0].length;
+        my_RHeight = my_height;
+        my_RWidth = my_width;
         gridX = 0;
         gridY = 0;
     }
@@ -665,23 +683,23 @@ class Structure
 
     public void place()
     {
-        for(int i = 0; i < my_width; i++)
+        for(int i = 0; i < my_RWidth; i++)
         {
-            for(int j = 0; j < my_height; j++)
+            for(int j = 0; j < my_RHeight; j++)
             {
-                board[i + gridX][j + gridY] = structure[i][j];
+                board[i + gridX][j + gridY] = rotatedStructure[i][j];
             }
         }
     }
 
     public int getWidth()
     {
-        return my_width;
+        return my_RWidth;
     }
 
     public int getHeight()
     {
-        return my_height;
+        return my_RHeight;
     }
 
     public int getX()
@@ -696,7 +714,7 @@ class Structure
 
     public boolean get(int x, int y)
     {
-        return structure[x][y];
+        return rotatedStructure[x][y];
     }
 
     public boolean isMouseOver(int x, int y)
@@ -708,6 +726,35 @@ class Structure
         } else {
             return false;
         }
+    }
+
+    public void resetRotated()
+    {
+        rotatedStructure = structure;
+        my_RHeight = my_height;
+        my_RWidth = my_width;
+    }
+
+    public void rotate(int r)
+    {
+        int temp = my_RHeight;
+        my_RHeight = my_RWidth;
+        my_RWidth = temp;
+        boolean[][] tempStructure = new boolean[my_RWidth][my_RHeight];
+        for(int i = 0; i < my_RHeight; i++)
+        {
+            for(int j = 0; j < my_RWidth; j++)
+            {
+                if(r == 1)
+                {
+                    tempStructure[j][i] = rotatedStructure[i][my_RWidth - j - 1];
+                } else
+                {
+                    tempStructure[j][i] = rotatedStructure[my_RHeight - i - 1][j];
+                }
+            }
+        }
+        rotatedStructure = tempStructure;
     }
 
     public void render(int x, int y)

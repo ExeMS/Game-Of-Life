@@ -1,3 +1,11 @@
+void mouseWheel(MouseEvent event) {
+    if(currentStructureActive != -1)
+    {
+        int e = int(event.getCount());
+        structures.get(currentStructureActive).rotate(e);
+    }
+}
+
 // Checks if mouse is pressed and is over any button
 void checkMousePressed()
 {
@@ -24,7 +32,11 @@ void checkMousePressed()
             if (spawnStructureButton.isMouseOver() && !inStructureMenu) {
                 inStructureMenu = true;
                 mousePressedDelay = 20;
-                currentStructureActive = -1;
+                if(currentStructureActive != -1)
+                {
+                    structures.get(currentStructureActive).resetRotated();
+                    currentStructureActive = -1;
+                }
             } else if(inStructureMenu && mousePressedDelay == 0)
             {
                 for(int i = 1; i < structures.size(); i++)
@@ -50,6 +62,7 @@ void checkMousePressed()
                     mousePressedDelay = 20;
                 }else
                 {
+                    structures.get(currentStructureActive).resetRotated();
                     currentStructureActive = -1;
                 }
             }
