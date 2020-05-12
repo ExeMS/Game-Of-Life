@@ -26,6 +26,9 @@ void randomBoard()
     }
 }
 
+void sandboxStart() {
+}
+
 void startGame_random()
 {
     randomBoard();
@@ -51,5 +54,12 @@ void startGame_file()
 { // We might need do this at some point :D
     readFromFile("xxx");
     mode = 4;
+    inMenu = false;
+};
+
+void startGame_sandbox()
+{
+    sandboxStart();
+    mode = 5;
     inMenu = false;
 };
