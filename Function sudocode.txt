@@ -1,11 +1,11 @@
 function setup()
 BEGINFUNCTION
-	SET canvas size to 1080x1920
-	SET background to backgroundColour
+	SET canvas size TO 1080x1920
+	SET background TO backgroundColour
 	CALL clearBoard()
 	CALL setupMenu()
 	CALL setupGUI
-	SET inMenu to true
+	SET inMenu TO true
 ENDFUNCTION
 
 function draw()
@@ -20,72 +20,81 @@ BEGINFUNCTION
 	Euan could you please do this for your code please thanks :D
 ENDFUNCTION
 
-function mousePressed
+function mousePressed()
 BEGINFUNCTION
 	IF inMenu THEN
-		IF randomStartButton is pressed THEN
+		IF randomStartButton IS pressed THEN
 			CALL startGame_random()
-		ELSE IF gosperGliderGunButton is pressed THEN
+		ELSE IF gosperGliderGunButton IS pressed THEN
 			CALL startGame_gun()
-		ELSE IF singleGliderButton is pressed THEN
+		ELSE IF singleGliderButton IS pressed THEN
 			CALL startGame_glider()
-		ELSE IF readFromFileButton is pressed THEN
+		ELSE IF readFromFileButton IS pressed THEN
 			CALL startGame_file()
 		ENDIF
+    ELSE
+        IF GUIButton pressed THEN
+            SET currentStructureActive TO relative index of structures
+        ELSE IF currentStructureActive IS NOT -1 THEN
+            IF cancelButton IS NOT pressed THEN
+                PLACE currentStructureActive
+            ENDIF
+            SET currentStructureActive TO -1
+        ENDIF
 	ENDIF
 ENDFUNCTION
 
-function checkKeys
+function checkKeys()
 BEGINFUNCTION
 	IF not inMenu THEN
-		IF upArrow is pressed THEN
+		IF upArrow IS pressed THEN
 			MINUS screenSpeed from screenYPos
-		ELSE IF downArrow is pressed THEN
-			ADD screenSpeed to screenYPos
-		ELSE IF leftArrow is pressed THEN
+		ELSE IF downArrow IS pressed THEN
+			ADD screenSpeed TO screenYPos
+		ELSE IF leftArrow IS pressed THEN
 			MINUS screenSpeed from screenXPos
-		ELSE IF rightArrow is pressed THEN
-			ADD screenSpeed to screenXPos
+		ELSE IF rightArrow IS pressed THEN
+			ADD screenSpeed TO screenXPos
 		ENDIF
 	ENDIF
 ENDFUNCTION
 
-function readFromFile
+function readFromFile()
 BEGINFUNCTION
-	Hey Euan this is you again :D
+	Hey Euan this IS you again :D
 ENDFUNCTION
 
-function clearBoard
+function clearBoard()
 BEGINFUNCTION
-	SET ALL values in board to 0
+	SET ALL values in board TO 0
 ENDFUNCTION
 
-function randomBoard
+function randomBoard()
 BEGINFUNCTION
-	SET ALL values in board to random integer between 0 and 1
+	SET ALL values in board TO random integer between 0 and 1
 ENDFUNCTION
 
-function startGame_random
+function startGame_random()
 BEGINFUNCTION
 	CALL randomBoard()
-	SET inMenu to False
+	SET inMenu TO False
 ENDFUNCTION
 
 Hey Euan, all the rest of the start game things were yours :D
-function startGame_gun
+function startGame_gun()
 BEGINFUNCTION
 ENDFUNCTION
 
-function startGame_glider
+function startGame_glider()
 BEGINFUNCTION
 ENDFUNCTION
 
-function startGame_file
+function startGame_file()
 BEGINFUNCTION
-	With this one Euan, just write what you think the finished function should do e.g. get user to input file and then set board...
+	With this one Euan, just write what you think the finished function should do e.g. get user TO input file and then set board...
 ENDFUNCTION
 
-function render
+function render()
 BEGINFUNCTION
 	RENDER background as backgroundColour
 	CALL renderBoard()
@@ -95,33 +104,57 @@ BEGINFUNCTION
 		CALL renderGUI()
 ENDFUNCTION
 
-function renderBoard
+function renderBoard()
 BEGINFUNCTION
-    Need to do this at some point
+    SET notDrawnStructuresLines TO True
+    SET gridX TO screenXPos / CELL_SIZE
+    SET gridY TO screenYPos / CELL_SIZE
+    FOR i IN RANGE gridX-1 TO gridX + SCREEN_GRID_WIDTH + 1
+        FOR j IN RANGE gridY-1 TO gridY + SCREEN_GRID_HEIGHT + 1
+            IF i OR j IS out of bounds THEN
+                CONTINUE
+            ELSE IF currentStructureActive IS NOT -1 and i AND j ARE IN the structure position THEN
+                IF notDrawnStructuresLines THEN
+                    DRAW lines
+                ENDIF
+                IF structure.get(i, j) THEN
+                    DRAW blue square
+                ELSE IF board[i][j] THEN
+                    DRAW red square
+                ENDIF
+            ELSE IF board[i][j] THEN
+                DRAW green square
+            ENDIF
+        ENDFOR
+    ENDFOR
 ENDFUNCTION
 
-function renderGUI
+function renderGUI()
 BEGINFUNCTION
 	FOR button in GUIButtons
 		CALL button.render()
 	ENDFOR
+    IF currentStructureActive IS NOT -1 THEN
+        CALL cancelButton.render()
+        RENDER currentStructureActive
+    ENDIF
 ENDFUNCTION
 
-function renderMenu
+function renderMenu()
 BEGINFUNCTION
 	FOR button in MenuButtons
 		CALL button.render()
 	ENDFOR
 ENDFUNCTION
 
-function saveGame
+function saveGame()
 BEGINFUNCTION
-	CAST board to String
-	SET filename to INPUT
-	SAVE board to filename
+	CAST board TO String
+	SET filename TO INPUT
+	SAVE board TO filename
 ENDFUNCTION
 
-function setupMenu
+function setupMenu()
 BEGINFUNCTION
 	CREATE randomStartButton
 	CREATE gosperGliderGunButton
@@ -129,9 +162,14 @@ BEGINFUNCTION
 	CREATE readFromFileButton
 ENDFUNCTION
 
-function setupGUI
+function setupGUI()
 BEGINFUNCTION
-	// NEED TO FILL THIS IN WHEN WE PLAN IT!!!
+	FOR each in structureFiles
+        SET structures[each] TO readFromFile(each)
+        CREATE Button
+    ENDFOR
+    SET cancelButton TO NEW Button
+    SET currentStructureActive TO -1
 ENDFUNCTION
 
 
@@ -139,7 +177,7 @@ class Button
 BEGINCLASS
 	function isMouseOver()
 	BEGINFUNCTION
-		IF mouse is over this THEN
+		IF mouse IS over this THEN
 			return True
 		ELSE
 			return False
@@ -148,14 +186,53 @@ BEGINCLASS
 
 	function render()
 	BEGINFUNCTION
-		SET stroke to this.outline
+		SET stroke TO this.outline
 		IF isMouseOver() THEN
-			SET fill to this.hoverColour
+			SET fill TO this.hoverColour
 		ELSE
-			SET fill to this.baseColour
+			SET fill TO this.baseColour
 		ENDIF
 		DRAW rectangle
-		SET textSize to this.my_textSize
+		SET textSize TO this.my_textSize
 		DRAW text
 	ENDFUNCTION
+ENDCLASS
+
+class Structure
+BEGINCLASS
+    function update()
+    BEGINFUNCTION
+        set gridX TO the position of the mouseX relative TO the board
+        set gridY TO the position of the mouseY relative TO the board
+    ENDFUNCTION
+
+    function place()
+    BEGINFUNCTION
+        place structure on the board
+    ENDFUNCTION
+
+    function getWidth()
+    BEGINFUNCTION
+        RETURN my_width
+    ENDFUNCTION
+
+    function getHeight()
+    BEGINFUNCTION
+        RETURN my_height
+    ENDFUNCTION
+
+    function getX()
+    BEGINFUNCTION
+        RETURN gridX
+    ENDFUNCTION
+
+    function getY()
+    BEGINFUNCTION
+        RETURN gridY
+    ENDFUNCTION
+
+    boolean get(int x, int y)
+    BEGINFUNCTION
+        RETURN structure[x][y]
+    ENDFUNCTION
 ENDCLASS
