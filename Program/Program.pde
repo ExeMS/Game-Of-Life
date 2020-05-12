@@ -1,33 +1,43 @@
 // Checks if mouse is pressed and is over any button
-void mousePressed()
+void checkMousePressed()
 {
-    if(inMenu)
+    if(mousePressed)
     {
-        if (randomStartButton.isMouseOver()) {
-            startGame_random();
-        }
-        if (gosperGliderGun.isMouseOver()) {
-            startGame_gun();
-        }
-        if (singleGlider.isMouseOver()) {
-            startGame_glider();
-        }
-        if (readFromFile.isMouseOver()) {
-            startGame_file();
-        }
-    } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
-        if (spawnGliderButton.isMouseOver()) {
-            currentStructureActive = 0;
-        }else if (currentStructureActive != -1) {
-            if(!cancelButton.isMouseOver())
-            {
-                structures.get(currentStructureActive).place();
+        if(inMenu)
+        {
+            if (randomStartButton.isMouseOver()) {
+                startGame_random();
             }
-            if(!shiftPressed)
-            {
-                currentStructureActive = -1;
+            if (gosperGliderGun.isMouseOver()) {
+                startGame_gun();
+            }
+            if (singleGlider.isMouseOver()) {
+                startGame_glider();
+            }
+            if (readFromFile.isMouseOver()) {
+                startGame_file();
+            }
+        } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
+            if (spawnGliderButton.isMouseOver()) {
+                currentStructureActive = 0;
+            }else if (currentStructureActive != -1 && mousePressedDelay == 0) {
+                if(!cancelButton.isMouseOver())
+                {
+                    structures.get(currentStructureActive).place();
+                }
+                if(shiftPressed)
+                {
+                    mousePressedDelay = 20;
+                }else
+                {
+                    currentStructureActive = -1;
+                }
             }
         }
+    }
+    if(mousePressedDelay != 0)
+    {
+        mousePressedDelay -= 1;
     }
 }
 
@@ -53,7 +63,8 @@ void keyPressed()
     }
 }
 
-void keyReleased() {
+void keyReleased()
+{
     if (key == CODED && !inMenu) {
         if (keyCode == UP) { // When a key is pressed, it checks to see if a the screen can more more in that direction
             upPressed = false;
@@ -70,6 +81,7 @@ void keyReleased() {
         if(keyCode == SHIFT) // This allows you to keep placing things if you press shift
         {
             shiftPressed = false;
+            mousePressedDelay = 0;
         }
     }
 }
@@ -180,7 +192,7 @@ void setup()
 void draw()
 {
     checkKeys();
-
+    checkMousePressed();
     render();
 
     timeControl++;

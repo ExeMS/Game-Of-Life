@@ -11,6 +11,7 @@ ENDFUNCTION
 function draw()
 BEGINFUNCTION
 	CALL checkKeys()
+    CALL checkMousePressed()
 	CALL render()
 	CALL god()
 ENDFUNCTION
@@ -20,28 +21,32 @@ BEGINFUNCTION
 	Euan could you please do this for your code please thanks :D
 ENDFUNCTION
 
-function mousePressed()
+function checkMousePressed()
 BEGINFUNCTION
-	IF inMenu THEN
-		IF randomStartButton IS pressed THEN
-			CALL startGame_random()
-		ELSE IF gosperGliderGunButton IS pressed THEN
-			CALL startGame_gun()
-		ELSE IF singleGliderButton IS pressed THEN
-			CALL startGame_glider()
-		ELSE IF readFromFileButton IS pressed THEN
-			CALL startGame_file()
-		ENDIF
-    ELSE
-        IF GUIButton pressed THEN
-            SET currentStructureActive TO relative index of structures
-        ELSE IF currentStructureActive IS NOT -1 THEN
-            IF cancelButton IS NOT pressed THEN
-                PLACE currentStructureActive
+    IF mousePressed THEN
+        IF inMenu THEN
+            IF randomStartButton IS pressed THEN
+                CALL startGame_random()
+            ELSE IF gosperGliderGunButton IS pressed THEN
+                CALL startGame_gun()
+            ELSE IF singleGliderButton IS pressed THEN
+                CALL startGame_glider()
+            ELSE IF readFromFileButton IS pressed THEN
+                CALL startGame_file()
             ENDIF
-            SET currentStructureActive TO -1
+        ELSE
+            IF GUIButton pressed THEN
+                SET currentStructureActive TO relative index of structures
+            ELSE IF currentStructureActive IS NOT -1 THEN
+                IF cancelButton IS NOT pressed THEN
+                    PLACE currentStructureActive
+                ENDIF
+                IF SHIFT IS NOT pressed THEN
+                    SET currentStructureActive TO -1
+                ENDIF
+            ENDIF
         ENDIF
-	ENDIF
+    ENDIF
 ENDFUNCTION
 
 function checkKeys()
