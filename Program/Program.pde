@@ -184,7 +184,7 @@ void setupGUI()
     spawnGliderButton = new Button(0, 0, "Glider", 30);
     cancelButton = new Button(SCREEN_WIDTH - 150, 0, "Cancel", 30);
     pauseButton = new Button(0, 800, 120, 50, "PAUSE", 30);
-    playButton = new Button(0, 740, 120, 50, "PLAY", 30);
+    playButton = new Button(0, 800, 120, 50, "PLAY", 30);
 
     // Structures
     structures.add(new Structure("glider.txt"));
