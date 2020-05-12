@@ -33,12 +33,19 @@ void checkMousePressed()
                     currentStructureActive = -1;
                 }
             }
-            if(pauseButton.isMouseOver() && paused == false) {
+            if(pauseButton.isMouseOver() && paused == false && mousePressedDelay == 0) {
               paused = true;
-            }
-            if(playButton.isMouseOver() && paused == true) {
+              mousePressedDelay = 20;
+            } else if(playButton.isMouseOver() && paused == true && mousePressedDelay == 0) {
               paused = false;
+              mousePressedDelay = 20;
             }
+        }
+    }else
+    {
+        if(!pauseButton.isMouseOver() && !shiftPressed)
+        {
+            mousePressedDelay = 0;
         }
     }
     if(mousePressedDelay != 0)

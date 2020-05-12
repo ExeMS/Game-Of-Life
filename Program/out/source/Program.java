@@ -49,6 +49,19 @@ public void checkMousePressed()
                     currentStructureActive = -1;
                 }
             }
+            if(pauseButton.isMouseOver() && paused == false && mousePressedDelay == 0) {
+              paused = true;
+              mousePressedDelay = 20;
+            } else if(playButton.isMouseOver() && paused == true && mousePressedDelay == 0) {
+              paused = false;
+              mousePressedDelay = 20;
+            }
+        }
+    }else
+    {
+        if(!pauseButton.isMouseOver() && !shiftPressed)
+        {
+            mousePressedDelay = 0;
         }
     }
     if(mousePressedDelay != 0)
@@ -124,52 +137,54 @@ public void checkKeys()
 // Updates the game
 public void god()
 {
-    for (int i = 0; i < BOARD_WIDTH; i++) {
-        for (int j = 0; j < BOARD_HEIGHT; j++) {
-            boardcopy[i][j] = board[i][j];
-            int counter = 0;
-            // counting the number of alive cells around the cell
-            if (i != 0 && board[i-1][j]) {
-                counter++;
-            }
-            if (i != BOARD_WIDTH - 1 && board[i+1][j]) {
-                counter++;
-            }
-            if (i != 0 && j != 0 && board[i-1][j-1]) {
-                counter++;
-            }
-            if (j != 0 && board[i][j-1]) {
-                counter++;
-            }
-            if (i != BOARD_WIDTH - 1 && j != 0 && board[i+1][j-1]) {
-                counter++;
-            }
-            if (i != 0 && j != BOARD_HEIGHT - 1 && board[i-1][j+1]) {
-                counter++;
-            }
-            if (j != BOARD_HEIGHT - 1 && board[i][j+1]) {
-                counter++;
-            }
-            if (j != BOARD_HEIGHT - 1 && i != BOARD_WIDTH - 1 && board[i+1][j+1]) {
-                counter++;
-            }
-            //Running through the rules
-            if ((counter < 2) && (board[i][j])) {
-                boardcopy[i][j] = false;
-            }
-            if ((counter > 3) && (board[i][j])) {
-                boardcopy[i][j] = false;
-            }
-            if ((counter == 3) && (board[i][j] == false)) {
-                boardcopy[i][j] = true;
-            }
-        }
-    }
-    for (int i = 0; i < BOARD_WIDTH; i++) {
-        for (int j = 0; j < BOARD_HEIGHT; j++) {
-            board[i][j] = boardcopy[i][j];
-        }
-    }
+  if(paused == false) {
+      for (int i = 0; i < BOARD_WIDTH; i++) {
+          for (int j = 0; j < BOARD_HEIGHT; j++) {
+              boardcopy[i][j] = board[i][j];
+              int counter = 0;
+              // counting the number of alive cells around the cell
+              if (i != 0 && board[i-1][j]) {
+                  counter++;
+              }
+              if (i != BOARD_WIDTH - 1 && board[i+1][j]) {
+                  counter++;
+              }
+              if (i != 0 && j != 0 && board[i-1][j-1]) {
+                  counter++;
+              }
+              if (j != 0 && board[i][j-1]) {
+                  counter++;
+              }
+              if (i != BOARD_WIDTH - 1 && j != 0 && board[i+1][j-1]) {
+                  counter++;
+              }
+              if (i != 0 && j != BOARD_HEIGHT - 1 && board[i-1][j+1]) {
+                  counter++;
+              }
+              if (j != BOARD_HEIGHT - 1 && board[i][j+1]) {
+                  counter++;
+              }
+              if (j != BOARD_HEIGHT - 1 && i != BOARD_WIDTH - 1 && board[i+1][j+1]) {
+                  counter++;
+              }
+              //Running through the rules
+              if ((counter < 2) && (board[i][j])) {
+                  boardcopy[i][j] = false;
+              }
+              if ((counter > 3) && (board[i][j])) {
+                  boardcopy[i][j] = false;
+              }
+              if ((counter == 3) && (board[i][j] == false)) {
+                  boardcopy[i][j] = true;
+              }
+          }
+      }
+      for (int i = 0; i < BOARD_WIDTH; i++) {
+          for (int j = 0; j < BOARD_HEIGHT; j++){
+              board[i][j] = boardcopy[i][j];
+          }
+      }
+  }
 }
 
 public void setupMenu()
@@ -184,6 +199,8 @@ public void setupGUI()
 {
     spawnGliderButton = new Button(0, 0, "Glider", 30);
     cancelButton = new Button(SCREEN_WIDTH - 150, 0, "Cancel", 30);
+    pauseButton = new Button(0, 800, 120, 50, "PAUSE", 30);
+    playButton = new Button(0, 800, 120, 50, "PLAY", 30);
 
     // Structures
     structures.add(new Structure("glider.txt"));
@@ -412,11 +429,21 @@ public void renderMenu()
 }
 public void renderGUI()
 { // Render process for the GUI will go in here
-    spawnGliderButton.render();
-    if(currentStructureActive != -1)
-    {
-        cancelButton.render();
-        structures.get(currentStructureActive).update();
+    if(mode == 2 || mode == 3 || mode == 4){
+      spawnGliderButton.render();
+      if(currentStructureActive != -1)
+      {
+          cancelButton.render();
+          structures.get(currentStructureActive).update();
+      }
+    }
+    if(mode == 1 || mode == 2 || mode == 3 || mode == 4){
+      if(paused == false){
+        pauseButton.render();
+      }
+      if(paused == true){
+        playButton.render();
+      }
     }
 }
 
@@ -533,24 +560,28 @@ public void randomBoard()
 public void startGame_random()
 {
     randomBoard();
+    mode = 1;
     inMenu = false;
 };
 
 public void startGame_gun()
 {
     createGliderGun(0, 0);
+    mode = 2;
     inMenu = false;
 };
 
 public void startGame_glider()
 {
     createGlider(0, 0);
+    mode = 3;
     inMenu = false;
 };
 
 public void startGame_file()
 { // We might need do this at some point :D
     readFromFile("xxx");
+    mode = 4;
     inMenu = false;
 };
 class Structure
@@ -626,6 +657,12 @@ static final int CELL_SIZE = 10;
 static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
 static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
 
+// mode of use
+int mode = 1;
+
+// Pausing
+boolean paused = true;
+
 // Boards key: 0: empty, 1: cell
 boolean[][] board = new boolean[BOARD_HEIGHT][BOARD_WIDTH]; // Will probably change this to a boolean later
 boolean[][] boardcopy = new boolean[BOARD_HEIGHT][BOARD_WIDTH];
@@ -643,6 +680,8 @@ Button spawnGliderButton;
 ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
 Button cancelButton;
 int currentStructureActive = -1;
+Button pauseButton;
+Button playButton;
 
 
 // keys Pressed
