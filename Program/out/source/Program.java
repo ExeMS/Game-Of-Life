@@ -44,6 +44,10 @@ public void checkMousePressed()
             if (sandbox.isMouseOver()) {
                 startGame_sandbox();
             }
+            if (exitButton.isMouseOver())
+            {
+                exit();
+            }
         } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
             if (spawnStructureButton.isMouseOver() && !inStructureMenu) {
                 inStructureMenu = true;
@@ -237,6 +241,7 @@ public void setupMenu()
     singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
     readFromFile = new Button(360, 655, 280, 50, "Read From File", 30);
     sandbox = new Button(360, 715, 280, 50, "Sandbox", 30);
+    exitButton = new Button(360, 900, 280, 50, "Exit", 30);
 }
 
 public void setupGUI()
@@ -475,6 +480,8 @@ public void renderMenu()
     gosperGliderGun.render();
     singleGlider.render();
     readFromFile.render();
+    sandbox.render();
+    exitButton.render();
 }
 public void renderGUI()
 { // Render process for the GUI will go in here
@@ -828,6 +835,7 @@ Button gosperGliderGun;
 Button singleGlider;
 Button readFromFile;
 Button sandbox;
+Button exitButton;
 
 // GUI Stuff
 //Button spawnGliderButton;

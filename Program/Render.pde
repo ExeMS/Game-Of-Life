@@ -4,6 +4,8 @@ void renderMenu()
     gosperGliderGun.render();
     singleGlider.render();
     readFromFile.render();
+    sandbox.render();
+    exitButton.render();
 }
 void renderGUI()
 { // Render process for the GUI will go in here

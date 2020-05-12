@@ -32,6 +32,7 @@ Button gosperGliderGun;
 Button singleGlider;
 Button readFromFile;
 Button sandbox;
+Button exitButton;
 
 // GUI Stuff
 //Button spawnGliderButton;
