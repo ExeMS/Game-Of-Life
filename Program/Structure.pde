@@ -37,6 +37,17 @@ class Structure
         }
     }
 
+    void placeInLocation(int x, int y)
+    {
+        for(int i = 0; i < my_RWidth; i++)
+        {
+            for(int j = 0; j < my_RHeight; j++)
+            {
+                board[i + x][j + y] = rotatedStructure[i][j];
+            }
+        }
+    }
+
     int getWidth()
     {
         return my_RWidth;

@@ -642,7 +642,7 @@ public void startGame_gun()
 
 public void startGame_glider()
 {
-    createGlider(0, 0);
+    structures.get(1).placeInLocation(49, 49);
     mode = 3;
     inMenu = false;
 };
@@ -695,6 +695,17 @@ class Structure
             for(int j = 0; j < my_RHeight; j++)
             {
                 board[i + gridX][j + gridY] = rotatedStructure[i][j];
+            }
+        }
+    }
+
+    public void placeInLocation(int x, int y)
+    {
+        for(int i = 0; i < my_RWidth; i++)
+        {
+            for(int j = 0; j < my_RHeight; j++)
+            {
+                board[i + x][j + y] = rotatedStructure[i][j];
             }
         }
     }

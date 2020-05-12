@@ -45,7 +45,7 @@ void startGame_gun()
 
 void startGame_glider()
 {
-    createGlider(0, 0);
+    structures.get(1).placeInLocation(49, 49);
     mode = 3;
     inMenu = false;
 };
