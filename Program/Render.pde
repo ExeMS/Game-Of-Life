@@ -24,6 +24,7 @@ void renderGUI()
             structures.get(currentStructureActive).update();
         }
     }
+    menuButton.render();
     if(mode == 1 || mode == 2 || mode == 3 || mode == 4){
       if(paused == false){
         pauseButton.render();

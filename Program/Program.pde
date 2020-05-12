@@ -53,6 +53,10 @@ void checkMousePressed()
                     currentStructureActive = -1;
                 }
             }
+            if(menuButton.isMouseOver())
+            {
+                backToMenu();
+            }
             if(pauseButton.isMouseOver() && paused == false && mousePressedDelay == 0) {
               paused = true;
               mousePressedDelay = 20;
@@ -138,6 +142,12 @@ void checkKeys()
     }
 }
 
+void backToMenu()
+{
+    inMenu = true;
+    clearBoard();
+}
+
 // Updates the game
 void god()
 {
@@ -207,8 +217,9 @@ void setupGUI()
     inStructureMenu = false;
     spawnCellButton = new Button(0, 60, 120, 50, "Cell", 30);
     cancelButton = new Button(1, 52, 140, 50, "Cancel", 30);
-    pauseButton = new Button(1, 949, 120, 50, "PAUSE", 30);
-    playButton = new Button(1, 949, 120, 50, "PLAY", 30);
+    pauseButton = new Button(1, SCREEN_HEIGHT - 51, 120, 50, "PAUSE", 30);
+    playButton = new Button(1, SCREEN_HEIGHT - 51, 120, 50, "PLAY", 30);
+    menuButton = new Button(SCREEN_WIDTH - 121, 1, 120, 50, "Menu", 30);
 
     // Structures
     structures.add(new Structure("cell.txt", "Cell")); // This will now be index 0

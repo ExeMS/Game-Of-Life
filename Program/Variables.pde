@@ -43,6 +43,7 @@ Button cancelButton;
 int currentStructureActive = -1;
 Button pauseButton;
 Button playButton;
+Button menuButton;
 
 
 // keys Pressed
