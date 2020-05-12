@@ -24,6 +24,7 @@ void checkMousePressed()
             if (spawnStructureButton.isMouseOver() && !inStructureMenu) {
                 inStructureMenu = true;
                 mousePressedDelay = 20;
+                currentStructureActive = -1;
             } else if(inStructureMenu && mousePressedDelay == 0)
             {
                 for(int i = 1; i < structures.size(); i++)
@@ -205,13 +206,13 @@ void setupGUI()
     spawnStructureButton = new Button(1, 1, 140, 50, "Structure", 30);
     inStructureMenu = false;
     spawnCellButton = new Button(0, 60, 120, 50, "Cell", 30);
-    cancelButton = new Button(SCREEN_WIDTH - 150, 0, "Cancel", 30);
-    pauseButton = new Button(0, 800, 120, 50, "PAUSE", 30);
-    playButton = new Button(0, 800, 120, 50, "PLAY", 30);
+    cancelButton = new Button(1, 52, 140, 50, "Cancel", 30);
+    pauseButton = new Button(1, 949, 120, 50, "PAUSE", 30);
+    playButton = new Button(1, 949, 120, 50, "PLAY", 30);
 
     // Structures
-    structures.add(new Structure("cell.txt")); // This will now be index 0
-    structures.add(new Structure("glider.txt")); // This will be index 1
+    structures.add(new Structure("cell.txt", "Cell")); // This will now be index 0
+    structures.add(new Structure("glider.txt", "Glider")); // This will be index 1
     currentStructureActive = -1;
 }
 

@@ -5,10 +5,10 @@ class Structure
     private int my_width, my_height;
     private String name;
 
-    Structure(String filename)
+    Structure(String filename, String name)
     {
         structure = readFromFile(filename);
-        name = filename;
+        this.name = name;
         my_width = structure.length;
         my_height = structure[0].length;
         gridX = 0;
