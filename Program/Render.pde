@@ -7,11 +7,21 @@ void renderMenu()
 }
 void renderGUI()
 { // Render process for the GUI will go in here
-    spawnGliderButton.render();
-    if(currentStructureActive != -1)
-    {
-        cancelButton.render();
-        structures.get(currentStructureActive).update();
+    if(mode == 2 || mode == 3 || mode == 4){
+      spawnGliderButton.render();
+      if(currentStructureActive != -1)
+      {
+          cancelButton.render();
+          structures.get(currentStructureActive).update();
+      }
+    }
+    if(mode == 1 || mode == 2 || mode == 3 || mode == 4){
+      if(paused == false){
+        pauseButton.render();
+      }
+      if(paused == true){
+        playButton.render();
+      }
     }
 }
 
