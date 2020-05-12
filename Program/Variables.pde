@@ -31,9 +31,11 @@ Button randomStartButton;
 Button gosperGliderGun;
 Button singleGlider;
 Button readFromFile;
+Button sandbox;
 
 // GUI Stuff
 Button spawnGliderButton;
+Button spawnCellButton;
 ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
 Button cancelButton;
 int currentStructureActive = -1;
