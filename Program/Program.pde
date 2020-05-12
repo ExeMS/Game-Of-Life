@@ -18,7 +18,7 @@ void checkMousePressed()
                 startGame_file();
             }
         } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
-            if (spawnGliderButton.isMouseOver()) {
+            if (spawnGliderButton.isMouseOver() && mode != 1) {
                 currentStructureActive = 0;
             }else if (currentStructureActive != -1 && mousePressedDelay == 0) {
                 if(!cancelButton.isMouseOver())
