@@ -31,3 +31,11 @@ Button spawnGliderButton;
 ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
 Button cancelButton;
 int currentStructureActive = -1;
+
+
+// keys Pressed
+Boolean upPressed    = false;
+Boolean downPressed  = false;
+Boolean rightPressed = false;
+Boolean leftPressed  = false;
+Boolean shiftPressed = false;

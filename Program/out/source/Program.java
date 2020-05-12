@@ -39,7 +39,53 @@ public void mousePressed()
             {
                 structures.get(currentStructureActive).place();
             }
-            currentStructureActive = -1;
+            if(!shiftPressed)
+            {
+                currentStructureActive = -1;
+            }
+        }
+    }
+}
+
+public void keyPressed()
+{
+    if (key == CODED && !inMenu) {
+        if (keyCode == UP) { // When a key is pressed, it checks to see if a the screen can more more in that direction
+            upPressed = true;
+        }
+        if (keyCode == LEFT) {
+            leftPressed = true;
+        }
+        if (keyCode == DOWN) {
+            downPressed = true;
+        }
+        if (keyCode == RIGHT) {
+            rightPressed = true;
+        }
+        if(keyCode == SHIFT) // This allows you to keep placing things if you press shift
+        {
+            shiftPressed = true;
+        }
+    }
+}
+
+public void keyReleased() {
+    if (key == CODED && !inMenu) {
+        if (keyCode == UP) { // When a key is pressed, it checks to see if a the screen can more more in that direction
+            upPressed = false;
+        }
+        if (keyCode == LEFT) {
+            leftPressed = false;
+        }
+        if (keyCode == DOWN) {
+            downPressed = false;
+        }
+        if (keyCode == RIGHT) {
+            rightPressed = false;
+        }
+        if(keyCode == SHIFT) // This allows you to keep placing things if you press shift
+        {
+            shiftPressed = false;
         }
     }
 }
@@ -47,21 +93,18 @@ public void mousePressed()
 // Checks if any of the keys are pressed
 public void checkKeys()
 {
-    if(keyPressed) // This senses a key being pressed
-    {
-        if (key == CODED && !inMenu) {
-            if (keyCode == UP && screenYPos - screenSpeed >= 0) { // When a key is pressed, it checks to see if a the screen can more more in that direction
-                screenYPos -= screenSpeed;
-            }
-            if (keyCode == LEFT && screenXPos - screenSpeed >= 0) {
-                screenXPos -= screenSpeed;
-            }
-            if (keyCode == DOWN && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * CELL_SIZE - SCREEN_HEIGHT) {
-                screenYPos += 5;
-            }
-            if (keyCode == RIGHT && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * CELL_SIZE - SCREEN_WIDTH) {
-                screenXPos += 5;
-            }
+    if (!inMenu) {
+        if (upPressed && screenYPos - screenSpeed >= 0) { // When a key is pressed, it checks to see if a the screen can more more in that direction
+            screenYPos -= screenSpeed;
+        }
+        if (leftPressed && screenXPos - screenSpeed >= 0) {
+            screenXPos -= screenSpeed;
+        }
+        if (downPressed && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * CELL_SIZE - SCREEN_HEIGHT) {
+            screenYPos += screenSpeed;
+        }
+        if (rightPressed && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * CELL_SIZE - SCREEN_WIDTH) {
+            screenXPos += screenSpeed;
         }
     }
 }
@@ -588,6 +631,14 @@ Button spawnGliderButton;
 ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
 Button cancelButton;
 int currentStructureActive = -1;
+
+
+// keys Pressed
+Boolean upPressed    = false;
+Boolean downPressed  = false;
+Boolean rightPressed = false;
+Boolean leftPressed  = false;
+Boolean shiftPressed = false;
   public void settings() {  size(1000, 1000); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Program" };
