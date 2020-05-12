@@ -17,9 +17,27 @@ void checkMousePressed()
             if (readFromFile.isMouseOver()) {
                 startGame_file();
             }
+            if (sandbox.isMouseOver()) {
+                startGame_sandbox();
+            }
         } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
             if (spawnGliderButton.isMouseOver() && mode != 1) {
                 currentStructureActive = 0;
+            }else if (currentStructureActive != -1 && mousePressedDelay == 0) {
+                if(!cancelButton.isMouseOver())
+                {
+                    structures.get(currentStructureActive).place();
+                }
+                if(shiftPressed)
+                {
+                    mousePressedDelay = 20;
+                }else
+                {
+                    currentStructureActive = -1;
+                }
+            }
+            if (spawnCellButton.isMouseOver() && mode == 5) {
+                currentStructureActive = 1;
             }else if (currentStructureActive != -1 && mousePressedDelay == 0) {
                 if(!cancelButton.isMouseOver())
                 {
@@ -177,17 +195,20 @@ void setupMenu()
     gosperGliderGun = new Button(360, 535, 280, 50, "Gosper Glider Gun", 30);
     singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
     readFromFile = new Button(360, 655, 280, 50, "Read From File", 30);
+    sandbox = new Button(360, 715, 280, 50, "Sandbox", 30);
 }
 
 void setupGUI()
 {
-    spawnGliderButton = new Button(0, 0, "Glider", 30);
+    spawnGliderButton = new Button(0, 0, 120, 50, "Glider", 30);
+    spawnCellButton = new Button(0, 60, 120, 50, "Cell", 30);
     cancelButton = new Button(SCREEN_WIDTH - 150, 0, "Cancel", 30);
     pauseButton = new Button(0, 800, 120, 50, "PAUSE", 30);
     playButton = new Button(0, 800, 120, 50, "PLAY", 30);
 
     // Structures
     structures.add(new Structure("glider.txt"));
+    structures.add(new Structure("cell.txt"));
     currentStructureActive = -1;
 }
 
