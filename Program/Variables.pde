@@ -14,6 +14,12 @@ static final int CELL_SIZE = 10;
 static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
 static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
 
+// mode of use
+int mode = 1;
+
+// Pausing
+boolean paused = true;
+
 // Boards key: 0: empty, 1: cell
 boolean[][] board = new boolean[BOARD_HEIGHT][BOARD_WIDTH]; // Will probably change this to a boolean later
 boolean[][] boardcopy = new boolean[BOARD_HEIGHT][BOARD_WIDTH];
@@ -31,6 +37,8 @@ Button spawnGliderButton;
 ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
 Button cancelButton;
 int currentStructureActive = -1;
+Button pauseButton;
+Button playButton;
 
 
 // keys Pressed
