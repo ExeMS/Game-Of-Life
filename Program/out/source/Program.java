@@ -14,11 +14,11 @@ import java.io.IOException;
 
 public class Program extends PApplet {
 
-public void mouseWheel(MouseEvent event) {
+public void mouseWheel(MouseEvent event) { // This is called when the user uses the scroll wheel
     if(currentStructureActive != -1)
     {
-        int e = PApplet.parseInt(event.getCount());
-        structures.get(currentStructureActive).rotate(e);
+        int e = PApplet.parseInt(event.getCount()); // This gets what direction the scroll wheel was used
+        structures.get(currentStructureActive).rotate(e); // This rotates the active structure
     }
 }
 
@@ -27,9 +27,9 @@ public void checkMousePressed()
 {
     if(mousePressed)
     {
-        if(inMenu)
+        if(inMenu) // Checks if in the main menu
         {
-            if (randomStartButton.isMouseOver()) {
+            if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
                 startGame_random();
             }
             if (gosperGliderGun.isMouseOver()) {
@@ -46,20 +46,20 @@ public void checkMousePressed()
             }
             if (exitButton.isMouseOver())
             {
-                exit();
+                exit(); // This just closes the window
             }
         } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
             if (spawnStructureButton.isMouseOver() && !inStructureMenu) {
-                inStructureMenu = true;
-                mousePressedDelay = 20;
+                inStructureMenu = true; // This opens the structure menu
+                mousePressedDelay = 20; // The mousePressedDelay is set to stop causing some bugs
                 if(currentStructureActive != -1)
-                {
+                { // This sets the rotation, if the user is placing down a structure
                     structures.get(currentStructureActive).resetRotated();
                     currentStructureActive = -1;
                 }
             } else if(inStructureMenu && mousePressedDelay == 0)
-            {
-                for(int i = 1; i < structures.size(); i++)
+            { // This checks if any of the structures were pressed (in the structure menu)
+                for(int i = 1; i < structures.size(); i++) // This goes through every structure in the list and checks its location
                 {
                     if(structures.get(i).isMouseOver((i - 1) * 102 + 50, 50))
                     {
@@ -67,30 +67,30 @@ public void checkMousePressed()
                         break;
                     }
                 }
-                inStructureMenu = false;
-                mousePressedDelay = 20;
+                inStructureMenu = false; // Closes the structure menu (even if a structure was not chosen)
+                mousePressedDelay = 20; // Sets the mousePressed delay so bugs aren't caused
             }
             else if (spawnCellButton.isMouseOver() && mode == 5) {
-                currentStructureActive = 0;
+                currentStructureActive = 0; // This checks if the spawnCellButton was clicked, and sets the current active structure to that
             } else if (currentStructureActive != -1 && mousePressedDelay == 0) {
                 if(!cancelButton.isMouseOver())
-                {
+                { // If the cancel button was not pressed, it calls the place function in the structure
                     structures.get(currentStructureActive).place();
                 }
                 if(shiftPressed)
-                {
+                { // If the shift is pressed, then a mousePressedDelay is set and the structure stays active (so you can keep placing them)
                     mousePressedDelay = 20;
                 }else
                 {
-                    structures.get(currentStructureActive).resetRotated();
+                    structures.get(currentStructureActive).resetRotated(); // Otherwise the structure is reset and nothing is set to active
                     currentStructureActive = -1;
                 }
             }
             if(menuButton.isMouseOver())
-            {
+            { // If the menu button is pressed it runs the given function
                 backToMenu();
             }
-            if(pauseButton.isMouseOver() && paused == false && mousePressedDelay == 0) {
+            if(pauseButton.isMouseOver() && paused == false && mousePressedDelay == 0) { // This checks if play/pause was pressed and pauses the game
               paused = true;
               mousePressedDelay = 20;
             } else if(playButton.isMouseOver() && paused == true && mousePressedDelay == 0) {
@@ -99,19 +99,19 @@ public void checkMousePressed()
             }
         }
     }else
-    {
-            mousePressedDelay = 0;
+    { // If the mouse is not pressed the mousePressedDelay is set to 0
+        mousePressedDelay = 0;
     }
     if(mousePressedDelay != 0)
-    {
+    { // This is the count down for the mousePressedDelay
         mousePressedDelay -= 1;
     }
 }
 
 public void keyPressed()
-{
+{ // This is run when a key is pressed
     if (key == CODED && !inMenu) {
-        if (keyCode == UP) { // When a key is pressed, it checks to see if a the screen can more more in that direction
+        if (keyCode == UP) { // When a key is pressed, it sets the given variable
             upPressed = true;
         }
         if (keyCode == LEFT) {
@@ -131,9 +131,9 @@ public void keyPressed()
 }
 
 public void keyReleased()
-{
+{ // This is run when a key is released
     if (key == CODED && !inMenu) {
-        if (keyCode == UP) { // When a key is pressed, it checks to see if a the screen can more more in that direction
+        if (keyCode == UP) { // When a key is released, it sets the given variable
             upPressed = false;
         }
         if (keyCode == LEFT) {
@@ -173,7 +173,7 @@ public void checkKeys()
 }
 
 public void backToMenu()
-{
+{ // This just clears the board to go back to the menu
     inMenu = true;
     clearBoard();
 }
@@ -232,7 +232,7 @@ public void god()
 }
 
 public void setupMenu()
-{
+{ // This creates all the buttons for the Menu
     randomStartButton = new Button(360, 475, 280, 50, "Start", 30);
     gosperGliderGun = new Button(360, 535, 280, 50, "Gosper Glider Gun", 30);
     singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
@@ -242,7 +242,7 @@ public void setupMenu()
 }
 
 public void setupGUI()
-{
+{ // This creates all the buttons of the GUI
     //spawnGliderButton = new Button(0, 0, 120, 50, "Glider", 30);
     spawnStructureButton = new Button(1, 1, 140, 50, "Structure", 30);
     inStructureMenu = false;
@@ -260,30 +260,30 @@ public void setupGUI()
 
 public void setup()
 {
-    
+     // Sets the size of the window, and background colour
     background(backgroundColour);
 
-    clearBoard();
+    clearBoard(); // This clears the board, making sure everything is false
 
-    setupMenu();
+    setupMenu(); // Sets just the menu and GUI
     setupGUI();
 
-    inMenu = true;
+    inMenu = true; // Makes sure you start in the menu
 
     frame.requestFocus(); // Makes the screen instantly focused
 }
 
 public void draw()
-{
-    checkKeys();
+{ // This acts like a update and render function
+    checkKeys(); // This checks if any keys or mouse is pressed
     checkMousePressed();
-    render();
+    render(); // This renders everything on the screen
 
     timeControl++;
     if(timeControl == 10) // This limits how much it is updated
     {
         timeControl = 0;
-        god();
+        god(); // Runs the function for updating the board
     }
 }
 // This is for when we want to display a button
@@ -472,7 +472,7 @@ public boolean[][] readFromFile(String filename)
     return struct;
 }
 public void renderMenu()
-{
+{ // Renders all the videos
     randomStartButton.render();
     gosperGliderGun.render();
     singleGlider.render();
@@ -482,26 +482,26 @@ public void renderMenu()
 }
 public void renderGUI()
 { // Render process for the GUI will go in here
-    if(mode == 2 || mode == 3 || mode == 4){
+    if(mode == 2 || mode == 3 || mode == 4){ // checks what mode you are in
         if(inStructureMenu)
-        {
+        { // If in the structure menu it renders the structures
             for(int i = 1; i < structures.size(); i++)
             {
                 structures.get(i).render((i - 1) * 102 + 50, 50);
             }
         } else
-        {
+        { // Otherwise it renders the structure button
             spawnStructureButton.render();
         }
         if(currentStructureActive != -1)
-        {
+        { // If the user is placing a structure, it updates the structure and renders the cancel button
             cancelButton.render();
             structures.get(currentStructureActive).update();
         }
     }
-    menuButton.render();
-    if(mode == 1 || mode == 2 || mode == 3 || mode == 4){
-      if(paused == false){
+    menuButton.render(); // Always renders the menuButton
+    if(mode == 1 || mode == 2 || mode == 3 || mode == 4){ // Checks the right mode
+      if(paused == false){ // Renders the pause and play button
         pauseButton.render();
       }
       if(paused == true){
@@ -582,10 +582,10 @@ public void renderBoard()
 }
 
 public void render()
-{
+{ // This renders the background and then the other things
     background(backgroundColour);
     renderBoard();
-    if(inMenu)
+    if(inMenu) // Chooses the run the board or...
     {
         renderMenu();
     }else {

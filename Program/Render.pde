@@ -1,5 +1,5 @@
 void renderMenu()
-{
+{ // Renders all the videos
     randomStartButton.render();
     gosperGliderGun.render();
     singleGlider.render();
@@ -9,26 +9,26 @@ void renderMenu()
 }
 void renderGUI()
 { // Render process for the GUI will go in here
-    if(mode == 2 || mode == 3 || mode == 4){
+    if(mode == 2 || mode == 3 || mode == 4){ // checks what mode you are in
         if(inStructureMenu)
-        {
+        { // If in the structure menu it renders the structures
             for(int i = 1; i < structures.size(); i++)
             {
                 structures.get(i).render((i - 1) * 102 + 50, 50);
             }
         } else
-        {
+        { // Otherwise it renders the structure button
             spawnStructureButton.render();
         }
         if(currentStructureActive != -1)
-        {
+        { // If the user is placing a structure, it updates the structure and renders the cancel button
             cancelButton.render();
             structures.get(currentStructureActive).update();
         }
     }
-    menuButton.render();
-    if(mode == 1 || mode == 2 || mode == 3 || mode == 4){
-      if(paused == false){
+    menuButton.render(); // Always renders the menuButton
+    if(mode == 1 || mode == 2 || mode == 3 || mode == 4){ // Checks the right mode
+      if(paused == false){ // Renders the pause and play button
         pauseButton.render();
       }
       if(paused == true){
@@ -109,10 +109,10 @@ void renderBoard()
 }
 
 void render()
-{
+{ // This renders the background and then the other things
     background(backgroundColour);
     renderBoard();
-    if(inMenu)
+    if(inMenu) // Chooses the run the board or...
     {
         renderMenu();
     }else {
