@@ -26,27 +26,10 @@ void randomBoard()
     }
 }
 
-void sandboxStart() {
-}
-
 void startGame_Explore()
 { // This randomizes the board and sets the mode to 1
     randomBoard();
     mode = 1;
-    currentMenu = 0;
-};
-
-void startGame_gun()
-{ // This spawns the glider gun
-    structures.get(2).placeInLocation(6, 8);
-    mode = 2;
-    currentMenu = 0;
-};
-
-void startGame_glider()
-{ // This spawns in a glider in the center of the screen
-    structures.get(1).placeInLocation(49, 49);
-    mode = 3;
     currentMenu = 0;
 };
 
@@ -67,13 +50,12 @@ void startGame_file()
     {
         board = struct;
     }
-    mode = 4;
+    mode = 3;
     currentMenu = 0;
 };
 
 void startGame_sandbox()
 {
-    sandboxStart();
-    mode = 5;
+    mode = 2;
     currentMenu = 0;
 };
