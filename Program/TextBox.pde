@@ -2,7 +2,7 @@ class TextBox
 {
     private int x, y;
     private boolean isFocused;
-    private int my_width, my_height;
+    private float my_width, my_height;
     private String inputText;
     private boolean showCursor = true;
     private int cursorDelay = 0;
@@ -13,38 +13,52 @@ class TextBox
         this.y = y;
         this.my_width = my_width;
         textSize(20);
-        this.my_height = textAscent() * 0.8 + 20;
+        inputText = "";
+        this.my_height = textAscent() * 0.8 + 10;
         isFocused = false;
     }
 
     void update()
     {
-        if(cursorDelay == 0)
+        if(isFocused)
         {
-            cursorDelay = 10;
-            showCursor = !showCursor;
-        }
-        else{
-            cursorDelay -= 1;
+            if(cursorDelay == 0)
+            {
+                cursorDelay = 20;
+                showCursor = !showCursor;
+            }
+            else{
+                cursorDelay -= 1;
+            }
         }
     }
 
     void inputKey(char inpKey)
     {
-        inputText
+        if(inpKey == BACKSPACE)
+        {
+            if(inputText.length() != 0)
+            {
+                inputText = inputText.substring(0, inputText.length() - 1);
+            }
+        }else if(textWidth(inputText + "W") + 10 < my_width)
+        {
+            inputText += inpKey;
+        }
     }
 
     void render()
     {
+        update();
         stroke(0);
         fill(255);
         rect(x, y, my_width, my_height);
         fill(0);
         textSize(20);
-        text(inputText, x + 10, y + textAscent() * 0.8 + 10);
-        if(showCursor)
+        text(inputText, x + 5, y + textAscent() * 0.8 + 5);
+        if(showCursor && isFocused)
         {
-            line(x + textWidth(inputText), y + 10, x + textWidth(inputText), y + 10 + textAscent() * 0.8);
+            line(x + textWidth(inputText) + 5, y + 5, x + textWidth(inputText) + 5, y + 5 + textAscent() * 0.8);
         }
     }
 
@@ -67,5 +81,10 @@ class TextBox
     String getInput()
     {
         return inputText;
+    }
+
+    boolean getIsFocused()
+    {
+        return isFocused;
     }
 }

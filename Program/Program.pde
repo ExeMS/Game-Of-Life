@@ -11,6 +11,13 @@ void checkMousePressed()
 {
     if(mousePressed)
     {
+        /*if(testBox.isMouseOver() && !testBox.getIsFocused())
+        {
+            testBox.setFocused(true);
+        } else if (testBox.getIsFocused() && !testBox.isMouseOver())
+        {
+            testBox.setFocused(false);
+        }*/
         if(inMenu) // Checks if in the main menu
         {
             if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
@@ -111,7 +118,10 @@ void checkMousePressed()
 
 void keyPressed()
 { // This is run when a key is pressed
-    if (key == CODED && !inMenu) {
+    if(testBox.getIsFocused())
+    {
+        testBox.inputKey(key);
+    }else if (key == CODED && !inMenu) {
         if (keyCode == UP) { // When a key is pressed, it sets the given variable
             upPressed = true;
         }
@@ -269,6 +279,7 @@ void setup()
 
     setupMenu(); // Sets just the menu and GUI
     setupGUI();
+    testBox = new TextBox(100, 100, 240);
 
     inMenu = true; // Makes sure you start in the menu
 

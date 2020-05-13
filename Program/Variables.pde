@@ -56,3 +56,4 @@ Boolean shiftPressed = false;
 int mousePressedDelay = 0;
 
 // Text box
+TextBox testBox;

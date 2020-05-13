@@ -27,6 +27,13 @@ public void checkMousePressed()
 {
     if(mousePressed)
     {
+        /*if(testBox.isMouseOver() && !testBox.getIsFocused())
+        {
+            testBox.setFocused(true);
+        } else if (testBox.getIsFocused() && !testBox.isMouseOver())
+        {
+            testBox.setFocused(false);
+        }*/
         if(inMenu) // Checks if in the main menu
         {
             if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
@@ -77,7 +84,7 @@ public void checkMousePressed()
                 }
             }
 
-            if (spawnStructureButton.isMouseOver() && !inStructureMenu) {
+            if (spawnStructureButton.isMouseOver() && !inStructureMenu && mousePressedDelay == 0) {
                 inStructureMenu = true; // This opens the structure menu
                 mousePressedDelay = 20; // The mousePressedDelay is set to stop causing some bugs
                 if(currentStructureActive != -1)
@@ -87,9 +94,9 @@ public void checkMousePressed()
                 }
             } else if(inStructureMenu && mousePressedDelay == 0)
             { // This checks if any of the structures were pressed (in the structure menu)
-                for(int i = 1; i < structures.size(); i++) // This goes through every structure in the list and checks its location
+                for(int i = 0; i < structures.size(); i++) // This goes through every structure in the list and checks its location
                 {
-                    if(structures.get(i).isMouseOver((i - 1) * 102 + 50, 50))
+                    if(structures.get(i).isMouseOver((i) * 102 + 50, 50))
                     {
                         currentStructureActive = i;
                         break;
@@ -105,7 +112,7 @@ public void checkMousePressed()
                 { // If the cancel button was not pressed, it calls the place function in the structure
                     structures.get(currentStructureActive).place();
                 }
-                if(shiftPressed)
+                if(!shiftPressed)
                 { // If the shift is pressed, then a mousePressedDelay is set and the structure stays active (so you can keep placing them)
                     mousePressedDelay = 20;
                 }else
@@ -127,7 +134,10 @@ public void checkMousePressed()
 
 public void keyPressed()
 { // This is run when a key is pressed
-    if (key == CODED && !inMenu) {
+    if(testBox.getIsFocused())
+    {
+        testBox.inputKey(key);
+    }else if (key == CODED && !inMenu) {
         if (keyCode == UP) { // When a key is pressed, it sets the given variable
             upPressed = true;
         }
@@ -250,12 +260,12 @@ public void god()
 
 public void setupMenu()
 { // This creates all the buttons for the Menu
-    randomStartButton = new Button(360, 475, 280, 50, "Start", 30);
-    gosperGliderGun = new Button(360, 535, 280, 50, "Gosper Glider Gun", 30);
-    singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
-    readFromFile = new Button(360, 655, 280, 50, "Read From File", 30);
-    sandbox = new Button(360, 715, 280, 50, "Sandbox", 30);
-    exitButton = new Button(360, 900, 280, 50, "Exit", 30);
+    randomStartButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 145, 280, 50, "Start", 30);
+    gosperGliderGun = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 85, 280, 50, "Gosper Glider Gun", 30);
+    singleGlider = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 25, 280, 50, "Glider", 30);
+    readFromFile = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 35, 280, 50, "Read From File", 30);
+    sandbox = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 95, 280, 50, "Sandbox", 30);
+    exitButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 155, 280, 50, "Exit", 30);
 }
 
 public void setupGUI()
@@ -285,6 +295,7 @@ public void setup()
 
     setupMenu(); // Sets just the menu and GUI
     setupGUI();
+    testBox = new TextBox(100, 100, 240);
 
     inMenu = true; // Makes sure you start in the menu
 
@@ -417,80 +428,8 @@ class Button
         text(my_text, x + paddingX, y + textAscent() * 0.8f + paddingY);
     }
 };
-public boolean[][] createGliderGun(int xPos, int yPos)
-{
-    boolean[][] struct = new boolean[39][20];
-    struct[1][7] = true;
-    struct[1][8] = true;
-    struct[2][7] = true;
-    struct[2][8] = true;
-
-    struct[9][8] = true;
-    struct[9][9] = true;
-    struct[10][7] = true;
-    struct[10][9] = true;
-    struct[11][7] = true;
-    struct[11][8] = true;
-
-    struct[17][9] = true;
-    struct[17][10] = true;
-    struct[17][11] = true;
-    struct[18][9] = true;
-    struct[19][10] = true;
-
-    struct[23][6] = true;
-    struct[23][7] = true;
-    struct[24][5] = true;
-    struct[24][7] = true;
-    struct[25][5] = true;
-    struct[25][6] = true;
-
-    struct[25][17] = true;
-    struct[25][18] = true;
-    struct[26][17] = true;
-    struct[26][19] = true;
-    struct[27][17] = true;
-
-    struct[35][5] = true;
-    struct[35][6] = true;
-    struct[36][5] = true;
-    struct[36][6] = true;
-
-    struct[36][12] = true;
-    struct[36][13] = true;
-    struct[36][14] = true;
-    struct[37][12] = true;
-    struct[38][13] = true;
-    return struct;
-}
-
-public void createGlider(int xPos, int yPos)
-{
-    board[xPos + 1][yPos + 2] = true;
-    board[xPos][yPos + 2] = true;
-    board[xPos + 2][yPos + 2] = true;
-    board[xPos + 2][yPos + 1] = true;
-    board[xPos + 1][yPos] = true;
-}
-
 public boolean[][] readFromFile(String filename)
-{ // This should return a 2d array of the file (same layout as the board but just smaller)
-    // This is temporary just so I can test the GUI structures
-    /*boolean[][] struct = new boolean[3][3];
-    for(int i = 0; i < 3; i++)
-    {
-        for(int j = 0; j < 3; j++)
-        {
-            struct[i][j] = false;
-        }
-    }
-    struct[1][2] = true;
-    struct[0][2] = true;
-    struct[2][2] = true;
-    struct[2][1] = true;
-    struct[1][0] = true;*/
-
-
+{ 
     String[] lines = loadStrings(filename);
     int structureWidth = 0;
     for (int i = 0 ; i < lines.length; i++) {
@@ -547,12 +486,12 @@ public void renderMenu()
 }
 public void renderGUI()
 { // Render process for the GUI will go in here
-    if(mode == 2 || mode == 3 || mode == 4){ // checks what mode you are in
+    if(mode != 1){ // checks what mode you are in
         if(inStructureMenu)
         { // If in the structure menu it renders the structures
-            for(int i = 1; i < structures.size(); i++)
+            for(int i = 0; i < structures.size(); i++)
             {
-                structures.get(i).render((i - 1) * 102 + 50, 50);
+                structures.get(i).render(i * 102 + 50, 50);
             }
         } else
         { // Otherwise it renders the structure button
@@ -565,7 +504,7 @@ public void renderGUI()
         }
     }
     menuButton.render(); // Always renders the menuButton
-    if(mode == 1 || mode == 2 || mode == 3 || mode == 4){ // Checks the right mode
+    if(mode != 0){ // Checks the right mode
       if(paused == false){ // Renders the pause and play button
         pauseButton.render();
       }
@@ -656,6 +595,7 @@ public void render()
     }else {
         renderGUI();
     }
+    //testBox.render();
 }
 public void clearBoard()
 { // This sets the whole board to 0
@@ -697,7 +637,7 @@ public void startGame_Explore()
 
 public void startGame_gun()
 { // This spawns the glider gun
-    createGliderGun(0, 0);
+    structures.get(2).placeInLocation(6, 8);
     mode = 2;
     inMenu = false;
 };
@@ -711,7 +651,7 @@ public void startGame_glider()
 
 public void startGame_file()
 { // We might need do this at some point :D
-    readFromFile("xxx");
+    readFromFile("cell.txt");
     mode = 4;
     inMenu = false;
 };
@@ -847,7 +787,7 @@ class Structure
         {
             my_cellSize = my_boardSize / (my_width + 2);
         }else {
-            my_cellSize = my_boardSize / (my_width + 2);
+            my_cellSize = my_boardSize / (my_height + 2);
         }
         stroke(0);
         if(isMouseOver(x, y))
@@ -876,8 +816,98 @@ class Structure
         text(name, x + xGap, y + my_boardSize - 2);
     }
 }
+class TextBox
+{
+    private int x, y;
+    private boolean isFocused;
+    private float my_width, my_height;
+    private String inputText;
+    private boolean showCursor = true;
+    private int cursorDelay = 0;
+
+    TextBox(int x, int y, int my_width)
+    {
+        this.x = x;
+        this.y = y;
+        this.my_width = my_width;
+        textSize(20);
+        inputText = "";
+        this.my_height = textAscent() * 0.8f + 10;
+        isFocused = false;
+    }
+
+    public void update()
+    {
+        if(isFocused)
+        {
+            if(cursorDelay == 0)
+            {
+                cursorDelay = 20;
+                showCursor = !showCursor;
+            }
+            else{
+                cursorDelay -= 1;
+            }
+        }
+    }
+
+    public void inputKey(char inpKey)
+    {
+        if(inpKey == BACKSPACE)
+        {
+            if(inputText.length() != 0)
+            {
+                inputText = inputText.substring(0, inputText.length() - 1);
+            }
+        }else if(textWidth(inputText + "W") + 10 < my_width)
+        {
+            inputText += inpKey;
+        }
+    }
+
+    public void render()
+    {
+        update();
+        stroke(0);
+        fill(255);
+        rect(x, y, my_width, my_height);
+        fill(0);
+        textSize(20);
+        text(inputText, x + 5, y + textAscent() * 0.8f + 5);
+        if(showCursor && isFocused)
+        {
+            line(x + textWidth(inputText) + 5, y + 5, x + textWidth(inputText) + 5, y + 5 + textAscent() * 0.8f);
+        }
+    }
+
+    public void setFocused(boolean temp)
+    {
+        isFocused = temp;
+    }
+
+    public boolean isMouseOver()
+    {
+        if (mouseX >= x && mouseX <= x+my_width &&
+            mouseY >= y && mouseY <= y+my_height)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String getInput()
+    {
+        return inputText;
+    }
+
+    public boolean getIsFocused()
+    {
+        return isFocused;
+    }
+}
 // Screen
-static final int SCREEN_HEIGHT = 1000;
+static final int SCREEN_HEIGHT = 850;
 static final int SCREEN_WIDTH = 1000;
 int screenXPos = 0;
 int screenYPos = 0;
@@ -932,7 +962,10 @@ Boolean rightPressed = false;
 Boolean leftPressed  = false;
 Boolean shiftPressed = false;
 int mousePressedDelay = 0;
-  public void settings() {  size(1000, 1000); }
+
+// Text box
+TextBox testBox;
+  public void settings() {  size(1000, 850); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Program" };
     if (passedArgs != null) {
