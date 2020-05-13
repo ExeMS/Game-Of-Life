@@ -52,7 +52,7 @@ void startGame_glider()
 
 void startGame_file()
 { // We might need do this at some point :D
-    readFromFile("xxx");
+    readFromFile("cell.txt");
     mode = 4;
     inMenu = false;
 };
