@@ -100,10 +100,7 @@ public void checkMousePressed()
         }
     }else
     {
-        if(!shiftPressed) // This is what happens when the mouse is released
-        {
             mousePressedDelay = 0;
-        }
     }
     if(mousePressedDelay != 0)
     {
