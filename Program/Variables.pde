@@ -1,5 +1,5 @@
 // Screen
-static final int SCREEN_HEIGHT = 1000;
+static final int SCREEN_HEIGHT = 850;
 static final int SCREEN_WIDTH = 1000;
 int screenXPos = 0;
 int screenYPos = 0;
