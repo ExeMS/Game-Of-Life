@@ -140,8 +140,9 @@ void checkMousePressed()
             {
                 saveToFile(inputFileBox.getInput(), board);
                 resetToDefaults();
-            }else if(mouseX < SCREEN_WIDTH / 4 || mouseX > SCREEN_WIDTH - SCREEN_WIDTH/4
+            }else if((mouseX < SCREEN_WIDTH / 4 || mouseX > SCREEN_WIDTH - SCREEN_WIDTH/4
                     || mouseY < SCREEN_HEIGHT / 4 || mouseY > SCREEN_HEIGHT - SCREEN_HEIGHT/4)
+                    && mousePressedDelay == 0)
             {
                 currentMenu = 0;
                 inputFileBox.clear();
