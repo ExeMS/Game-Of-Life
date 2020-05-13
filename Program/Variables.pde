@@ -28,8 +28,6 @@ int timeControl = 0;
 
 // Menu Buttons
 Button randomStartButton;
-Button gosperGliderGun;
-Button singleGlider;
 Button readFromFile;
 Button sandbox;
 Button exitButton;
