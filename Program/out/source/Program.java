@@ -740,13 +740,15 @@ public void randomBoard()
 
 public void setBoardToStruct(boolean[][] struct)
 {
-    if(struct.length < 1000)
+    if(struct.length < BOARD_WIDTH || struct[0].length < BOARD_HEIGHT)
     {
+        int startX = PApplet.parseInt((BOARD_WIDTH - struct.length) / 2);
+        int startY = PApplet.parseInt((BOARD_HEIGHT - struct[0].length) / 2);
         for(int i = 0; i < struct.length; i++)
         {
             for(int j = 0; j < struct[i].length; j++)
             {
-                board[i][j] = struct[i][j];
+                board[startX + i][startY + j] = struct[i][j];
             }
         }
     }else
@@ -1033,11 +1035,6 @@ class TextBox
 // Screen
 static final int SCREEN_HEIGHT = 850;
 static final int SCREEN_WIDTH = 1000;
-static final int CELL_SIZE = 10;
-static final int START_GRID_X = 500 * CELL_SIZE;
-static final int START_GRID_Y = 500 * CELL_SIZE;
-int screenXPos = START_GRID_X;
-int screenYPos = START_GRID_Y;
 int screenSpeed = 5;
 int backgroundColour = color(255);
 int currentMenu = 0; // 0: Game. 1: Main menu, 2: Opening file, 3: Saving file
@@ -1045,9 +1042,14 @@ int currentMenu = 0; // 0: Game. 1: Main menu, 2: Opening file, 3: Saving file
 // Board and cell settings
 static final int BOARD_HEIGHT = 1000;
 static final int BOARD_WIDTH = 1000;
+static final int CELL_SIZE = 10;
 static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
 static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
 static final int STRUCTURE_MENU_WIDTH = 6;
+static final int START_GRID_X = (500 - (SCREEN_GRID_WIDTH / 2)) * CELL_SIZE;
+static final int START_GRID_Y = (500 - (SCREEN_GRID_HEIGHT / 2)) * CELL_SIZE;
+int screenXPos = START_GRID_X;
+int screenYPos = START_GRID_Y;
 
 // mode of use
 int mode = 1;
