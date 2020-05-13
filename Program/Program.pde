@@ -359,9 +359,9 @@ void setup()
     setupMenu(); // Sets just the menu and GUI
     setupGUI();
     inputFileBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
-    cancelOSButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 20, 110, 50, "Cancel", 30);
-    doneButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 110, 50, "Done", 30);
-    dontSaveButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 20, 110, 50, "Don't Save", 30);
+    cancelOSButton = new Button(SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Cancel", 30);
+    doneButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 160, 50, "Done", 30);
+    dontSaveButton = new Button(SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Don't Save", 30);
 
     currentMenu = 1; // Makes sure you start in the menu
 
