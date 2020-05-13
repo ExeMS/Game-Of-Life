@@ -37,7 +37,6 @@ Button exitButton;
 //Button spawnGliderButton;
 Button spawnStructureButton;
 boolean inStructureMenu = false;
-Button spawnCellButton;
 ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
 Button cancelButton;
 int currentStructureActive = -1;
@@ -58,4 +57,5 @@ int mousePressedDelay = 0;
 TextBox inputFileBox;
 Button doneButton;
 Button cancelOSButton;
+Button dontSaveButton;
 boolean enterPressed = false;

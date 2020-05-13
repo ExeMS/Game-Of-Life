@@ -301,6 +301,7 @@ public void setupGUI()
     structures.add(new Structure("spaceship.txt", "Spaceship")); //index 3
     structures.add(new Structure("dart.txt", "Dart")); //index 4
     structures.add(new Structure("schick engine.txt", "Schick")); //index 5
+    structures.add(new Structure("hammerhead.txt", "Hammer")); //index 6
     currentStructureActive = -1;
 }
 
@@ -622,7 +623,7 @@ public void render()
     }else if(currentMenu == 0)
     {
         renderGUI();
-    }else if(currentMenu == 2)
+    }else if(currentMenu == 2 || currentMenu == 3)
     {
         fill(255);
         stroke(0);
@@ -636,9 +637,6 @@ public void render()
         inputFileBox.render();
         doneButton.render();
         cancelOSButton.render();
-    }else if(currentMenu == 3)
-    {
-
     }
     //testBox.render();
 }

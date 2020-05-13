@@ -86,10 +86,7 @@ void checkMousePressed()
                 }
                 inStructureMenu = false; // Closes the structure menu (even if a structure was not chosen)
                 mousePressedDelay = 20; // Sets the mousePressed delay so bugs aren't caused
-            }
-            else if (spawnCellButton.isMouseOver() && mode == 5) {
-                currentStructureActive = 0; // This checks if the spawnCellButton was clicked, and sets the current active structure to that
-            } else if (currentStructureActive != -1 && mousePressedDelay == 0) {
+            }else if (currentStructureActive != -1 && mousePressedDelay == 0) {
                 if(!cancelButton.isMouseOver())
                 { // If the cancel button was not pressed, it calls the place function in the structure
                     structures.get(currentStructureActive).place();
@@ -272,7 +269,6 @@ void setupGUI()
     //spawnGliderButton = new Button(0, 0, 120, 50, "Glider", 30);
     spawnStructureButton = new Button(1, 1, 140, 50, "Structure", 30);
     inStructureMenu = false;
-    spawnCellButton = new Button(0, 60, 120, 50, "Cell", 30);
     cancelButton = new Button(1, 52, 140, 50, "Cancel", 30);
     pauseButton = new Button(1, SCREEN_HEIGHT - 51, 120, 50, "PAUSE", 30);
     playButton = new Button(1, SCREEN_HEIGHT - 51, 120, 50, "PLAY", 30);
