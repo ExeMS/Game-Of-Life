@@ -23,12 +23,6 @@ void checkMousePressed()
             if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
                 startGame_Explore();
             }
-            if (gosperGliderGun.isMouseOver()) {
-                startGame_gun();
-            }
-            if (singleGlider.isMouseOver()) {
-                startGame_glider();
-            }
             if (readFromFile.isMouseOver()) {
                 startGame_file();
             }
@@ -250,12 +244,10 @@ void god()
 
 void setupMenu()
 { // This creates all the buttons for the Menu
-    randomStartButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 145, 280, 50, "Start", 30);
-    gosperGliderGun = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 85, 280, 50, "Gosper Glider Gun", 30);
-    singleGlider = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 25, 280, 50, "Glider", 30);
-    readFromFile = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 35, 280, 50, "Read From File", 30);
-    sandbox = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 95, 280, 50, "Sandbox", 30);
-    exitButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 155, 280, 50, "Exit", 30);
+    randomStartButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2), 280, 50, "Explore", 30);
+    sandbox = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 60, 280, 50, "Sandbox", 30);
+    readFromFile = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 120, 280, 50, "Read From File", 30);
+    exitButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 180, 280, 50, "Exit", 30);
 }
 
 void setupGUI()
