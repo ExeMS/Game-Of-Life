@@ -3,7 +3,7 @@
 # Analysis
 Cellular Automata: a system involving a finitely dimensioned grid, where cells can exist in one of a finite number of states (e.g. on and off), and where a cell's neibourhood is directly affected by it, under a finite number of rules, usually a mathmatical function.
 
-Creating a working version of Conway's Game Of Life (one of the more famous cellular automata) using Processing. This involves making a system that can create and delete life depending on patterns on an interface. After establishing a solid base to work from, add the option for the user to create their own patterns, as well as upload patterns from files.
+Our Project: Creating a working version of Conway's Game Of Life (one of the more famous cellular automata) using Processing. This involves making a system that can create and delete life depending on patterns on an interface. After establishing a solid base to work from, add the option for the user to create their own patterns, as well as upload patterns from files.
 
 How the problem was researched:
 1) Google Search Conway's Game Of Life for rules and common patterns.
