@@ -26,6 +26,23 @@ void randomBoard()
     }
 }
 
+void setBoardToStruct(boolean[][] struct)
+{
+    if(struct.length < 1000)
+    {
+        for(int i = 0; i < struct.length; i++)
+        {
+            for(int j = 0; j < struct[i].length; j++)
+            {
+                board[i][j] = struct[i][j];
+            }
+        }
+    }else
+    {
+        board = struct;
+    }
+}
+
 void sandboxStart() {
 }
 
@@ -53,22 +70,8 @@ void startGame_glider()
 void startGame_file()
 { // We might need do this at some point :D
     clearBoard();
-    boolean[][] struct = readFromFile(openOrSaveGameMenu(false));
-    if(struct.length < 1000)
-    {
-        for(int i = 0; i < struct.length; i++)
-        {
-            for(int j = 0; j < struct[i].length; j++)
-            {
-                board[i][j] = struct[i][j];
-            }
-        }
-    }else
-    {
-        board = struct;
-    }
     mode = 4;
-    currentMenu = 0;
+    currentMenu = 2;
 };
 
 void startGame_sandbox()

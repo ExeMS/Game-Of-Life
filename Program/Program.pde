@@ -201,22 +201,7 @@ void backToMenu()
     screenYPos = 0;
     paused = true;
     clearBoard();
-}
-
-String openOrSaveGameMenu(boolean save)
-{ // Warning this locks out the whole program from running so it makes it a bit limited
-    while(true)
-    {
-        inputFileBox.render();
-        cancelOSButton.render();
-        cancelOSButton.render();
-        if(enterPressed)
-        {
-            break;
-        }
-    }
-    return "glider gun.txt";
-}
+}t
 
 // Updates the game
 void god()

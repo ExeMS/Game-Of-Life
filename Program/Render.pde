@@ -119,8 +119,18 @@ void render()
     }else if(currentMenu == 0)
     {
         renderGUI();
-    }else if(currentMenu == 2 || currentMenu == 3)
+    }else if(currentMenu == 2)
     {
+        fill(255);
+        outline(0);
+        rect(SCREEN_WIDTH/2-250, SCREEN_HEIGHT/2-250, width, height);
+        textSize(30);
+        outline(0);
+        fill(0);
+        text("Input name of the save");
+    }else if(currentMenu == 3)
+    {
+
     }
     //testBox.render();
 }
