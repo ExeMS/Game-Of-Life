@@ -204,8 +204,8 @@ void checkKeys()
 void backToMenu()
 { // This just clears the board to go back to the menu
     currentMenu = 1;
-    screenXPos = 0;
-    screenYPos = 0;
+    screenXPos = START_GRID_X;
+    screenYPos = START_GRID_Y;
     paused = true;
     clearBoard();
 }

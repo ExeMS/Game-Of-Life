@@ -1,8 +1,10 @@
 // Screen
 static final int SCREEN_HEIGHT = 850;
 static final int SCREEN_WIDTH = 1000;
-int screenXPos = 0;
-int screenYPos = 0;
+static final int START_GRID_X = 500;
+static final int START_GRID_Y = 500;
+int screenXPos = START_GRID_X;
+int screenYPos = START_GRID_Y;
 int screenSpeed = 5;
 color backgroundColour = color(255);
 int currentMenu = 0; // 0: Game. 1: Main menu, 2: Opening file, 3: Saving file
