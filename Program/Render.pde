@@ -15,7 +15,10 @@ void renderGUI()
         { // If in the structure menu it renders the structures
             for(int i = 0; i < structures.size(); i++)
             {
-                structures.get(i).render(i * 102 + 50, 50);
+                structures.get(i).render(
+                    (i - int(i / STRUCTURE_MENU_WIDTH) * STRUCTURE_MENU_WIDTH) * 102 + 50,
+                    int(i / STRUCTURE_MENU_WIDTH) * 102 + 50
+                );
             }
         } else
         { // Otherwise it renders the structure button
@@ -122,10 +125,10 @@ void render()
     }else if(currentMenu == 2)
     {
         fill(255);
-        outline(0);
+        stroke(0);
         rect(SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         textSize(30);
-        outline(0);
+        stroke(0);
         fill(0);
         textAlign(CENTER);
         text("Input name of the save", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 40);

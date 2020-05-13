@@ -13,6 +13,7 @@ static final int BOARD_WIDTH = 1000;
 static final int CELL_SIZE = 10;
 static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
 static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
+static final int STRUCTURE_MENU_WIDTH = 6;
 
 // mode of use
 int mode = 1;

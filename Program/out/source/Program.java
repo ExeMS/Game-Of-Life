@@ -91,7 +91,10 @@ public void checkMousePressed()
             { // This checks if any of the structures were pressed (in the structure menu)
                 for(int i = 0; i < structures.size(); i++) // This goes through every structure in the list and checks its location
                 {
-                    if(structures.get(i).isMouseOver((i) * 102 + 50, 50))
+                    if(structures.get(i).isMouseOver(
+                        (i - PApplet.parseInt(i / STRUCTURE_MENU_WIDTH) * STRUCTURE_MENU_WIDTH) * 102 + 50,
+                        PApplet.parseInt(i / STRUCTURE_MENU_WIDTH) * 102 + 50
+                    ))
                     {
                         currentStructureActive = i;
                         break;
@@ -219,21 +222,6 @@ public void backToMenu()
     clearBoard();
 }
 
-public String openOrSaveGameMenu(boolean save)
-{ // Warning this locks out the whole program from running so it makes it a bit limited
-    while(true)
-    {
-        inputFileBox.render();
-        cancelOSButton.render();
-        cancelOSButton.render();
-        if(enterPressed)
-        {
-            break;
-        }
-    }
-    return "glider gun.txt";
-}
-
 // Updates the game
 public void god()
 {
@@ -344,7 +332,7 @@ public void draw()
     render(); // This renders everything on the screen
 
     timeControl++;
-    if(timeControl == 10) // This limits how much it is updated
+    if(timeControl == 8) // This limits how much it is updated
     {
         timeControl = 0;
         god(); // Runs the function for updating the board
@@ -527,7 +515,10 @@ public void renderGUI()
         { // If in the structure menu it renders the structures
             for(int i = 0; i < structures.size(); i++)
             {
-                structures.get(i).render(i * 102 + 50, 50);
+                structures.get(i).render(
+                    (i - PApplet.parseInt(i / STRUCTURE_MENU_WIDTH) * STRUCTURE_MENU_WIDTH) * 102 + 50,
+                    PApplet.parseInt(i / STRUCTURE_MENU_WIDTH) * 102 + 50
+                );
             }
         } else
         { // Otherwise it renders the structure button
@@ -628,8 +619,22 @@ public void render()
     if(currentMenu == 1) // Chooses the run the board or...
     {
         renderMenu();
-    }else {
+    }else if(currentMenu == 0)
+    {
         renderGUI();
+    }else if(currentMenu == 2)
+    {
+        fill(255);
+        stroke(0);
+        rect(SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        textSize(30);
+        stroke(0);
+        fill(0);
+        textAlign(CENTER);
+        text("Input name of the save", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 40);
+    }else if(currentMenu == 3)
+    {
+
     }
     //testBox.render();
 }
@@ -661,34 +666,8 @@ public void randomBoard()
     }
 }
 
-public void sandboxStart() {
-}
-
-public void startGame_Explore()
-{ // This randomizes the board and sets the mode to 1
-    randomBoard();
-    mode = 1;
-    currentMenu = 0;
-};
-
-public void startGame_gun()
-{ // This spawns the glider gun
-    structures.get(2).placeInLocation(6, 8);
-    mode = 2;
-    currentMenu = 0;
-};
-
-public void startGame_glider()
-{ // This spawns in a glider in the center of the screen
-    structures.get(1).placeInLocation(49, 49);
-    mode = 3;
-    currentMenu = 0;
-};
-
-public void startGame_file()
-{ // We might need do this at some point :D
-    clearBoard();
-    boolean[][] struct = readFromFile(openOrSaveGameMenu(false));
+public void setBoardToStruct(boolean[][] struct)
+{
     if(struct.length < 1000)
     {
         for(int i = 0; i < struct.length; i++)
@@ -702,8 +681,23 @@ public void startGame_file()
     {
         board = struct;
     }
-    mode = 4;
+}
+
+public void sandboxStart() {
+}
+
+public void startGame_Explore()
+{ // This randomizes the board and sets the mode to 1
+    randomBoard();
+    mode = 1;
     currentMenu = 0;
+};
+
+public void startGame_file()
+{ // We might need do this at some point :D
+    clearBoard();
+    mode = 4;
+    currentMenu = 2;
 };
 
 public void startGame_sandbox()
@@ -971,6 +965,7 @@ static final int BOARD_WIDTH = 1000;
 static final int CELL_SIZE = 10;
 static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
 static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
+static final int STRUCTURE_MENU_WIDTH = 3;
 
 // mode of use
 int mode = 1;
