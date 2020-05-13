@@ -288,6 +288,9 @@ void setup()
     inMenu = true; // Makes sure you start in the menu
 
     frame.requestFocus(); // Makes the screen instantly focused
+    
+    // Images must be in the "data" directory to load correctly
+    img = loadImage("LIFE-IS-JUST-A-GAME.png");
 }
 
 void draw()
