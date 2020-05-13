@@ -89,7 +89,7 @@ void checkMousePressed()
                 { // If the cancel button was not pressed, it calls the place function in the structure
                     structures.get(currentStructureActive).place();
                 }
-                if(shiftPressed)
+                if(!shiftPressed)
                 { // If the shift is pressed, then a mousePressedDelay is set and the structure stays active (so you can keep placing them)
                     mousePressedDelay = 20;
                 }else
