@@ -234,12 +234,12 @@ void god()
 
 void setupMenu()
 { // This creates all the buttons for the Menu
-    randomStartButton = new Button(360, 475, 280, 50, "Start", 30);
-    gosperGliderGun = new Button(360, 535, 280, 50, "Gosper Glider Gun", 30);
-    singleGlider = new Button(360, 595, 280, 50, "Glider", 30);
-    readFromFile = new Button(360, 655, 280, 50, "Read From File", 30);
-    sandbox = new Button(360, 715, 280, 50, "Sandbox", 30);
-    exitButton = new Button(360, 900, 280, 50, "Exit", 30);
+    randomStartButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 145, 280, 50, "Start", 30);
+    gosperGliderGun = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 85, 280, 50, "Gosper Glider Gun", 30);
+    singleGlider = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 25, 280, 50, "Glider", 30);
+    readFromFile = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 35, 280, 50, "Read From File", 30);
+    sandbox = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 95, 280, 50, "Sandbox", 30);
+    exitButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 155, 280, 50, "Exit", 30);
 }
 
 void setupGUI()
@@ -262,7 +262,7 @@ void setupGUI()
 
 void setup()
 {
-    size(1000, 1000); // Sets the size of the window, and background colour
+    size(1000, 850); // Sets the size of the window, and background colour
     background(backgroundColour);
 
     clearBoard(); // This clears the board, making sure everything is false
