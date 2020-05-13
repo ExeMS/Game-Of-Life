@@ -21,13 +21,13 @@ class Structure
     }
 
     void update()
-    {
+    { // This updates the gridX and gridY
         gridX = screenXPos / 10 + (mouseX - (my_width * CELL_SIZE / 2)) / CELL_SIZE;
         gridY = screenYPos / 10 + (mouseY - (my_height * CELL_SIZE / 2)) / CELL_SIZE;
     }
 
     void place()
-    {
+    { // This places the structure at its location
         for(int i = 0; i < my_RWidth; i++)
         {
             for(int j = 0; j < my_RHeight; j++)
@@ -38,7 +38,7 @@ class Structure
     }
 
     void placeInLocation(int x, int y)
-    {
+    { // This places the structure at a given x and y coordinates
         for(int i = 0; i < my_RWidth; i++)
         {
             for(int j = 0; j < my_RHeight; j++)
@@ -48,6 +48,7 @@ class Structure
         }
     }
 
+    // Get functions:
     int getWidth()
     {
         return my_RWidth;
@@ -73,6 +74,7 @@ class Structure
         return rotatedStructure[x][y];
     }
 
+    // Checks if the mouse is over it at a given x and y coordinate
     boolean isMouseOver(int x, int y)
     {
         if (mouseX >= x && mouseX <= x+100 &&
@@ -85,14 +87,14 @@ class Structure
     }
 
     void resetRotated()
-    {
+    { // This resets the rotation of it
         rotatedStructure = structure;
         my_RHeight = my_height;
         my_RWidth = my_width;
     }
 
     void rotate(int r)
-    {
+    { // This rotates it in a given direction
         int temp = my_RHeight;
         my_RHeight = my_RWidth;
         my_RWidth = temp;
@@ -114,7 +116,7 @@ class Structure
     }
 
     void render(int x, int y)
-    {
+    { // This renders the button side of it
         int my_boardSize = 100;
         int my_cellSize;
         if(my_width > my_height)

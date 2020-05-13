@@ -30,7 +30,7 @@ public void checkMousePressed()
         if(inMenu) // Checks if in the main menu
         {
             if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
-                startGame_random();
+                startGame_Explore();
             }
             if (gosperGliderGun.isMouseOver()) {
                 startGame_gun();
@@ -373,7 +373,7 @@ class Button
     }
 
     public boolean isMouseOver()
-    {
+    { // This checks if the mouse is over
         if (mouseX >= x && mouseX <= x+my_width &&
             mouseY >= y && mouseY <= y+my_height)
         {
@@ -384,7 +384,7 @@ class Button
     }
 
     public void render()
-    {
+    { // This renders the button
         stroke(outline);
         if(isMouseOver())
         {
@@ -593,7 +593,7 @@ public void render()
     }
 }
 public void clearBoard()
-{
+{ // This sets the whole board to 0
     for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
     {
         for(int j = 0; j < BOARD_HEIGHT; j++)
@@ -604,8 +604,8 @@ public void clearBoard()
 }
 
 public void randomBoard()
-{
-    for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
+{ // This randomizes the whole board
+    for(int i = 0; i < BOARD_WIDTH; i++)
     {
         for(int j = 0; j < BOARD_HEIGHT; j++)
         {
@@ -623,22 +623,22 @@ public void randomBoard()
 public void sandboxStart() {
 }
 
-public void startGame_random()
-{
+public void startGame_Explore()
+{ // This randomizes the board and sets the mode to 1
     randomBoard();
     mode = 1;
     inMenu = false;
 };
 
 public void startGame_gun()
-{
+{ // This spawns the glider gun
     createGliderGun(0, 0);
     mode = 2;
     inMenu = false;
 };
 
 public void startGame_glider()
-{
+{ // This spawns in a glider in the center of the screen
     structures.get(1).placeInLocation(49, 49);
     mode = 3;
     inMenu = false;
@@ -680,13 +680,13 @@ class Structure
     }
 
     public void update()
-    {
+    { // This updates the gridX and gridY
         gridX = screenXPos / 10 + (mouseX - (my_width * CELL_SIZE / 2)) / CELL_SIZE;
         gridY = screenYPos / 10 + (mouseY - (my_height * CELL_SIZE / 2)) / CELL_SIZE;
     }
 
     public void place()
-    {
+    { // This places the structure at its location
         for(int i = 0; i < my_RWidth; i++)
         {
             for(int j = 0; j < my_RHeight; j++)
@@ -697,7 +697,7 @@ class Structure
     }
 
     public void placeInLocation(int x, int y)
-    {
+    { // This places the structure at a given x and y coordinates
         for(int i = 0; i < my_RWidth; i++)
         {
             for(int j = 0; j < my_RHeight; j++)
@@ -707,6 +707,7 @@ class Structure
         }
     }
 
+    // Get functions:
     public int getWidth()
     {
         return my_RWidth;
@@ -732,6 +733,7 @@ class Structure
         return rotatedStructure[x][y];
     }
 
+    // Checks if the mouse is over it at a given x and y coordinate
     public boolean isMouseOver(int x, int y)
     {
         if (mouseX >= x && mouseX <= x+100 &&
@@ -744,14 +746,14 @@ class Structure
     }
 
     public void resetRotated()
-    {
+    { // This resets the rotation of it
         rotatedStructure = structure;
         my_RHeight = my_height;
         my_RWidth = my_width;
     }
 
     public void rotate(int r)
-    {
+    { // This rotates it in a given direction
         int temp = my_RHeight;
         my_RHeight = my_RWidth;
         my_RWidth = temp;
@@ -773,7 +775,7 @@ class Structure
     }
 
     public void render(int x, int y)
-    {
+    { // This renders the button side of it
         int my_boardSize = 100;
         int my_cellSize;
         if(my_width > my_height)

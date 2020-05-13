@@ -14,7 +14,7 @@ void checkMousePressed()
         if(inMenu) // Checks if in the main menu
         {
             if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
-                startGame_random();
+                startGame_Explore();
             }
             if (gosperGliderGun.isMouseOver()) {
                 startGame_gun();

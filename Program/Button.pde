@@ -85,7 +85,7 @@ class Button
     }
 
     boolean isMouseOver()
-    {
+    { // This checks if the mouse is over
         if (mouseX >= x && mouseX <= x+my_width &&
             mouseY >= y && mouseY <= y+my_height)
         {
@@ -96,7 +96,7 @@ class Button
     }
 
     void render()
-    {
+    { // This renders the button
         stroke(outline);
         if(isMouseOver())
         {
