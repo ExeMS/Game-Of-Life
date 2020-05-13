@@ -18,7 +18,7 @@ void checkMousePressed()
         {
             testBox.setFocused(false);
         }*/
-        if(currentMenu == 1) // Checks if in the main menu
+        if(currentMenu == 1 && mousePressedDelay == 0) // Checks if in the main menu
         {
             if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
                 startGame_Explore();
@@ -112,8 +112,41 @@ void checkMousePressed()
             {
                 inputFileBox.setFocused(false);
             }
+            if(cancelOSButton.isMouseOver())
+            {
+                resetToDefaults();
+            }else if(doneButton.isMouseOver())
+            {
+                currentMenu = 0;
+                setBoardToStruct(readFromFile(inputFileBox.getInput()));
+                inputFileBox.clear();
+                inputFileBox.setFocused(false);
+            }
+            mousePressedDelay = 20;
         } else if(currentMenu == 3)
         { // Saving file menu
+            if(inputFileBox.isMouseOver() && !inputFileBox.getIsFocused())
+            {
+                inputFileBox.setFocused(true);
+            } else if (inputFileBox.getIsFocused() && !inputFileBox.isMouseOver())
+            {
+                inputFileBox.setFocused(false);
+            }
+            if(dontSaveButton.isMouseOver())
+            {
+                resetToDefaults();
+            }else if(doneButton.isMouseOver())
+            {
+                saveToFile(inputFileBox.getInput(), board);
+                resetToDefaults();
+            }else if(mouseX < SCREEN_WIDTH / 4 || mouseX > SCREEN_WIDTH - SCREEN_WIDTH/4
+                    || mouseY < SCREEN_HEIGHT / 4 || mouseY > SCREEN_HEIGHT - SCREEN_HEIGHT/4)
+            {
+                currentMenu = 0;
+                inputFileBox.clear();
+                inputFileBox.setFocused(false);
+            }
+            mousePressedDelay = 20;
         }
     }else
     { // If the mouse is not pressed the mousePressedDelay is set to 0
@@ -129,12 +162,29 @@ void keyPressed()
 { // This is run when a key is pressed
     if(key == '\n')
     {
-        enterPressed = true;
+        if(currentMenu == 2)
+        {
+            currentMenu = 0;
+            setBoardToStruct(readFromFile(inputFileBox.getInput()));
+            inputFileBox.clear();
+            inputFileBox.setFocused(false);
+        }else if(currentMenu == 3)
+        {
+            currentMenu = 1;
+            saveToFile(inputFileBox.getInput(), board);
+            resetToDefaults();
+        }
     }else if(inputFileBox.getIsFocused())
     {
         inputFileBox.inputKey(key);
     }else if(key == ESC)
     {
+        if(currentMenu == 3)
+        {
+            currentMenu = 0;
+            inputFileBox.clear();
+            inputFileBox.setFocused(false);
+        }
         key = 0;
     } else if (key == CODED && currentMenu == 0) {
         if (keyCode == UP) { // When a key is pressed, it sets the given variable
@@ -158,10 +208,7 @@ void keyPressed()
 
 void keyReleased()
 { // This is run when a key is released
-    if(key == '\n')
-    {
-        enterPressed = false;
-    } else if (key == CODED && currentMenu == 0) {
+    if (key == CODED && currentMenu == 0) {
         if (keyCode == UP) { // When a key is released, it sets the given variable
             upPressed = false;
         }
@@ -203,11 +250,7 @@ void checkKeys()
 
 void backToMenu()
 { // This just clears the board to go back to the menu
-    currentMenu = 1;
-    screenXPos = START_GRID_X;
-    screenYPos = START_GRID_Y;
-    paused = true;
-    clearBoard();
+    currentMenu = 3;
 }
 
 // Updates the game
@@ -261,6 +304,17 @@ void god()
           }
       }
   }
+}
+
+void resetToDefaults()
+{
+    inputFileBox.clear();
+    inputFileBox.setFocused(false);
+    paused = true;
+    currentMenu = 1;
+    screenXPos = START_GRID_X;
+    screenYPos = START_GRID_Y;
+    clearBoard();
 }
 
 void setupMenu()
