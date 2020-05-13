@@ -116,8 +116,11 @@ void render()
     if(currentMenu == 1) // Chooses the run the board or...
     {
         renderMenu();
-    }else {
+    }else if(currentMenu == 0)
+    {
         renderGUI();
+    }else if(currentMenu == 2 || currentMenu == 3)
+    {
     }
     //testBox.render();
 }
