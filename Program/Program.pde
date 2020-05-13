@@ -349,6 +349,15 @@ void setupGUI()
     structures.add(new Structure("hammerhead.txt", "Hammer")); //index 6
     structures.add(new Structure("Sir Robin.txt", "Sir Robin")); //index 7
     structures.add(new Structure("copperhead.txt", "Copper")); //index 8
+    structures.add(new Structure("pulsar.txt", "Pulsar")); //index 9
+    structures.add(new Structure("kok's galaxy.txt", "Galaxy")); //index 10
+    structures.add(new Structure("rich's P16.txt", "P16")); //index 11
+    structures.add(new Structure("rocket.txt", "Rocket")); //index 12
+    structures.add(new Structure("flash oscillator.txt", "Flash")); //index 13
+    structures.add(new Structure("pentadecathalon.txt", "15")); //index 14
+    structures.add(new Structure("oddball.txt", "Oddball")); //index 15
+    structures.add(new Structure("fairy.txt", "Fairy")); //index 16
+    structures.add(new Structure("weekender.txt", "Weekender")); //index 17
     currentStructureActive = -1;
 }
 
