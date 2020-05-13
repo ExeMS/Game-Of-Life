@@ -26,6 +26,7 @@ void randomBoard()
     }
 }
 
+<<<<<<< HEAD
 void setBoardToStruct(boolean[][] struct)
 {
     if(struct.length < 1000)
@@ -53,20 +54,6 @@ void startGame_Explore()
     currentMenu = 0;
 };
 
-void startGame_gun()
-{ // This spawns the glider gun
-    structures.get(2).placeInLocation(6, 8);
-    mode = 2;
-    currentMenu = 0;
-};
-
-void startGame_glider()
-{ // This spawns in a glider in the center of the screen
-    structures.get(1).placeInLocation(49, 49);
-    mode = 3;
-    currentMenu = 0;
-};
-
 void startGame_file()
 { // We might need do this at some point :D
     clearBoard();
@@ -76,7 +63,6 @@ void startGame_file()
 
 void startGame_sandbox()
 {
-    sandboxStart();
-    mode = 5;
+    mode = 2;
     currentMenu = 0;
 };
