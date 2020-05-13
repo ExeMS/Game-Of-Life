@@ -34,7 +34,7 @@ public void checkMousePressed()
         {
             testBox.setFocused(false);
         }*/
-        if(inMenu) // Checks if in the main menu
+        if(currentMenu == 1) // Checks if in the main menu
         {
             if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
                 startGame_Explore();
@@ -49,7 +49,8 @@ public void checkMousePressed()
             {
                 exit(); // This just closes the window
             }
-        } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
+        } else if(currentMenu == 0)
+        { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
 
             if(menuButton.isMouseOver())
             { // If the menu button is pressed it runs the given function
@@ -118,6 +119,10 @@ public void checkMousePressed()
                     currentStructureActive = -1;
                 }
             }
+        } else if(currentMenu == 2)
+        { // Opening file menu
+        } else if(currentMenu == 3)
+        { // Saving file menu
         }
     }else
     { // If the mouse is not pressed the mousePressedDelay is set to 0
@@ -131,13 +136,16 @@ public void checkMousePressed()
 
 public void keyPressed()
 { // This is run when a key is pressed
-    if(testBox.getIsFocused())
+    if(key == '\n')
     {
-        testBox.inputKey(key);
+        enterPressed = true;
+    }else if(inputFileBox.getIsFocused())
+    {
+        inputFileBox.inputKey(key);
     }else if(key == ESC)
     {
         key = 0;
-    } else if (key == CODED && !inMenu) {
+    } else if (key == CODED && currentMenu == 0) {
         if (keyCode == UP) { // When a key is pressed, it sets the given variable
             upPressed = true;
         }
@@ -159,7 +167,10 @@ public void keyPressed()
 
 public void keyReleased()
 { // This is run when a key is released
-    if (key == CODED && !inMenu) {
+    if(key == '\n')
+    {
+        enterPressed = false;
+    } else if (key == CODED && currentMenu == 0) {
         if (keyCode == UP) { // When a key is released, it sets the given variable
             upPressed = false;
         }
@@ -183,7 +194,7 @@ public void keyReleased()
 // Checks if any of the keys are pressed
 public void checkKeys()
 {
-    if (!inMenu) {
+    if (currentMenu == 0) {
         if (upPressed && screenYPos - screenSpeed >= 0) { // When a key is pressed, it checks to see if a the screen can more more in that direction
             screenYPos -= screenSpeed;
         }
@@ -201,11 +212,26 @@ public void checkKeys()
 
 public void backToMenu()
 { // This just clears the board to go back to the menu
-    inMenu = true;
+    currentMenu = 1;
     screenXPos = 0;
     screenYPos = 0;
     paused = true;
     clearBoard();
+}
+
+public String openOrSaveGameMenu(boolean save)
+{ // Warning this locks out the whole program from running so it makes it a bit limited
+    while(true)
+    {
+        inputFileBox.render();
+        cancelOSButton.render();
+        cancelOSButton.render();
+        if(enterPressed)
+        {
+            break;
+        }
+    }
+    return "glider gun.txt";
 }
 
 // Updates the game
@@ -299,11 +325,16 @@ public void setup()
 
     setupMenu(); // Sets just the menu and GUI
     setupGUI();
-    testBox = new TextBox(100, 100, 240);
+    inputFileBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
+    cancelOSButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 10, 110, 50, "Cancel", 30);
+    cancelOSButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 10, 110, 50, "Done", 30);
 
-    inMenu = true; // Makes sure you start in the menu
+    currentMenu = 1; // Makes sure you start in the menu
 
     frame.requestFocus(); // Makes the screen instantly focused
+
+    // Images must be in the "data" directory to load correctly
+    img = loadImage("LIFE-IS-JUST-A-GAME.png");
 }
 
 public void draw()
@@ -479,12 +510,15 @@ public void saveToFile(String filename, boolean[][] struct)
     }
     saveStrings(filename, lines);
 }
+PImage img;
+
 public void renderMenu()
 { // Renders all the videos
     randomStartButton.render();
     readFromFile.render();
     sandbox.render();
     exitButton.render();
+    image(img, (SCREEN_WIDTH / 2) - (width / 4), 60, width / 2, height / 3);
 }
 public void renderGUI()
 { // Render process for the GUI will go in here
@@ -591,7 +625,7 @@ public void render()
 { // This renders the background and then the other things
     background(backgroundColour);
     renderBoard();
-    if(inMenu) // Chooses the run the board or...
+    if(currentMenu == 1) // Chooses the run the board or...
     {
         renderMenu();
     }else {
@@ -634,35 +668,49 @@ public void startGame_Explore()
 { // This randomizes the board and sets the mode to 1
     randomBoard();
     mode = 1;
-    inMenu = false;
+    currentMenu = 0;
 };
 
 public void startGame_gun()
 { // This spawns the glider gun
     structures.get(2).placeInLocation(6, 8);
     mode = 2;
-    inMenu = false;
+    currentMenu = 0;
 };
 
 public void startGame_glider()
 { // This spawns in a glider in the center of the screen
     structures.get(1).placeInLocation(49, 49);
     mode = 3;
-    inMenu = false;
+    currentMenu = 0;
 };
 
 public void startGame_file()
 { // We might need do this at some point :D
-    readFromFile("cell.txt");
+    clearBoard();
+    boolean[][] struct = readFromFile(openOrSaveGameMenu(false));
+    if(struct.length < 1000)
+    {
+        for(int i = 0; i < struct.length; i++)
+        {
+            for(int j = 0; j < struct[i].length; j++)
+            {
+                board[i][j] = struct[i][j];
+            }
+        }
+    }else
+    {
+        board = struct;
+    }
     mode = 4;
-    inMenu = false;
+    currentMenu = 0;
 };
 
 public void startGame_sandbox()
 {
     sandboxStart();
     mode = 5;
-    inMenu = false;
+    currentMenu = 0;
 };
 class Structure
 {
@@ -915,7 +963,7 @@ int screenXPos = 0;
 int screenYPos = 0;
 int screenSpeed = 5;
 int backgroundColour = color(255);
-boolean inMenu = false;
+int currentMenu = 0; // 0: Game. 1: Main menu, 2: Opening file, 3: Saving file
 
 // Board and cell settings
 static final int BOARD_HEIGHT = 1000;
@@ -963,8 +1011,11 @@ Boolean leftPressed  = false;
 Boolean shiftPressed = false;
 int mousePressedDelay = 0;
 
-// Text box
-TextBox testBox;
+// openOrSaveGameMenu function stuff
+TextBox inputFileBox;
+Button doneButton;
+Button cancelOSButton;
+boolean enterPressed = false;
   public void settings() {  size(1000, 850); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Program" };

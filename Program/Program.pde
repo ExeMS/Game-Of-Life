@@ -18,7 +18,7 @@ void checkMousePressed()
         {
             testBox.setFocused(false);
         }*/
-        if(inMenu) // Checks if in the main menu
+        if(currentMenu == 1) // Checks if in the main menu
         {
             if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
                 startGame_Explore();
@@ -33,7 +33,8 @@ void checkMousePressed()
             {
                 exit(); // This just closes the window
             }
-        } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
+        } else if(currentMenu == 0)
+        { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
 
             if(menuButton.isMouseOver())
             { // If the menu button is pressed it runs the given function
@@ -102,6 +103,10 @@ void checkMousePressed()
                     currentStructureActive = -1;
                 }
             }
+        } else if(currentMenu == 2)
+        { // Opening file menu
+        } else if(currentMenu == 3)
+        { // Saving file menu
         }
     }else
     { // If the mouse is not pressed the mousePressedDelay is set to 0
@@ -124,7 +129,7 @@ void keyPressed()
     }else if(key == ESC)
     {
         key = 0;
-    } else if (key == CODED && !inMenu) {
+    } else if (key == CODED && currentMenu == 0) {
         if (keyCode == UP) { // When a key is pressed, it sets the given variable
             upPressed = true;
         }
@@ -149,7 +154,7 @@ void keyReleased()
     if(key == '\n')
     {
         enterPressed = false;
-    } else if (key == CODED && !inMenu) {
+    } else if (key == CODED && currentMenu == 0) {
         if (keyCode == UP) { // When a key is released, it sets the given variable
             upPressed = false;
         }
@@ -173,7 +178,7 @@ void keyReleased()
 // Checks if any of the keys are pressed
 void checkKeys()
 {
-    if (!inMenu) {
+    if (currentMenu == 0) {
         if (upPressed && screenYPos - screenSpeed >= 0) { // When a key is pressed, it checks to see if a the screen can more more in that direction
             screenYPos -= screenSpeed;
         }
@@ -191,14 +196,14 @@ void checkKeys()
 
 void backToMenu()
 { // This just clears the board to go back to the menu
-    inMenu = true;
+    currentMenu = 1;
     screenXPos = 0;
     screenYPos = 0;
     paused = true;
     clearBoard();
 }
 
-void openOrSaveGameMenu(boolean save)
+String openOrSaveGameMenu(boolean save)
 { // Warning this locks out the whole program from running so it makes it a bit limited
     while(true)
     {
@@ -210,6 +215,7 @@ void openOrSaveGameMenu(boolean save)
             break;
         }
     }
+    return "glider gun.txt";
 }
 
 // Updates the game
@@ -307,10 +313,10 @@ void setup()
     cancelOSButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 10, 110, 50, "Cancel", 30);
     cancelOSButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 10, 110, 50, "Done", 30);
 
-    inMenu = true; // Makes sure you start in the menu
+    currentMenu = 1; // Makes sure you start in the menu
 
     frame.requestFocus(); // Makes the screen instantly focused
-    
+
     // Images must be in the "data" directory to load correctly
     img = loadImage("LIFE-IS-JUST-A-GAME.png");
 }

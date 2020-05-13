@@ -5,7 +5,7 @@ int screenXPos = 0;
 int screenYPos = 0;
 int screenSpeed = 5;
 color backgroundColour = color(255);
-boolean inMenu = false;
+int currentMenu = 0; // 0: Game. 1: Main menu, 2: Opening file, 3: Saving file
 
 // Board and cell settings
 static final int BOARD_HEIGHT = 1000;

@@ -33,33 +33,47 @@ void startGame_Explore()
 { // This randomizes the board and sets the mode to 1
     randomBoard();
     mode = 1;
-    inMenu = false;
+    currentMenu = 0;
 };
 
 void startGame_gun()
 { // This spawns the glider gun
     structures.get(2).placeInLocation(6, 8);
     mode = 2;
-    inMenu = false;
+    currentMenu = 0;
 };
 
 void startGame_glider()
 { // This spawns in a glider in the center of the screen
     structures.get(1).placeInLocation(49, 49);
     mode = 3;
-    inMenu = false;
+    currentMenu = 0;
 };
 
 void startGame_file()
 { // We might need do this at some point :D
-    readFromFile("cell.txt");
+    clearBoard();
+    boolean[][] struct = readFromFile(openOrSaveGameMenu(false));
+    if(struct.length < 1000)
+    {
+        for(int i = 0; i < struct.length; i++)
+        {
+            for(int j = 0; j < struct[i].length; j++)
+            {
+                board[i][j] = struct[i][j];
+            }
+        }
+    }else
+    {
+        board = struct;
+    }
     mode = 4;
-    inMenu = false;
+    currentMenu = 0;
 };
 
 void startGame_sandbox()
 {
     sandboxStart();
     mode = 5;
-    inMenu = false;
+    currentMenu = 0;
 };

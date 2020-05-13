@@ -113,7 +113,7 @@ void render()
 { // This renders the background and then the other things
     background(backgroundColour);
     renderBoard();
-    if(inMenu) // Chooses the run the board or...
+    if(currentMenu == 1) // Chooses the run the board or...
     {
         renderMenu();
     }else {
