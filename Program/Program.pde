@@ -186,6 +186,9 @@ void checkKeys()
 void backToMenu()
 { // This just clears the board to go back to the menu
     inMenu = true;
+    screenXPos = 0;
+    screenYPos = 0;
+    paused = true;
     clearBoard();
 }
 
