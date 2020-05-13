@@ -285,6 +285,7 @@ void setupGUI()
     structures.add(new Structure("spaceship.txt", "Spaceship")); //index 3
     structures.add(new Structure("dart.txt", "Dart")); //index 4
     structures.add(new Structure("schick engine.txt", "Schick")); //index 5
+    structures.add(new Structure("hammerhead.txt", "Hammer")); //index 6
     currentStructureActive = -1;
 }
 
