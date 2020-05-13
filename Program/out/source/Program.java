@@ -21,12 +21,24 @@ public void mouseWheel(MouseEvent event) { // This is called when the user uses 
         structures.get(currentStructureActive).rotate(e); // This rotates the active structure
     } else if (currentMenu == 0)
     {
-        if(e == -1 && cellSize != 1)
+        if(e == 1 && cellSize != 3)
         {
+            screenXPos = screenXPos * (cellSize - 1) / cellSize;
+            screenYPos = screenYPos * (cellSize - 1) / cellSize;
             cellSize -= 1;
-        }else if (e == 1 && cellSize != SCREEN_WIDTH)
+        }else if (e == -1 && cellSize != SCREEN_WIDTH)
         {
+            screenXPos = screenXPos * (cellSize + 1) / cellSize;
+            screenYPos = screenYPos * (cellSize + 1) / cellSize;
             cellSize += 1;
+        }
+        if((screenXPos + SCREEN_WIDTH)/cellSize >= 1000)
+        {
+            screenXPos = 1000*cellSize - SCREEN_WIDTH;
+        }
+        if((screenYPos + SCREEN_HEIGHT)/cellSize >= 1000)
+        {
+            screenYPos = 1000*cellSize - SCREEN_HEIGHT;
         }
         screenGridHeight = SCREEN_HEIGHT / cellSize;
         screenGridWidth = SCREEN_WIDTH / cellSize;
