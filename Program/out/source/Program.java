@@ -27,13 +27,6 @@ public void checkMousePressed()
 {
     if(mousePressed)
     {
-        /*if(testBox.isMouseOver() && !testBox.getIsFocused())
-        {
-            testBox.setFocused(true);
-        } else if (testBox.getIsFocused() && !testBox.isMouseOver())
-        {
-            testBox.setFocused(false);
-        }*/
         if(currentMenu == 1 && mousePressedDelay == 0) // Checks if in the main menu
         {
             if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
@@ -188,7 +181,6 @@ public void keyPressed()
             inputFileBox.setFocused(false);
         }else if(currentMenu == 3)
         {
-            currentMenu = 1;
             saveToFile(inputFileBox.getInput(), board);
             resetToDefaults();
         }
@@ -197,7 +189,17 @@ public void keyPressed()
         inputFileBox.inputKey(key);
     }else if(key == ESC)
     {
-        if(currentMenu == 3)
+        if(currentMenu == 0)
+        {
+            backToMenu();
+        }else if(currentMenu == 1)
+        {
+            exit();
+        } else if(currentMenu == 2)
+        {
+            resetToDefaults();
+        }
+        else if(currentMenu == 3)
         {
             currentMenu = 0;
             inputFileBox.clear();
@@ -362,6 +364,7 @@ public void setupGUI()
     structures.add(new Structure("schick engine.txt", "Schick")); //index 5
     structures.add(new Structure("hammerhead.txt", "Hammer")); //index 6
     structures.add(new Structure("Sir Robin.txt", "Sir Robin")); //index 7
+    structures.add(new Structure("copperhead.txt", "Copper")); //index 8
     currentStructureActive = -1;
 }
 
