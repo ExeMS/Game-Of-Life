@@ -105,12 +105,12 @@ void checkMousePressed()
             }
         } else if(currentMenu == 2)
         { // Opening file menu
-            if(testBox.isMouseOver() && !testBox.getIsFocused())
+            if(inputFileBox.isMouseOver() && !inputFileBox.getIsFocused())
             {
-                testBox.setFocused(true);
-            } else if (testBox.getIsFocused() && !testBox.isMouseOver())
+                inputFileBox.setFocused(true);
+            } else if (inputFileBox.getIsFocused() && !inputFileBox.isMouseOver())
             {
-                testBox.setFocused(false);
+                inputFileBox.setFocused(false);
             }
         } else if(currentMenu == 3)
         { // Saving file menu

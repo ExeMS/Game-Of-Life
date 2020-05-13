@@ -121,6 +121,13 @@ public void checkMousePressed()
             }
         } else if(currentMenu == 2)
         { // Opening file menu
+            if(inputFileBox.isMouseOver() && !inputFileBox.getIsFocused())
+            {
+                inputFileBox.setFocused(true);
+            } else if (inputFileBox.getIsFocused() && !inputFileBox.isMouseOver())
+            {
+                inputFileBox.setFocused(false);
+            }
         } else if(currentMenu == 3)
         { // Saving file menu
         }
@@ -213,8 +220,8 @@ public void checkKeys()
 public void backToMenu()
 { // This just clears the board to go back to the menu
     currentMenu = 1;
-    screenXPos = 0;
-    screenYPos = 0;
+    screenXPos = START_GRID_X;
+    screenYPos = START_GRID_Y;
     paused = true;
     clearBoard();
 }
@@ -311,8 +318,9 @@ public void setup()
     setupMenu(); // Sets just the menu and GUI
     setupGUI();
     inputFileBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
-    doneButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 20, 110, 50, "Cancel", 30);
-    cancelOSButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 110, 50, "Done", 30);
+    cancelOSButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 20, 110, 50, "Cancel", 30);
+    doneButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 110, 50, "Done", 30);
+    dontSaveButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 20, 110, 50, "Don't Save", 30);
 
     currentMenu = 1; // Makes sure you start in the menu
 
@@ -632,7 +640,13 @@ public void render()
         textAlign(LEFT);
         inputFileBox.render();
         doneButton.render();
-        cancelOSButton.render();
+        if(currentMenu == 2)
+        {
+            cancelOSButton.render();
+        }else
+        {
+            dontSaveButton.render();
+        }
     }
     //testBox.render();
 }
@@ -695,6 +709,7 @@ public void startGame_file()
 { // We might need do this at some point :D
     clearBoard();
     mode = 4;
+    inputFileBox.clear();
     currentMenu = 2;
 };
 
@@ -893,6 +908,11 @@ class TextBox
         }
     }
 
+    public void clear()
+    {
+        inputText = "";
+    }
+
     public void inputKey(char inpKey)
     {
         if(inpKey == BACKSPACE)
@@ -951,8 +971,10 @@ class TextBox
 // Screen
 static final int SCREEN_HEIGHT = 850;
 static final int SCREEN_WIDTH = 1000;
-int screenXPos = 0;
-int screenYPos = 0;
+static final int START_GRID_X = 500;
+static final int START_GRID_Y = 500;
+int screenXPos = START_GRID_X;
+int screenYPos = START_GRID_Y;
 int screenSpeed = 5;
 int backgroundColour = color(255);
 int currentMenu = 0; // 0: Game. 1: Main menu, 2: Opening file, 3: Saving file
