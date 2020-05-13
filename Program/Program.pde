@@ -43,6 +43,7 @@ void checkMousePressed()
                     structures.get(currentStructureActive).resetRotated();
                     currentStructureActive = -1;
                 }
+                mousePressedDelay = 20;
                 backToMenu();
             }
             if(pauseButton.isMouseOver() && paused == false && mousePressedDelay == 0) { // This checks if play/pause was pressed and pauses the game

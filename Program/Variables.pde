@@ -1,8 +1,9 @@
 // Screen
 static final int SCREEN_HEIGHT = 850;
 static final int SCREEN_WIDTH = 1000;
-static final int START_GRID_X = 500;
-static final int START_GRID_Y = 500;
+static final int CELL_SIZE = 10;
+static final int START_GRID_X = 500 * CELL_SIZE;
+static final int START_GRID_Y = 500 * CELL_SIZE;
 int screenXPos = START_GRID_X;
 int screenYPos = START_GRID_Y;
 int screenSpeed = 5;
@@ -12,7 +13,6 @@ int currentMenu = 0; // 0: Game. 1: Main menu, 2: Opening file, 3: Saving file
 // Board and cell settings
 static final int BOARD_HEIGHT = 1000;
 static final int BOARD_WIDTH = 1000;
-static final int CELL_SIZE = 10;
 static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
 static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
 static final int STRUCTURE_MENU_WIDTH = 6;
