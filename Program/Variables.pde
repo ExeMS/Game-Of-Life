@@ -54,3 +54,5 @@ Boolean rightPressed = false;
 Boolean leftPressed  = false;
 Boolean shiftPressed = false;
 int mousePressedDelay = 0;
+
+// Text box
