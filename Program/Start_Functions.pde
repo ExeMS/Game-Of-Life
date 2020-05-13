@@ -58,7 +58,7 @@ void startGame_Explore()
 void startGame_file()
 { // We might need do this at some point :D
     clearBoard();
-    mode = 4;
+    mode = 3;
     inputFileBox.clear();
     currentMenu = 2;
 };
@@ -66,6 +66,6 @@ void startGame_file()
 void startGame_sandbox()
 {
     sandboxStart();
-    mode = 5;
+    mode = 2;
     currentMenu = 0;
 };
