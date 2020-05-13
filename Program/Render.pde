@@ -1,8 +1,6 @@
 void renderMenu()
 { // Renders all the videos
     randomStartButton.render();
-    gosperGliderGun.render();
-    singleGlider.render();
     readFromFile.render();
     sandbox.render();
     exitButton.render();
