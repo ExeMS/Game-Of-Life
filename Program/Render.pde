@@ -123,11 +123,12 @@ void render()
     {
         fill(255);
         outline(0);
-        rect(SCREEN_WIDTH/2-250, SCREEN_HEIGHT/2-250, width, height);
+        rect(SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         textSize(30);
         outline(0);
         fill(0);
-        text("Input name of the save");
+        textAlign(CENTER);
+        text("Input name of the save", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 40);
     }else if(currentMenu == 3)
     {
 

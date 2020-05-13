@@ -26,7 +26,6 @@ void randomBoard()
     }
 }
 
-<<<<<<< HEAD
 void setBoardToStruct(boolean[][] struct)
 {
     if(struct.length < 1000)
@@ -63,6 +62,7 @@ void startGame_file()
 
 void startGame_sandbox()
 {
-    mode = 2;
+    sandboxStart();
+    mode = 5;
     currentMenu = 0;
 };
