@@ -28,13 +28,15 @@ void randomBoard()
 
 void setBoardToStruct(boolean[][] struct)
 {
-    if(struct.length < 1000)
+    if(struct.length < BOARD_WIDTH || struct[0].length < BOARD_HEIGHT)
     {
+        int startX = int((BOARD_WIDTH - struct.length) / 2)
+        int startY = int((BOARD_HEIGHT - struct[0].length) / 2)
         for(int i = 0; i < struct.length; i++)
         {
             for(int j = 0; j < struct[i].length; j++)
             {
-                board[i][j] = struct[i][j];
+                board[startX + i][startY + j] = struct[i][j];
             }
         }
     }else
