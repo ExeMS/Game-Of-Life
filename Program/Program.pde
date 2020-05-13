@@ -270,6 +270,9 @@ void setupGUI()
     structures.add(new Structure("cell.txt", "Cell")); // This will now be index 0
     structures.add(new Structure("glider.txt", "Glider")); // This will be index 1
     structures.add(new Structure("glider gun.txt", "Glider Gun")); // This will be index 2
+    structures.add(new Structure("spaceship.txt", "Spaceship")); //index 3
+    structures.add(new Structure("dart.txt", "Dart")); //index 4
+    structures.add(new Structure("schick engine.txt", "Schick")); //index 5
     currentStructureActive = -1;
 }
 
