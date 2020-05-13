@@ -314,8 +314,8 @@ public void setup()
     setupMenu(); // Sets just the menu and GUI
     setupGUI();
     inputFileBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
-    cancelOSButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 10, 110, 50, "Cancel", 30);
-    cancelOSButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 10, 110, 50, "Done", 30);
+    doneButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 20, 110, 50, "Cancel", 30);
+    cancelOSButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 110, 50, "Done", 30);
 
     currentMenu = 1; // Makes sure you start in the menu
 
@@ -631,7 +631,11 @@ public void render()
         stroke(0);
         fill(0);
         textAlign(CENTER);
-        text("Input name of the save", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 40);
+        text("Input name of the save", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 20);
+        textAlign(LEFT);
+        inputFileBox.render();
+        doneButton.render();
+        cancelOSButton.render();
     }else if(currentMenu == 3)
     {
 
@@ -965,7 +969,7 @@ static final int BOARD_WIDTH = 1000;
 static final int CELL_SIZE = 10;
 static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
 static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
-static final int STRUCTURE_MENU_WIDTH = 3;
+static final int STRUCTURE_MENU_WIDTH = 6;
 
 // mode of use
 int mode = 1;

@@ -122,7 +122,7 @@ void render()
     }else if(currentMenu == 0)
     {
         renderGUI();
-    }else if(currentMenu == 2)
+    }else if(currentMenu == 2 || currentMenu == 3)
     {
         fill(255);
         stroke(0);
@@ -131,10 +131,11 @@ void render()
         stroke(0);
         fill(0);
         textAlign(CENTER);
-        text("Input name of the save", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 40);
-    }else if(currentMenu == 3)
-    {
-
+        text("Input name of the save", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 20);
+        textAlign(LEFT);
+        inputFileBox.render();
+        doneButton.render();
+        cancelOSButton.render();
     }
     //testBox.render();
 }
