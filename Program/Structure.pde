@@ -123,7 +123,7 @@ class Structure
         {
             my_cellSize = my_boardSize / (my_width + 2);
         }else {
-            my_cellSize = my_boardSize / (my_width + 2);
+            my_cellSize = my_boardSize / (my_height + 2);
         }
         stroke(0);
         if(isMouseOver(x, y))
