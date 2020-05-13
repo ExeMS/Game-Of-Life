@@ -12,9 +12,9 @@ void renderGUI()
     if(mode != 1){ // checks what mode you are in
         if(inStructureMenu)
         { // If in the structure menu it renders the structures
-            for(int i = 1; i < structures.size(); i++)
+            for(int i = 0; i < structures.size(); i++)
             {
-                structures.get(i).render((i - 1) * 102 + 50, 50);
+                structures.get(i).render(i * 102 + 50, 50);
             }
         } else
         { // Otherwise it renders the structure button
