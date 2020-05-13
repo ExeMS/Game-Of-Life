@@ -18,7 +18,36 @@ ENDFUNCTION
 
 god(cellList)
 BEGINFUNCTION
-	Euan could you please do this for your code please thanks :D
+    IF not paused THEN
+	FOR i IN RANGE 0 TO BOARD_WIDTH
+	    FOR j IN RANGE 0 TO BOARD_HEIGHT
+		SET BoardCopy[i][j] TO Board[i][j]
+		SET Counter TO 0
+		IF i NOT EQUAL TO 0 AND board[i-1][j] THEN
+			SET counter To counter + 1
+		IF i NOT EQUAL TO BOARD_WIDTH - 1 AND board[i+1][j] THEN
+			SET counter To counter + 1
+		IF i NOT EQUAL TO 0 AND j NOT EQUAL TO 0 AND board[i-1][j-1] THEN
+			SET counter To counter + 1
+		IF j NOT EQUAL TO 0 AND board[i][j-1] EQUAL TO 1 THEN
+			SET counter To counter + 1
+		IF i NOT EQUAL TO BOARD_WIDTH - 1 AND j NOT EQUAL TO 0 AND board[i+1][j-1] THEN
+			SET counter To counter + 1
+		IF i NOT EQUAL TO 0 AN j NOT EQUAL TO BOARD_HEIGHT - 1 AND board[i-1][j+1]  THEN
+			SET counter To counter + 1
+		IF j NOT EQUAL TO BOARD_HEIGHT - 1 AND board[i][j+1] THEN
+			SET counter To counter + 1
+		IF i NOT EQUAL TO BOARD_WIDTH -1 AND j NOT EQUAL TO BOARD_HEIGHT - 1 AND board[i+1][j+1] THEN
+			SET counter To counter + 1
+		IF counter LESS THAN 2 AND board[i][j] THEN
+			SET boardcopy[i][j] TO false
+		IF counter GREATER THAN 3 AND board[i][j] THEN
+			SET boardcopy[i][j] TO false
+		IF counter EQUAL TO 3 AND board[i][j] EQUAL TO false THEN
+			SET boardcopy[i][j] TO true
+	FOR i IN RANGE 0 TO BOARD_WIDTH
+	    FOR j IN RANGE 0 TO BOARD_HEIGHT
+	        SET board[i][j] TO boardcopy[i][j]
 ENDFUNCTION
 
 function checkMousePressed()
@@ -176,7 +205,6 @@ BEGINFUNCTION
     SET pauseButton TO NEW Button
     SET playButton TO NEW Button
     SET menuButton TO NEW Button
-    Initialise all Structures
     SET currentStructureActive TO -1
 ENDFUNCTION
 
