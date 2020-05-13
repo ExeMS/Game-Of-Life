@@ -289,6 +289,7 @@ void setupGUI()
     structures.add(new Structure("dart.txt", "Dart")); //index 4
     structures.add(new Structure("schick engine.txt", "Schick")); //index 5
     structures.add(new Structure("hammerhead.txt", "Hammer")); //index 6
+    structures.add(new Structure("Sir Robin.txt", "Sir Robin")); //index 7
     currentStructureActive = -1;
 }
 
