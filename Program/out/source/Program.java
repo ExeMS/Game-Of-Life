@@ -39,12 +39,6 @@ public void checkMousePressed()
             if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
                 startGame_Explore();
             }
-            if (gosperGliderGun.isMouseOver()) {
-                startGame_gun();
-            }
-            if (singleGlider.isMouseOver()) {
-                startGame_glider();
-            }
             if (readFromFile.isMouseOver()) {
                 startGame_file();
             }
@@ -111,6 +105,9 @@ public void checkMousePressed()
                 if(!cancelButton.isMouseOver())
                 { // If the cancel button was not pressed, it calls the place function in the structure
                     structures.get(currentStructureActive).place();
+                }else
+                {
+                    currentStructureActive = -1;
                 }
                 if(!shiftPressed)
                 { // If the shift is pressed, then a mousePressedDelay is set and the structure stays active (so you can keep placing them)
@@ -266,12 +263,10 @@ public void god()
 
 public void setupMenu()
 { // This creates all the buttons for the Menu
-    randomStartButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 145, 280, 50, "Start", 30);
-    gosperGliderGun = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 85, 280, 50, "Gosper Glider Gun", 30);
-    singleGlider = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) - 25, 280, 50, "Glider", 30);
-    readFromFile = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 35, 280, 50, "Read From File", 30);
-    sandbox = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 95, 280, 50, "Sandbox", 30);
-    exitButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 155, 280, 50, "Exit", 30);
+    randomStartButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2), 280, 50, "Explore", 30);
+    sandbox = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 60, 280, 50, "Sandbox", 30);
+    readFromFile = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 120, 280, 50, "Read From File", 30);
+    exitButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 180, 280, 50, "Exit", 30);
 }
 
 public void setupGUI()
@@ -487,8 +482,6 @@ public void saveToFile(String filename, boolean[][] struct)
 public void renderMenu()
 { // Renders all the videos
     randomStartButton.render();
-    gosperGliderGun.render();
-    singleGlider.render();
     readFromFile.render();
     sandbox.render();
     exitButton.render();
@@ -945,8 +938,6 @@ int timeControl = 0;
 
 // Menu Buttons
 Button randomStartButton;
-Button gosperGliderGun;
-Button singleGlider;
 Button readFromFile;
 Button sandbox;
 Button exitButton;
