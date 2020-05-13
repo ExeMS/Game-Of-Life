@@ -38,7 +38,7 @@ void startGame_Explore()
 
 void startGame_gun()
 { // This spawns the glider gun
-    createGliderGun(0, 0);
+    structures.get(2).placeInLocation(6, 8);
     mode = 2;
     inMenu = false;
 };
