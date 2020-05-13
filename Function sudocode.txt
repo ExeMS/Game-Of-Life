@@ -80,24 +80,22 @@ BEGINFUNCTION
 	SET ALL values in board TO random integer between 0 and 1
 ENDFUNCTION
 
-function startGame_random()
+function startGame_Explore()
 BEGINFUNCTION
 	CALL randomBoard()
-	SET inMenu TO False
-ENDFUNCTION
-
-Hey Euan, all the rest of the start game things were yours :D
-function startGame_gun()
-BEGINFUNCTION
-ENDFUNCTION
-
-function startGame_glider()
-BEGINFUNCTION
+	SET mode TO 1
+	SET currentMenu TO 0
 ENDFUNCTION
 
 function startGame_file()
 BEGINFUNCTION
 	With this one Euan, just write what you think the finished function should do e.g. get user TO input file and then set board...
+ENDFUNCTION
+
+function startGame_sandbox()
+BEGINFUNCTION
+	SET mode TO 2
+	SET currentMenu TO 0
 ENDFUNCTION
 
 function render()
