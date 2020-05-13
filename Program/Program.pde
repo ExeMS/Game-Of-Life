@@ -73,7 +73,7 @@ void checkMousePressed()
             { // This checks if any of the structures were pressed (in the structure menu)
                 for(int i = 0; i < structures.size(); i++) // This goes through every structure in the list and checks its location
                 {
-                    if(structures.get(i).isMouseOver((i - 1) * 102 + 50, 50))
+                    if(structures.get(i).isMouseOver((i) * 102 + 50, 50))
                     {
                         currentStructureActive = i;
                         break;
