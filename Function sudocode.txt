@@ -67,6 +67,7 @@ ENDFUNCTION
 function readFromFile()
 BEGINFUNCTION
 	Hey Euan this IS you again :D
+	I don't think it is =D
 ENDFUNCTION
 
 function clearBoard()
