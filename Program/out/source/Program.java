@@ -49,6 +49,34 @@ public void checkMousePressed()
                 exit(); // This just closes the window
             }
         } else { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
+
+            if(menuButton.isMouseOver())
+            { // If the menu button is pressed it runs the given function
+                if(currentStructureActive != -1)
+                { // This sets the rotation, if the user is placing down a structure
+                    structures.get(currentStructureActive).resetRotated();
+                    currentStructureActive = -1;
+                }
+                backToMenu();
+            }
+            if(pauseButton.isMouseOver() && paused == false && mousePressedDelay == 0) { // This checks if play/pause was pressed and pauses the game
+                paused = true;
+                mousePressedDelay = 20;
+                if(currentStructureActive != -1)
+                { // This sets the rotation, if the user is placing down a structure
+                    structures.get(currentStructureActive).resetRotated();
+                    currentStructureActive = -1;
+                }
+            } else if(playButton.isMouseOver() && paused == true && mousePressedDelay == 0) {
+                paused = false;
+                mousePressedDelay = 20;
+                if(currentStructureActive != -1)
+                { // This sets the rotation, if the user is placing down a structure
+                    structures.get(currentStructureActive).resetRotated();
+                    currentStructureActive = -1;
+                }
+            }
+
             if (spawnStructureButton.isMouseOver() && !inStructureMenu) {
                 inStructureMenu = true; // This opens the structure menu
                 mousePressedDelay = 20; // The mousePressedDelay is set to stop causing some bugs
@@ -85,17 +113,6 @@ public void checkMousePressed()
                     structures.get(currentStructureActive).resetRotated(); // Otherwise the structure is reset and nothing is set to active
                     currentStructureActive = -1;
                 }
-            }
-            if(menuButton.isMouseOver())
-            { // If the menu button is pressed it runs the given function
-                backToMenu();
-            }
-            if(pauseButton.isMouseOver() && paused == false && mousePressedDelay == 0) { // This checks if play/pause was pressed and pauses the game
-              paused = true;
-              mousePressedDelay = 20;
-            } else if(playButton.isMouseOver() && paused == true && mousePressedDelay == 0) {
-              paused = false;
-              mousePressedDelay = 20;
             }
         }
     }else
