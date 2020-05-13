@@ -46,7 +46,7 @@ class TextBox
             {
                 inputText = inputText.substring(0, inputText.length() - 1);
             }
-        }else if(inpKey == CODED && keyCode == SHIFT)
+        }else if(inpKey == CODED && keyCode < 31)
         {
         }else if(textWidth(inputText + "W") + 10 < my_width)
         {
