@@ -115,9 +115,12 @@ void checkMousePressed()
 
 void keyPressed()
 { // This is run when a key is pressed
-    if(testBox.getIsFocused())
+    if(key == '\n')
     {
-        testBox.inputKey(key);
+        enterPressed = true;
+    }else if(inputFileBox.getIsFocused())
+    {
+        inputFileBox.inputKey(key);
     }else if(key == ESC)
     {
         key = 0;
@@ -143,7 +146,10 @@ void keyPressed()
 
 void keyReleased()
 { // This is run when a key is released
-    if (key == CODED && !inMenu) {
+    if(key == '\n')
+    {
+        enterPressed = false;
+    } else if (key == CODED && !inMenu) {
         if (keyCode == UP) { // When a key is released, it sets the given variable
             upPressed = false;
         }
@@ -190,6 +196,20 @@ void backToMenu()
     screenYPos = 0;
     paused = true;
     clearBoard();
+}
+
+void openOrSaveGameMenu(boolean save)
+{ // Warning this locks out the whole program from running so it makes it a bit limited
+    while(true)
+    {
+        inputFileBox.render();
+        cancelOSButton.render();
+        cancelOSButton.render();
+        if(enterPressed)
+        {
+            break;
+        }
+    }
 }
 
 // Updates the game
@@ -283,7 +303,9 @@ void setup()
 
     setupMenu(); // Sets just the menu and GUI
     setupGUI();
-    testBox = new TextBox(100, 100, 240);
+    inputFileBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
+    cancelOSButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 10, 110, 50, "Cancel", 30);
+    cancelOSButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 10, 110, 50, "Done", 30);
 
     inMenu = true; // Makes sure you start in the menu
 

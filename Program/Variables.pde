@@ -53,5 +53,8 @@ Boolean leftPressed  = false;
 Boolean shiftPressed = false;
 int mousePressedDelay = 0;
 
-// Text box
-TextBox testBox;
+// openOrSaveGameMenu function stuff
+TextBox inputFileBox;
+Button doneButton;
+Button cancelOSButton;
+boolean enterPressed = false;
