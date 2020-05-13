@@ -71,7 +71,7 @@ void checkMousePressed()
                 }
             } else if(inStructureMenu && mousePressedDelay == 0)
             { // This checks if any of the structures were pressed (in the structure menu)
-                for(int i = 1; i < structures.size(); i++) // This goes through every structure in the list and checks its location
+                for(int i = 0; i < structures.size(); i++) // This goes through every structure in the list and checks its location
                 {
                     if(structures.get(i).isMouseOver((i - 1) * 102 + 50, 50))
                     {
