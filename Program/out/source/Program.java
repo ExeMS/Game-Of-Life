@@ -272,6 +272,7 @@ public void setupGUI()
     // Structures
     structures.add(new Structure("cell.txt", "Cell")); // This will now be index 0
     structures.add(new Structure("glider.txt", "Glider")); // This will be index 1
+    structures.add(new Structure("glider gun.txt", "Glider Gun")); // This will be index 2
     currentStructureActive = -1;
 }
 
@@ -279,7 +280,6 @@ public void setup()
 {
      // Sets the size of the window, and background colour
     background(backgroundColour);
-    saveToFile("glider gun.txt", createGliderGun(0,0));
 
     clearBoard(); // This clears the board, making sure everything is false
 

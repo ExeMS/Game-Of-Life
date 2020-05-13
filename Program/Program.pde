@@ -61,7 +61,7 @@ void checkMousePressed()
                 }
             }
 
-            if (spawnStructureButton.isMouseOver() && !inStructureMenu) {
+            if (spawnStructureButton.isMouseOver() && !inStructureMenu && mousePressedDelay == 0) {
                 inStructureMenu = true; // This opens the structure menu
                 mousePressedDelay = 20; // The mousePressedDelay is set to stop causing some bugs
                 if(currentStructureActive != -1)
@@ -256,6 +256,7 @@ void setupGUI()
     // Structures
     structures.add(new Structure("cell.txt", "Cell")); // This will now be index 0
     structures.add(new Structure("glider.txt", "Glider")); // This will be index 1
+    structures.add(new Structure("glider gun.txt", "Glider Gun")); // This will be index 2
     currentStructureActive = -1;
 }
 
