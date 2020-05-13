@@ -105,6 +105,13 @@ void checkMousePressed()
             }
         } else if(currentMenu == 2)
         { // Opening file menu
+            if(testBox.isMouseOver() && !testBox.getIsFocused())
+            {
+                testBox.setFocused(true);
+            } else if (testBox.getIsFocused() && !testBox.isMouseOver())
+            {
+                testBox.setFocused(false);
+            }
         } else if(currentMenu == 3)
         { // Saving file menu
         }
@@ -295,8 +302,9 @@ void setup()
     setupMenu(); // Sets just the menu and GUI
     setupGUI();
     inputFileBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
-    doneButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 20, 110, 50, "Cancel", 30);
-    cancelOSButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 110, 50, "Done", 30);
+    cancelOSButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 20, 110, 50, "Cancel", 30);
+    doneButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 110, 50, "Done", 30);
+    dontSaveButton = new Button(SCREEN_WIDTH / 2 - 115, SCREEN_HEIGHT / 2 + 20, 110, 50, "Don't Save", 30);
 
     currentMenu = 1; // Makes sure you start in the menu
 

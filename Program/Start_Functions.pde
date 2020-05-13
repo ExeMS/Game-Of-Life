@@ -57,6 +57,7 @@ void startGame_file()
 { // We might need do this at some point :D
     clearBoard();
     mode = 4;
+    inputFileBox.clear();
     currentMenu = 2;
 };
 

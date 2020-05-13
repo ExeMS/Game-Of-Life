@@ -33,6 +33,11 @@ class TextBox
         }
     }
 
+    void clear()
+    {
+        inputText = "";
+    }
+
     void inputKey(char inpKey)
     {
         if(inpKey == BACKSPACE)

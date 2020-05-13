@@ -135,7 +135,13 @@ void render()
         textAlign(LEFT);
         inputFileBox.render();
         doneButton.render();
-        cancelOSButton.render();
+        if(currentMenu == 2)
+        {
+            cancelOSButton.render();
+        }else
+        {
+            dontSaveButton.render();
+        }
     }
     //testBox.render();
 }
