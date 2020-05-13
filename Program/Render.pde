@@ -9,7 +9,7 @@ void renderMenu()
 }
 void renderGUI()
 { // Render process for the GUI will go in here
-    if(mode == 2 || mode == 3 || mode == 4){ // checks what mode you are in
+    if(mode != 1){ // checks what mode you are in
         if(inStructureMenu)
         { // If in the structure menu it renders the structures
             for(int i = 1; i < structures.size(); i++)
@@ -27,7 +27,7 @@ void renderGUI()
         }
     }
     menuButton.render(); // Always renders the menuButton
-    if(mode == 1 || mode == 2 || mode == 3 || mode == 4){ // Checks the right mode
+    if(mode != 0){ // Checks the right mode
       if(paused == false){ // Renders the pause and play button
         pauseButton.render();
       }
