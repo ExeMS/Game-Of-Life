@@ -328,7 +328,7 @@ void draw()
     render(); // This renders everything on the screen
 
     timeControl++;
-    if(timeControl == 10) // This limits how much it is updated
+    if(timeControl == 8) // This limits how much it is updated
     {
         timeControl = 0;
         god(); // Runs the function for updating the board
