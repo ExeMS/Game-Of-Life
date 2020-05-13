@@ -173,6 +173,10 @@ BEGINFUNCTION
         CREATE Button
     ENDFOR
     SET cancelButton TO NEW Button
+    SET pauseButton TO NEW Button
+    SET playButton TO NEW Button
+    SET menuButton TO NEW Button
+    Initialise all Structures
     SET currentStructureActive TO -1
 ENDFUNCTION
 
