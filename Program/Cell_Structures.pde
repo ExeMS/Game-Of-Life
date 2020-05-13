@@ -1,5 +1,5 @@
 boolean[][] readFromFile(String filename)
-{ 
+{
     String[] lines = loadStrings(filename);
     int structureWidth = 0;
     for (int i = 0 ; i < lines.length; i++) {

@@ -121,7 +121,10 @@ void keyPressed()
     if(testBox.getIsFocused())
     {
         testBox.inputKey(key);
-    }else if (key == CODED && !inMenu) {
+    }else if(key == ESC)
+    {
+        key = 0;
+    } else if (key == CODED && !inMenu) {
         if (keyCode == UP) { // When a key is pressed, it sets the given variable
             upPressed = true;
         }

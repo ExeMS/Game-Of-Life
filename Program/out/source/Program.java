@@ -137,7 +137,10 @@ public void keyPressed()
     if(testBox.getIsFocused())
     {
         testBox.inputKey(key);
-    }else if (key == CODED && !inMenu) {
+    }else if(key == ESC)
+    {
+        key = 0;
+    } else if (key == CODED && !inMenu) {
         if (keyCode == UP) { // When a key is pressed, it sets the given variable
             upPressed = true;
         }
@@ -202,6 +205,9 @@ public void checkKeys()
 public void backToMenu()
 { // This just clears the board to go back to the menu
     inMenu = true;
+    screenXPos = 0;
+    screenYPos = 0;
+    paused = true;
     clearBoard();
 }
 
@@ -283,6 +289,9 @@ public void setupGUI()
     structures.add(new Structure("cell.txt", "Cell")); // This will now be index 0
     structures.add(new Structure("glider.txt", "Glider")); // This will be index 1
     structures.add(new Structure("glider gun.txt", "Glider Gun")); // This will be index 2
+    structures.add(new Structure("spaceship.txt", "Spaceship")); //index 3
+    structures.add(new Structure("dart.txt", "Dart")); //index 4
+    structures.add(new Structure("schick engine.txt", "Schick")); //index 5
     currentStructureActive = -1;
 }
 
@@ -429,7 +438,7 @@ class Button
     }
 };
 public boolean[][] readFromFile(String filename)
-{ 
+{
     String[] lines = loadStrings(filename);
     int structureWidth = 0;
     for (int i = 0 ; i < lines.length; i++) {
