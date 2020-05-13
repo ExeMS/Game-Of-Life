@@ -37,7 +37,8 @@ A model of a representation of the problem, possibly a drawing.
 In design.docx
 
 # Evaluation
-Suggest Improvements
-... I have no idea for the rest of it
-
-
+Suggest Improvements:
+1) Add a larger range of structures.
+2) Add a speed controller to the game, so the player can change how fast the game moves.
+3) Add a "single stage" button, so the user can move forward one stage at a time.
+4) Allow the user to use the forward and back keys in the textboxes for readFromFile and SaveToFile.
