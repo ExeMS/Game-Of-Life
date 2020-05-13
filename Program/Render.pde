@@ -1,9 +1,12 @@
+PImage img;
+
 void renderMenu()
 { // Renders all the videos
     randomStartButton.render();
     readFromFile.render();
     sandbox.render();
     exitButton.render();
+    image(img, (SCREEN_WIDTH / 2) - (width / 4), 60, width / 2, height / 3);
 }
 void renderGUI()
 { // Render process for the GUI will go in here
