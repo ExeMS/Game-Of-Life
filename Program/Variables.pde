@@ -8,14 +8,21 @@ int currentMenu = 0; // 0: Game. 1: Main menu, 2: Opening file, 3: Saving file
 // Board and cell settings
 static final int BOARD_HEIGHT = 1000;
 static final int BOARD_WIDTH = 1000;
-static final int CELL_SIZE = 10;
-static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
-static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
+
+static final int ORIGINAL_CELL_SIZE = 10;
 static final int STRUCTURE_MENU_WIDTH = 6;
-static final int START_GRID_X = (500 - (SCREEN_GRID_WIDTH / 2)) * CELL_SIZE;
-static final int START_GRID_Y = (500 - (SCREEN_GRID_HEIGHT / 2)) * CELL_SIZE;
+
+static final int ORIGINAL_SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / ORIGINAL_CELL_SIZE;
+static final int ORIGINAL_SCREEN_GRID_WIDTH = SCREEN_WIDTH / ORIGINAL_CELL_SIZE;
+
+static final int START_GRID_X = (500 - (ORIGINAL_SCREEN_GRID_WIDTH / 2)) * ORIGINAL_CELL_SIZE;
+static final int START_GRID_Y = (500 - (ORIGINAL_SCREEN_GRID_HEIGHT / 2)) * ORIGINAL_CELL_SIZE;
+
+int cellSize = ORIGINAL_CELL_SIZE;
 int screenXPos = START_GRID_X;
 int screenYPos = START_GRID_Y;
+int screenGridHeight = ORIGINAL_SCREEN_GRID_HEIGHT;
+int screenGridWidth = ORIGINAL_SCREEN_GRID_WIDTH;
 
 // mode of use
 int mode = 1;

@@ -1,8 +1,19 @@
 void mouseWheel(MouseEvent event) { // This is called when the user uses the scroll wheel
+    int e = int(event.getCount()); // This gets what direction the scroll wheel was used
     if(currentStructureActive != -1)
     {
-        int e = int(event.getCount()); // This gets what direction the scroll wheel was used
         structures.get(currentStructureActive).rotate(e); // This rotates the active structure
+    } else if (currentMenu == 0)
+    {
+        if(e == -1 && cellSize != 1)
+        {
+            cellSize -= 1;
+        }else if (e == 1 && cellSize != SCREEN_WIDTH)
+        {
+            cellSize += 1;
+        }
+        screenGridHeight = SCREEN_HEIGHT / cellSize;
+        screenGridWidth = SCREEN_WIDTH / cellSize;
     }
 }
 
@@ -243,10 +254,10 @@ void checkKeys()
         if (leftPressed && screenXPos - screenSpeed >= 0) {
             screenXPos -= screenSpeed;
         }
-        if (downPressed && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * CELL_SIZE - SCREEN_HEIGHT) {
+        if (downPressed && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * cellSize - SCREEN_HEIGHT) {
             screenYPos += screenSpeed;
         }
-        if (rightPressed && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * CELL_SIZE - SCREEN_WIDTH) {
+        if (rightPressed && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * cellSize - SCREEN_WIDTH) {
             screenXPos += screenSpeed;
         }
     }
@@ -318,6 +329,9 @@ void resetToDefaults()
     currentMenu = 1;
     screenXPos = START_GRID_X;
     screenYPos = START_GRID_Y;
+    cellSize = ORIGINAL_CELL_SIZE;
+    screenGridHeight = ORIGINAL_SCREEN_GRID_HEIGHT;
+    screenGridWidth = ORIGINAL_SCREEN_GRID_WIDTH;
     clearBoard();
 }
 

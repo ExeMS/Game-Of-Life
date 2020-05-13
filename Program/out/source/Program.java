@@ -15,10 +15,21 @@ import java.io.IOException;
 public class Program extends PApplet {
 
 public void mouseWheel(MouseEvent event) { // This is called when the user uses the scroll wheel
+    int e = PApplet.parseInt(event.getCount()); // This gets what direction the scroll wheel was used
     if(currentStructureActive != -1)
     {
-        int e = PApplet.parseInt(event.getCount()); // This gets what direction the scroll wheel was used
         structures.get(currentStructureActive).rotate(e); // This rotates the active structure
+    } else if (currentMenu == 0)
+    {
+        if(e == -1 && cellSize != 1)
+        {
+            cellSize -= 1;
+        }else if (e == 1 && cellSize != SCREEN_WIDTH)
+        {
+            cellSize += 1;
+        }
+        screenGridHeight = SCREEN_HEIGHT / cellSize;
+        screenGridWidth = SCREEN_WIDTH / cellSize;
     }
 }
 
@@ -259,10 +270,10 @@ public void checkKeys()
         if (leftPressed && screenXPos - screenSpeed >= 0) {
             screenXPos -= screenSpeed;
         }
-        if (downPressed && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * CELL_SIZE - SCREEN_HEIGHT) {
+        if (downPressed && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * cellSize - SCREEN_HEIGHT) {
             screenYPos += screenSpeed;
         }
-        if (rightPressed && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * CELL_SIZE - SCREEN_WIDTH) {
+        if (rightPressed && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * cellSize - SCREEN_WIDTH) {
             screenXPos += screenSpeed;
         }
     }
@@ -334,6 +345,9 @@ public void resetToDefaults()
     currentMenu = 1;
     screenXPos = START_GRID_X;
     screenYPos = START_GRID_Y;
+    cellSize = ORIGINAL_CELL_SIZE;
+    screenGridHeight = ORIGINAL_SCREEN_GRID_HEIGHT;
+    screenGridWidth = ORIGINAL_SCREEN_GRID_WIDTH;
     clearBoard();
 }
 
@@ -365,6 +379,15 @@ public void setupGUI()
     structures.add(new Structure("hammerhead.txt", "Hammer")); //index 6
     structures.add(new Structure("Sir Robin.txt", "Sir Robin")); //index 7
     structures.add(new Structure("copperhead.txt", "Copper")); //index 8
+    structures.add(new Structure("pulsar.txt", "Pulsar")); //index 9
+    structures.add(new Structure("kok's galaxy.txt", "Galaxy")); //index 10
+    structures.add(new Structure("rich's P16.txt", "P16")); //index 11
+    structures.add(new Structure("rocket.txt", "Rocket")); //index 12
+    structures.add(new Structure("flash oscillator.txt", "Flash")); //index 13
+    structures.add(new Structure("pentadecathalon.txt", "15")); //index 14
+    structures.add(new Structure("oddball.txt", "Oddball")); //index 15
+    structures.add(new Structure("fairy.txt", "Fairy")); //index 16
+    structures.add(new Structure("weekender.txt", "Weekender")); //index 17
     currentStructureActive = -1;
 }
 
@@ -609,12 +632,12 @@ public void renderGUI()
 public void renderBoard()
 {
     boolean notDrawnStructuresLines = true; // This makes sure that we don't draw the lines around the structure multiple times
-    int gridX = screenXPos / CELL_SIZE;
-    int gridY = screenYPos / CELL_SIZE;
+    int gridX = screenXPos / cellSize;
+    int gridY = screenYPos / cellSize;
     // This renders the current part of the matrix that is viewed (Also it renders one cell either side of the boarders to make sure scrolling is smooth)
-    for(int i = gridX - 1; i < gridX + SCREEN_GRID_WIDTH + 1; i++) // Goes through the 2d matrix and draws the cell if it is alive
+    for(int i = gridX - 1; i < gridX + screenGridWidth + 1; i++) // Goes through the 2d matrix and draws the cell if it is alive
     {
-        for(int j = gridY - 1; j < gridY + SCREEN_GRID_HEIGHT + 1; j++)
+        for(int j = gridY - 1; j < gridY + screenGridHeight + 1; j++)
         {
             if(i < 0 || j < 0 || i >= BOARD_WIDTH || j >= BOARD_HEIGHT) // This is just safe guards just so it doesn't through an error
             {
@@ -630,27 +653,27 @@ public void renderBoard()
                 if (notDrawnStructuresLines)
                 { // This draws the lines around the structure
                     stroke(0);
-                    int structScreenX = structures.get(currentStructureActive).getX() * CELL_SIZE - screenXPos;
-                    int structScreenY = structures.get(currentStructureActive).getY() * CELL_SIZE - screenYPos;
+                    int structScreenX = structures.get(currentStructureActive).getX() * cellSize - screenXPos;
+                    int structScreenY = structures.get(currentStructureActive).getY() * cellSize - screenYPos;
                     line(structScreenX,
                          structScreenY,
-                         structScreenX + structures.get(currentStructureActive).getWidth() * CELL_SIZE,
+                         structScreenX + structures.get(currentStructureActive).getWidth() * cellSize,
                          structScreenY
                     );
                     line(structScreenX,
                          structScreenY,
                          structScreenX,
-                         structScreenY + structures.get(currentStructureActive).getHeight() * CELL_SIZE
+                         structScreenY + structures.get(currentStructureActive).getHeight() * cellSize
                     );
                     line(structScreenX,
-                         structScreenY + structures.get(currentStructureActive).getHeight() * CELL_SIZE,
-                         structScreenX + structures.get(currentStructureActive).getWidth() * CELL_SIZE,
-                         structScreenY + structures.get(currentStructureActive).getHeight() * CELL_SIZE
+                         structScreenY + structures.get(currentStructureActive).getHeight() * cellSize,
+                         structScreenX + structures.get(currentStructureActive).getWidth() * cellSize,
+                         structScreenY + structures.get(currentStructureActive).getHeight() * cellSize
                     );
-                    line(structScreenX + structures.get(currentStructureActive).getWidth() * CELL_SIZE,
+                    line(structScreenX + structures.get(currentStructureActive).getWidth() * cellSize,
                          structScreenY,
-                         structScreenX + structures.get(currentStructureActive).getWidth() * CELL_SIZE,
-                         structScreenY + structures.get(currentStructureActive).getHeight() * CELL_SIZE
+                         structScreenX + structures.get(currentStructureActive).getWidth() * cellSize,
+                         structScreenY + structures.get(currentStructureActive).getHeight() * cellSize
                     );
                     notDrawnStructuresLines = false;
                 }
@@ -660,18 +683,18 @@ public void renderBoard()
                 { // This renders the squares as blue (as they will be created when the structure is placed)
                     stroke(0, 0, 255);
                     fill(0, 0, 255);
-                    rect(i*CELL_SIZE - screenXPos, j*CELL_SIZE - screenYPos, CELL_SIZE, CELL_SIZE);
+                    rect(i*cellSize - screenXPos, j*cellSize - screenYPos, cellSize, cellSize);
                 } else if(board[i][j])
                 { // This renders the squares as red (as they will be destroyed when the structure is placed)
                     stroke(255, 0, 0);
                     fill(255, 0, 0);
-                    rect(i*CELL_SIZE - screenXPos, j*CELL_SIZE - screenYPos, CELL_SIZE, CELL_SIZE);
+                    rect(i*cellSize - screenXPos, j*cellSize - screenYPos, cellSize, cellSize);
                 }
             } else if(board[i][j]) // 1 means that it is alive
             {
                 stroke(0, 255, 0);
                 fill(0, 255, 0);
-                rect(i*CELL_SIZE - screenXPos, j*CELL_SIZE - screenYPos, CELL_SIZE, CELL_SIZE); // Multiplies the index by 10 because each one is a 10 by 10 pixel
+                rect(i*cellSize - screenXPos, j*cellSize - screenYPos, cellSize, cellSize); // Multiplies the index by 10 because each one is a 10 by 10 pixel
             }
         }
     }
@@ -770,7 +793,7 @@ public void startGame_Explore()
 public void startGame_file()
 { // We might need do this at some point :D
     clearBoard();
-    mode = 4;
+    mode = 3;
     inputFileBox.clear();
     currentMenu = 2;
 };
@@ -778,7 +801,7 @@ public void startGame_file()
 public void startGame_sandbox()
 {
     sandboxStart();
-    mode = 5;
+    mode = 2;
     currentMenu = 0;
 };
 class Structure
@@ -805,8 +828,8 @@ class Structure
 
     public void update()
     { // This updates the gridX and gridY
-        gridX = screenXPos / 10 + (mouseX - (my_width * CELL_SIZE / 2)) / CELL_SIZE;
-        gridY = screenYPos / 10 + (mouseY - (my_height * CELL_SIZE / 2)) / CELL_SIZE;
+        gridX = screenXPos / 10 + (mouseX - (my_width * cellSize / 2)) / cellSize;
+        gridY = screenYPos / 10 + (mouseY - (my_height * cellSize / 2)) / cellSize;
     }
 
     public void place()
@@ -1042,14 +1065,21 @@ int currentMenu = 0; // 0: Game. 1: Main menu, 2: Opening file, 3: Saving file
 // Board and cell settings
 static final int BOARD_HEIGHT = 1000;
 static final int BOARD_WIDTH = 1000;
-static final int CELL_SIZE = 10;
-static final int SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / CELL_SIZE;
-static final int SCREEN_GRID_WIDTH = SCREEN_WIDTH / CELL_SIZE;
+
+static final int ORIGINAL_CELL_SIZE = 10;
 static final int STRUCTURE_MENU_WIDTH = 6;
-static final int START_GRID_X = (500 - (SCREEN_GRID_WIDTH / 2)) * CELL_SIZE;
-static final int START_GRID_Y = (500 - (SCREEN_GRID_HEIGHT / 2)) * CELL_SIZE;
+
+static final int ORIGINAL_SCREEN_GRID_HEIGHT = SCREEN_HEIGHT / ORIGINAL_CELL_SIZE;
+static final int ORIGINAL_SCREEN_GRID_WIDTH = SCREEN_WIDTH / ORIGINAL_CELL_SIZE;
+
+static final int START_GRID_X = (500 - (ORIGINAL_SCREEN_GRID_WIDTH / 2)) * ORIGINAL_CELL_SIZE;
+static final int START_GRID_Y = (500 - (ORIGINAL_SCREEN_GRID_HEIGHT / 2)) * ORIGINAL_CELL_SIZE;
+
+int cellSize = ORIGINAL_CELL_SIZE;
 int screenXPos = START_GRID_X;
 int screenYPos = START_GRID_Y;
+int screenGridHeight = ORIGINAL_SCREEN_GRID_HEIGHT;
+int screenGridWidth = ORIGINAL_SCREEN_GRID_WIDTH;
 
 // mode of use
 int mode = 1;

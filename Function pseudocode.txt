@@ -140,8 +140,8 @@ ENDFUNCTION
 function renderBoard()
 BEGINFUNCTION
     SET notDrawnStructuresLines TO True
-    SET gridX TO screenXPos / CELL_SIZE
-    SET gridY TO screenYPos / CELL_SIZE
+    SET gridX TO screenXPos / cellSize
+    SET gridY TO screenYPos / cellSize
     FOR i IN RANGE gridX-1 TO gridX + SCREEN_GRID_WIDTH + 1
         FOR j IN RANGE gridY-1 TO gridY + SCREEN_GRID_HEIGHT + 1
             IF i OR j IS out of bounds THEN
