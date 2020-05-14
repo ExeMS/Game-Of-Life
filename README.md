@@ -31,6 +31,15 @@ Extra features we've added:
 2) The creation of user patterns is not limited to starting patterns, instead the board can be edited at any time in sandbox and file mode.
 3) Players can also pause the game at any time in all three modes.
 
+Significant Versions:
+1) ee026b2 - Initial layout. - 2/5/2020
+2) 5449aff - Changed to 2d Array System. - 5/5/2020
+3) 74e3e46 - First working God function. - 6/5/2020
+4) 4c6b5c4 - Split the program into several different files. - 7/5/2020
+5) 62560f9 - First implementation of GUI. - 9/5/2020
+6) a635c8d - Switched from int based system to boolean. - 9/5/2020
+7) bae9ae4 - Added readFromFile function. - 13/5/2020
+
 A model of a representation of the problem, possibly a drawing.
 
 # Design
