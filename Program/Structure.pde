@@ -22,8 +22,8 @@ class Structure
 
     void update()
     { // This updates the gridX and gridY
-        gridX = screenXPos / cellSize + (mouseX - (my_width * cellSize / 2)) / cellSize;
-        gridY = screenYPos / cellSize + (mouseY - (my_height * cellSize / 2)) / cellSize;
+        gridX = screenXPos / cellSize + (mouseX - (my_RWidth * cellSize / 2)) / cellSize;
+        gridY = screenYPos / cellSize + (mouseY - (my_RHeight * cellSize / 2)) / cellSize;
     }
 
     void place()
