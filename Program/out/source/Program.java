@@ -840,8 +840,8 @@ class Structure
 
     public void update()
     { // This updates the gridX and gridY
-        gridX = screenXPos / 10 + (mouseX - (my_width * cellSize / 2)) / cellSize;
-        gridY = screenYPos / 10 + (mouseY - (my_height * cellSize / 2)) / cellSize;
+        gridX = screenXPos / cellSize + (mouseX - (my_width * cellSize / 2)) / cellSize;
+        gridY = screenYPos / cellSize + (mouseY - (my_height * cellSize / 2)) / cellSize;
     }
 
     public void place()
