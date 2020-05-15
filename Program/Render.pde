@@ -1,46 +1,3 @@
-PImage img;
-
-void renderMenu()
-{ // Renders all the videos
-    randomStartButton.render();
-    readFromFile.render();
-    sandbox.render();
-    exitButton.render();
-    image(img, (SCREEN_WIDTH / 2) - (width / 4), 60, width / 2, height / 3);
-}
-void renderGUI()
-{ // Render process for the GUI will go in here
-    if(mode != 1){ // checks what mode you are in
-        if(inStructureMenu)
-        { // If in the structure menu it renders the structures
-            for(int i = 0; i < structures.size(); i++)
-            {
-                structures.get(i).render(
-                    (i - int(i / STRUCTURE_MENU_WIDTH) * STRUCTURE_MENU_WIDTH) * 102 + 50,
-                    int(i / STRUCTURE_MENU_WIDTH) * 102 + 50
-                );
-            }
-        } else
-        { // Otherwise it renders the structure button
-            spawnStructureButton.render();
-        }
-        if(currentStructureActive != -1)
-        { // If the user is placing a structure, it updates the structure and renders the cancel button
-            cancelButton.render();
-            structures.get(currentStructureActive).update();
-        }
-    }
-    menuButton.render(); // Always renders the menuButton
-    if(mode != 0){ // Checks the right mode
-      if(paused == false){ // Renders the pause and play button
-        pauseButton.render();
-      }
-      if(paused == true){
-        playButton.render();
-      }
-    }
-}
-
 void renderBoard()
 {
     boolean notDrawnStructuresLines = true; // This makes sure that we don't draw the lines around the structure multiple times
@@ -116,32 +73,9 @@ void render()
 { // This renders the background and then the other things
     background(backgroundColour);
     renderBoard();
-    if(currentMenu == 1) // Chooses the run the board or...
+    if(currentStructureActive != -1)
     {
-        renderMenu();
-    }else if(currentMenu == 0)
-    {
-        renderGUI();
-    }else if(currentMenu == 2 || currentMenu == 3)
-    {
-        fill(255);
-        stroke(0);
-        rect(SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-        textSize(30);
-        stroke(0);
-        fill(0);
-        textAlign(CENTER);
-        text("Input name of the save", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 20);
-        textAlign(LEFT);
-        inputFileBox.render();
-        doneButton.render();
-        if(currentMenu == 2)
-        {
-            cancelOSButton.render();
-        }else
-        {
-            dontSaveButton.render();
-        }
+        structures.get(currentStructureActive).update();
     }
-    //testBox.render();
+    menus[currentMenu].render();
 }

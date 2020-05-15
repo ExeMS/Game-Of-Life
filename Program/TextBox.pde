@@ -1,20 +1,15 @@
-class TextBox
+class TextBox extends GraphicalObject
 {
-    private int x, y;
     private boolean isFocused;
-    private float my_width, my_height;
     private String inputText;
     private boolean showCursor = true;
     private int cursorDelay = 0;
 
     TextBox(int x, int y, int my_width)
     {
-        this.x = x;
-        this.y = y;
-        this.my_width = my_width;
+        super(x, y, my_width, textAscent() * 0.8 + 10);
         textSize(20);
         inputText = "";
-        this.my_height = textAscent() * 0.8 + 10;
         isFocused = false;
     }
 
@@ -74,17 +69,6 @@ class TextBox
         isFocused = temp;
     }
 
-    boolean isMouseOver()
-    {
-        if (mouseX >= x && mouseX <= x+my_width &&
-            mouseY >= y && mouseY <= y+my_height)
-        {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     String getInput()
     {
         return inputText;
@@ -93,5 +77,29 @@ class TextBox
     boolean getIsFocused()
     {
         return isFocused;
+    }
+
+    boolean checkMousePressed()
+    {
+        if(isMouseOver())
+        {
+            isFocused = true;
+            return true;
+        }else
+        {
+            isFocused = false;
+            return false;
+        }
+    }
+
+    void reset()
+    {
+        clear();
+        setFocused(false);
+    }
+
+    String getType()
+    {
+        return "TextBox";
     }
 }

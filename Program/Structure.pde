@@ -69,21 +69,14 @@ class Structure
         return gridY;
     }
 
+    String getName()
+    {
+        return name;
+    }
+
     boolean get(int x, int y)
     {
         return rotatedStructure[x][y];
-    }
-
-    // Checks if the mouse is over it at a given x and y coordinate
-    boolean isMouseOver(int x, int y)
-    {
-        if (mouseX >= x && mouseX <= x+100 &&
-            mouseY >= y && mouseY <= y+100)
-        {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     void resetRotated()
@@ -113,42 +106,5 @@ class Structure
             }
         }
         rotatedStructure = tempStructure;
-    }
-
-    void render(int x, int y)
-    { // This renders the button side of it
-        int my_boardSize = 100;
-        int my_cellSize;
-        if(my_width > my_height)
-        {
-            my_cellSize = my_boardSize / (my_width + 2);
-        }else {
-            my_cellSize = my_boardSize / (my_height + 2);
-        }
-        stroke(0);
-        if(isMouseOver(x, y))
-        {
-            fill(150);
-        }else{
-            fill(255);
-        }
-        rect(x, y, my_boardSize, my_boardSize);
-        for(int i = 0; i < my_width; i++)
-        {
-            for(int j = 0; j < my_height; j++)
-            {
-                if(structure[i][j])
-                {
-                    stroke(0,0,255);
-                    fill(0,0,255);
-                    rect(x + i*my_cellSize + my_cellSize, y + j*my_cellSize + my_cellSize, my_cellSize, my_cellSize);
-                }
-            }
-        }
-        stroke(0);
-        fill(0);
-        textSize(20);
-        int xGap = int((my_boardSize - textWidth(name)) / 2);
-        text(name, x + xGap, y + my_boardSize - 2);
     }
 }

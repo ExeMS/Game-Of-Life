@@ -1,21 +1,18 @@
 // This is for when we want to display a button
-class Button
+class Button extends GraphicalObject
 {
-    private int x, y;
-    private float my_width, my_height;
     private String my_text;
     private int my_textSize;
     private int paddingX, paddingY;
     private color textColour, baseColour, hoverColour, outline;
+    private String type;
 
     // We might also want to pass in a function for when it is pressed
-    Button(int x, int y, String text, int my_textSize)
+    Button(String type, int x, int y, String text, int my_textSize)
     {
-        this.x = x;
-        this.y = y;
+        super(x, y, textWidth(text) + 20, textAscent() * 0.8 + 20);
+        this.type = type;
         textSize(my_textSize);
-        this.my_width = textWidth(text) + 20;
-        this.my_height = textAscent() * 0.8 + 20;
         this.paddingX = 10;
         this.paddingY = 10;
 
@@ -28,12 +25,10 @@ class Button
         this.hoverColour = color(150);
     }
 
-    Button(int x, int y, float my_width, float my_height)
+    Button(String type, int x, int y, float my_width, float my_height)
     {
-        this.x = x;
-        this.y = y;
-        this.my_width = my_width;
-        this.my_height = my_height;
+        super(x, y, my_width, my_height);
+        this.type = type;
         this.paddingX = 10;
         this.paddingY = 10;
 
@@ -46,13 +41,11 @@ class Button
         this.hoverColour = color(150);
     }
 
-    Button(int x, int y, int my_width, int my_height, String text, int my_textSize)
+    Button(String type, int x, int y, int my_width, int my_height, String text, int my_textSize)
     {
-        this.x = x;
-        this.y = y;
+        super(x, y, my_width, my_height);
+        this.type = type;
         textSize(my_textSize);
-        this.my_width = my_width;
-        this.my_height = my_height;
         this.paddingX = int(my_width - textWidth(text)) / 2;
         this.paddingY = int(my_height - textAscent()) / 2;
 
@@ -65,13 +58,11 @@ class Button
         this.hoverColour = color(150);
     }
 
-    Button(int x, int y, int paddingX, int paddingY, String text, int my_textSize, color textColour, color outline, color baseColour, color hoverColour)
+    Button(String type, int x, int y, int paddingX, int paddingY, String text, int my_textSize, color textColour, color outline, color baseColour, color hoverColour)
     {
-        this.x = x;
-        this.y = y;
+        super(x, y, textWidth(text) + 20, textAscent() * 0.8 + 20);
+        this.type = type;
         textSize(my_textSize);
-        this.my_width = textWidth(text) + 2 * paddingX;
-        this.my_height = textAscent() * 0.8 + 2 * paddingX;
         this.paddingX = paddingX;
         this.paddingY = paddingY;
 
@@ -84,30 +75,115 @@ class Button
         this.hoverColour = hoverColour;
     }
 
-    boolean isMouseOver()
-    { // This checks if the mouse is over
-        if (mouseX >= x && mouseX <= x+my_width &&
-            mouseY >= y && mouseY <= y+my_height)
+    void render()
+    { // This renders the button
+        if(!(
+            (type == "cancelPlacement" && currentStructureActive == -1)
+            || (type == "spawnStructure" && mode == 1)
+        ))
         {
-            return true;
-        } else {
-            return false;
+            stroke(outline);
+            if(isMouseOver())
+            {
+                fill(hoverColour);
+            }else
+            {
+                fill(baseColour);
+            }
+            rect(x, y, my_width, my_height);
+            fill(textColour);
+            textSize(my_textSize);
+            text(my_text, x + paddingX, y + textAscent() * 0.8 + paddingY);
         }
     }
 
-    void render()
-    { // This renders the button
-        stroke(outline);
-        if(isMouseOver())
-        {
-            fill(hoverColour);
-        }else
-        {
-            fill(baseColour);
+    boolean checkMousePressed(Menu menu,boolean hasSomethingBeenPressed)
+    {
+        if(isMouseOver() && !hasSomethingBeenPressed)
+        { // This goes through all the types of buttons and runs what they are meant to do when pressed
+          // It was done like this as processing doesn't allow you to write lambdas
+            if(currentStructureActive != -1)
+            { // This sets the rotation, if the user is placing down a structure
+                structures.get(currentStructureActive).resetRotated();
+                currentStructureActive = -1;
+            }
+            // GUI TYPES
+            if(type == "spawnStructure")
+            {
+                currentMenu = 4;
+                return true;
+            }else if(type == "cancelPlacement")
+            {
+                currentStructureActive = -1;
+                return true;
+            }else if(type == "playPause")
+            {
+                paused = !paused;
+                if(paused)
+                {
+                    my_text = "PLAY";
+                }else
+                {
+                    my_text = "PAUSE";
+                }
+                textSize(my_textSize);
+                this.paddingX = int(my_width - textWidth(my_text)) / 2;
+                return true;
+            }else if(type == "mainMenu")
+            {
+                currentMenu = 3;
+                return true;
+            }
+            // MAIN MENU TYPES
+            else if(type == "explore")
+            {
+                startGame_Explore();
+                return true;
+            }else if(type == "sandbox")
+            {
+                startGame_sandbox();
+                return true;
+            }else if(type == "openFileMenu")
+            {
+                startGame_file();
+                return true;
+            }else if(type == "exitGame")
+            {
+                exit(); // This just closes the window
+                // The rest of the code is never run
+            }
+            // OPEN FILE TYPES
+            else if(type == "cancelOpening")
+            {
+                resetToDefaults();
+            } else if(type == "openFile")
+            {
+                openSavedGame(menu.getInput() + ".gol");
+            }
+            // SAVE FILE TYPES
+            else if(type == "dontSave")
+            {
+                resetToDefaults();
+            }else if(type == "save")
+            {
+                saveGame(menu.getInput() + ".gol");
+            }
         }
-        rect(x, y, my_width, my_height);
-        fill(textColour);
-        textSize(my_textSize);
-        text(my_text, x + paddingX, y + textAscent() * 0.8 + paddingY);
+        return false;
+    }
+
+    String getType()
+    {
+        return "Button";
+    }
+
+    void reset()
+    {
+        if(type == "playPause")
+        {
+            my_text = "PLAY";
+            textSize(my_textSize);
+            this.paddingX = int(my_width - textWidth(my_text)) / 2;
+        }
     }
 };

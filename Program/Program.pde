@@ -1,343 +1,11 @@
-void mouseWheel(MouseEvent event) { // This is called when the user uses the scroll wheel
-    int e = int(event.getCount()); // This gets what direction the scroll wheel was used
-    if(currentStructureActive != -1)
-    {
-        structures.get(currentStructureActive).rotate(e); // This rotates the active structure
-    } else if (currentMenu == 0)
-    {
-        if(e == 1 && cellSize != 3)
-        {
-            screenXPos = screenXPos * (cellSize - 1) / cellSize;
-            screenYPos = screenYPos * (cellSize - 1) / cellSize;
-            cellSize -= 1;
-        }else if (e == -1 && cellSize != SCREEN_WIDTH)
-        {
-            screenXPos = screenXPos * (cellSize + 1) / cellSize;
-            screenYPos = screenYPos * (cellSize + 1) / cellSize;
-            cellSize += 1;
-        }
-        if((screenXPos + SCREEN_WIDTH)/cellSize >= 1000)
-        {
-            screenXPos = 1000*cellSize - SCREEN_WIDTH;
-        }
-        if((screenYPos + SCREEN_HEIGHT)/cellSize >= 1000)
-        {
-            screenYPos = 1000*cellSize - SCREEN_HEIGHT;
-        }
-        screenGridHeight = SCREEN_HEIGHT / cellSize;
-        screenGridWidth = SCREEN_WIDTH / cellSize;
-    }
-}
-
-// Checks if mouse is pressed and is over any button
-void checkMousePressed()
-{
-    if(mousePressed)
-    {
-        if(currentMenu == 1 && mousePressedDelay == 0) // Checks if in the main menu
-        {
-            if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
-                startGame_Explore();
-            }
-            if (readFromFile.isMouseOver()) {
-                startGame_file();
-            }
-            if (sandbox.isMouseOver()) {
-                startGame_sandbox();
-            }
-            if (exitButton.isMouseOver())
-            {
-                exit(); // This just closes the window
-            }
-        } else if(currentMenu == 0)
-        { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
-
-            if(menuButton.isMouseOver())
-            { // If the menu button is pressed it runs the given function
-                if(currentStructureActive != -1)
-                { // This sets the rotation, if the user is placing down a structure
-                    structures.get(currentStructureActive).resetRotated();
-                    currentStructureActive = -1;
-                }
-                mousePressedDelay = 20;
-                backToMenu();
-            }
-            if(pauseButton.isMouseOver() && paused == false && mousePressedDelay == 0) { // This checks if play/pause was pressed and pauses the game
-                paused = true;
-                mousePressedDelay = 20;
-                if(currentStructureActive != -1)
-                { // This sets the rotation, if the user is placing down a structure
-                    structures.get(currentStructureActive).resetRotated();
-                    currentStructureActive = -1;
-                }
-            } else if(playButton.isMouseOver() && paused == true && mousePressedDelay == 0) {
-                paused = false;
-                mousePressedDelay = 20;
-                if(currentStructureActive != -1)
-                { // This sets the rotation, if the user is placing down a structure
-                    structures.get(currentStructureActive).resetRotated();
-                    currentStructureActive = -1;
-                }
-            }
-
-            if (spawnStructureButton.isMouseOver() && !inStructureMenu && mousePressedDelay == 0) {
-                inStructureMenu = true; // This opens the structure menu
-                mousePressedDelay = 20; // The mousePressedDelay is set to stop causing some bugs
-                if(currentStructureActive != -1)
-                { // This sets the rotation, if the user is placing down a structure
-                    structures.get(currentStructureActive).resetRotated();
-                    currentStructureActive = -1;
-                }
-            } else if(inStructureMenu && mousePressedDelay == 0)
-            { // This checks if any of the structures were pressed (in the structure menu)
-                for(int i = 0; i < structures.size(); i++) // This goes through every structure in the list and checks its location
-                {
-                    if(structures.get(i).isMouseOver(
-                        (i - int(i / STRUCTURE_MENU_WIDTH) * STRUCTURE_MENU_WIDTH) * 102 + 50,
-                        int(i / STRUCTURE_MENU_WIDTH) * 102 + 50
-                    ))
-                    {
-                        currentStructureActive = i;
-                        break;
-                    }
-                }
-                inStructureMenu = false; // Closes the structure menu (even if a structure was not chosen)
-                mousePressedDelay = 20; // Sets the mousePressed delay so bugs aren't caused
-            }else if (currentStructureActive != -1 && mousePressedDelay == 0) {
-                if(!cancelButton.isMouseOver())
-                { // If the cancel button was not pressed, it calls the place function in the structure
-                    structures.get(currentStructureActive).place();
-                }else
-                {
-                    currentStructureActive = -1;
-                }
-                if(!shiftPressed)
-                { // If the shift is pressed, then a mousePressedDelay is set and the structure stays active (so you can keep placing them)
-                    mousePressedDelay = 20;
-                }else
-                {
-                    structures.get(currentStructureActive).resetRotated(); // Otherwise the structure is reset and nothing is set to active
-                    currentStructureActive = -1;
-                }
-            }
-        } else if(currentMenu == 2)
-        { // Opening file menu
-            if(inputFileBox.isMouseOver() && !inputFileBox.getIsFocused())
-            {
-                inputFileBox.setFocused(true);
-            } else if (inputFileBox.getIsFocused() && !inputFileBox.isMouseOver())
-            {
-                inputFileBox.setFocused(false);
-            }
-            if(cancelOSButton.isMouseOver())
-            {
-                resetToDefaults();
-            }else if(doneButton.isMouseOver())
-            {
-                currentMenu = 0;
-                setBoardToStruct(readFromFile(inputFileBox.getInput()));
-                inputFileBox.clear();
-                inputFileBox.setFocused(false);
-            }
-            mousePressedDelay = 20;
-        } else if(currentMenu == 3)
-        { // Saving file menu
-            if(inputFileBox.isMouseOver() && !inputFileBox.getIsFocused())
-            {
-                inputFileBox.setFocused(true);
-            } else if (inputFileBox.getIsFocused() && !inputFileBox.isMouseOver())
-            {
-                inputFileBox.setFocused(false);
-            }
-            if(dontSaveButton.isMouseOver())
-            {
-                resetToDefaults();
-            }else if(doneButton.isMouseOver())
-            {
-                saveToFile(inputFileBox.getInput(), board);
-                resetToDefaults();
-            }else if((mouseX < SCREEN_WIDTH / 4 || mouseX > SCREEN_WIDTH - SCREEN_WIDTH/4
-                    || mouseY < SCREEN_HEIGHT / 4 || mouseY > SCREEN_HEIGHT - SCREEN_HEIGHT/4)
-                    && mousePressedDelay == 0)
-            {
-                currentMenu = 0;
-                inputFileBox.clear();
-                inputFileBox.setFocused(false);
-            }
-            mousePressedDelay = 20;
-        }
-    }else
-    { // If the mouse is not pressed the mousePressedDelay is set to 0
-        mousePressedDelay = 0;
-    }
-    if(mousePressedDelay != 0)
-    { // This is the count down for the mousePressedDelay
-        mousePressedDelay -= 1;
-    }
-}
-
-void keyPressed()
-{ // This is run when a key is pressed
-    if(key == '\n')
-    {
-        if(currentMenu == 2)
-        {
-            currentMenu = 0;
-            setBoardToStruct(readFromFile(inputFileBox.getInput()));
-            inputFileBox.clear();
-            inputFileBox.setFocused(false);
-        }else if(currentMenu == 3)
-        {
-            saveToFile(inputFileBox.getInput(), board);
-            resetToDefaults();
-        }
-    }else if(inputFileBox.getIsFocused())
-    {
-        inputFileBox.inputKey(key);
-    }else if(key == ESC)
-    {
-        if(currentMenu == 0)
-        {
-            backToMenu();
-        }else if(currentMenu == 1)
-        {
-            exit();
-        } else if(currentMenu == 2)
-        {
-            resetToDefaults();
-        }
-        else if(currentMenu == 3)
-        {
-            currentMenu = 0;
-            inputFileBox.clear();
-            inputFileBox.setFocused(false);
-        }
-        key = 0;
-    } else if (key == CODED && currentMenu == 0) {
-        if (keyCode == UP) { // When a key is pressed, it sets the given variable
-            upPressed = true;
-        }
-        if (keyCode == LEFT) {
-            leftPressed = true;
-        }
-        if (keyCode == DOWN) {
-            downPressed = true;
-        }
-        if (keyCode == RIGHT) {
-            rightPressed = true;
-        }
-        if(keyCode == SHIFT) // This allows you to keep placing things if you press shift
-        {
-            shiftPressed = true;
-        }
-    }
-}
-
-void keyReleased()
-{ // This is run when a key is released
-    if (key == CODED && currentMenu == 0) {
-        if (keyCode == UP) { // When a key is released, it sets the given variable
-            upPressed = false;
-        }
-        if (keyCode == LEFT) {
-            leftPressed = false;
-        }
-        if (keyCode == DOWN) {
-            downPressed = false;
-        }
-        if (keyCode == RIGHT) {
-            rightPressed = false;
-        }
-        if(keyCode == SHIFT) // This allows you to keep placing things if you press shift
-        {
-            shiftPressed = false;
-            mousePressedDelay = 0;
-        }
-    }
-}
-
-// Checks if any of the keys are pressed
-void checkKeys()
-{
-    if (currentMenu == 0) {
-        if (upPressed && screenYPos - screenSpeed >= 0) { // When a key is pressed, it checks to see if a the screen can more more in that direction
-            screenYPos -= screenSpeed;
-        }
-        if (leftPressed && screenXPos - screenSpeed >= 0) {
-            screenXPos -= screenSpeed;
-        }
-        if (downPressed && screenYPos + screenSpeed <= (BOARD_HEIGHT - 1) * cellSize - SCREEN_HEIGHT) {
-            screenYPos += screenSpeed;
-        }
-        if (rightPressed && screenXPos + screenSpeed <= (BOARD_WIDTH - 1) * cellSize - SCREEN_WIDTH) {
-            screenXPos += screenSpeed;
-        }
-    }
-}
-
-void backToMenu()
-{ // This just clears the board to go back to the menu
-    currentMenu = 3;
-}
-
-// Updates the game
-void god()
-{
-  if(paused == false) {
-      for (int i = 0; i < BOARD_WIDTH; i++) {
-          for (int j = 0; j < BOARD_HEIGHT; j++) {
-              boardcopy[i][j] = board[i][j];
-              int counter = 0;
-              // counting the number of alive cells around the cell
-              if (i != 0 && board[i-1][j]) {
-                  counter++;
-              }
-              if (i != BOARD_WIDTH - 1 && board[i+1][j]) {
-                  counter++;
-              }
-              if (i != 0 && j != 0 && board[i-1][j-1]) {
-                  counter++;
-              }
-              if (j != 0 && board[i][j-1]) {
-                  counter++;
-              }
-              if (i != BOARD_WIDTH - 1 && j != 0 && board[i+1][j-1]) {
-                  counter++;
-              }
-              if (i != 0 && j != BOARD_HEIGHT - 1 && board[i-1][j+1]) {
-                  counter++;
-              }
-              if (j != BOARD_HEIGHT - 1 && board[i][j+1]) {
-                  counter++;
-              }
-              if (j != BOARD_HEIGHT - 1 && i != BOARD_WIDTH - 1 && board[i+1][j+1]) {
-                  counter++;
-              }
-              //Running through the rules
-              if ((counter < 2) && (board[i][j])) {
-                  boardcopy[i][j] = false;
-              }
-              if ((counter > 3) && (board[i][j])) {
-                  boardcopy[i][j] = false;
-              }
-              if ((counter == 3) && (board[i][j] == false)) {
-                  boardcopy[i][j] = true;
-              }
-          }
-      }
-      for (int i = 0; i < BOARD_WIDTH; i++) {
-          for (int j = 0; j < BOARD_HEIGHT; j++){
-              board[i][j] = boardcopy[i][j];
-          }
-      }
-  }
-}
-
 void resetToDefaults()
 {
-    inputFileBox.clear();
-    inputFileBox.setFocused(false);
+    for(Menu menu : menus)
+    {
+        menu.reset();
+    }
     paused = true;
+    inStructureMenu = false;
     currentMenu = 1;
     screenXPos = START_GRID_X;
     screenYPos = START_GRID_Y;
@@ -347,44 +15,92 @@ void resetToDefaults()
     clearBoard();
 }
 
-void setupMenu()
+Menu setupMainMenu()
 { // This creates all the buttons for the Menu
-    randomStartButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2), 280, 50, "Explore", 30);
-    sandbox = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 60, 280, 50, "Sandbox", 30);
-    readFromFile = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 120, 280, 50, "Read From File", 30);
-    exitButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 180, 280, 50, "Exit", 30);
+    Button[] menuButtons = new Button[4];
+    menuButtons[0] = new Button("explore", (SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2), 280, 50, "Explore", 30);
+    menuButtons[1] = new Button("sandbox", (SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 60, 280, 50, "Sandbox", 30);
+    menuButtons[2] = new Button("openFileMenu", (SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 120, 280, 50, "Read From File", 30);
+    menuButtons[3] = new Button("exitGame", (SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 180, 280, 50, "Exit", 30);
+    GraphicImage img = new GraphicImage((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4), 60, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 3, "Images/LIFE-IS-JUST-A-GAME.png");
+    return new Menu(menuButtons, img);
 }
 
-void setupGUI()
+Menu setupGUI()
 { // This creates all the buttons of the GUI
-    //spawnGliderButton = new Button(0, 0, 120, 50, "Glider", 30);
-    spawnStructureButton = new Button(1, 1, 140, 50, "Structure", 30);
     inStructureMenu = false;
-    cancelButton = new Button(1, 52, 140, 50, "Cancel", 30);
-    pauseButton = new Button(1, SCREEN_HEIGHT - 51, 120, 50, "PAUSE", 30);
-    playButton = new Button(1, SCREEN_HEIGHT - 51, 120, 50, "PLAY", 30);
-    menuButton = new Button(SCREEN_WIDTH - 121, 1, 120, 50, "Menu", 30);
+    Button[] menuButtons = new Button[4];
+    menuButtons[0] = new Button("spawnStructure", 1, 1, 140, 50, "Structure", 30);
+    menuButtons[1] = new Button("cancelPlacement", 1, 52, 140, 50, "Cancel", 30);
+    menuButtons[2] = new Button("playPause", 1, SCREEN_HEIGHT - 51, 120, 50, "PLAY", 30); // This is the play pause button - it can change its text :D
+    menuButtons[3] = new Button("mainMenu", SCREEN_WIDTH - 121, 1, 120, 50, "Menu", 30);
+    return new Menu(menuButtons);
+}
 
-    // Structures
-    structures.add(new Structure("cell.txt", "Cell")); // This will now be index 0
-    structures.add(new Structure("glider.txt", "Glider")); // This will be index 1
-    structures.add(new Structure("glider gun.txt", "Glider Gun")); // This will be index 2
-    structures.add(new Structure("spaceship.txt", "Spaceship")); //index 3
-    structures.add(new Structure("dart.txt", "Dart")); //index 4
-    structures.add(new Structure("schick engine.txt", "Schick")); //index 5
-    structures.add(new Structure("hammerhead.txt", "Hammer")); //index 6
-    structures.add(new Structure("Sir Robin.txt", "Sir Robin")); //index 7
-    structures.add(new Structure("copperhead.txt", "Copper")); //index 8
-    structures.add(new Structure("pulsar.txt", "Pulsar")); //index 9
-    structures.add(new Structure("kok's galaxy.txt", "Galaxy")); //index 10
-    structures.add(new Structure("rich's P16.txt", "P16")); //index 11
-    structures.add(new Structure("rocket.txt", "Rocket")); //index 12
-    structures.add(new Structure("flash oscillator.txt", "Flash")); //index 13
-    structures.add(new Structure("pentadecathalon.txt", "15")); //index 14
-    structures.add(new Structure("oddball.txt", "Oddball")); //index 15
-    structures.add(new Structure("fairy.txt", "Fairy")); //index 16
-    structures.add(new Structure("weekender.txt", "Weekender")); //index 17
+Menu setupOpenGameMenu()
+{
+    TextBox menuTextBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
+    Button[] menuButtons = new Button[2];
+    menuButtons[0] = new Button("cancelOpening", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Cancel", 30);
+    menuButtons[1] = new Button("openFile", SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 160, 50, "Open", 30);
+    return new Menu(SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, menuButtons, menuTextBox, color(255), color(0), 1, "Input name of saved game:");
+}
+
+Menu setupSaveGameMenu()
+{
+    TextBox menuTextBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
+    Button[] menuButtons = new Button[2];
+    menuButtons[0] = new Button("dontSave", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Don't Save", 30);
+    menuButtons[1] = new Button("save", SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 160, 50, "Save", 30);
+    return new Menu(SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, menuButtons, menuTextBox, color(255), color(0), 0, "Input name of save:");
+}
+
+Menu setupStructureMenu()
+{
+    GraphicalStructure[] menuStructures = new GraphicalStructure[18];
+    for(int i = 0; i < structures.size(); i++)
+    {
+        int structX = (i - int(i / STRUCTURE_MENU_WIDTH) * STRUCTURE_MENU_WIDTH) * 102 + 50;
+        int structY = int(i / STRUCTURE_MENU_WIDTH) * 102 + 50;
+        menuStructures[i] = new GraphicalStructure(structX, structY, i);
+    }
+
+    return new Menu(menuStructures, 0);
+}
+
+void setupStructures()
+{
+    structures = new ArrayList<Structure>();
+    structures.add(new Structure("Structures/cell.txt", "Cell")); // This will now be index 0
+    structures.add(new Structure("Structures/glider.txt", "Glider")); // This will be index 1
+    structures.add(new Structure("Structures/glider gun.txt", "Glider Gun")); // This will be index 2
+    structures.add(new Structure("Structures/spaceship.txt", "Spaceship")); //index 3
+    structures.add(new Structure("Structures/dart.txt", "Dart")); //index 4
+    structures.add(new Structure("Structures/schick engine.txt", "Schick")); //index 5
+    structures.add(new Structure("Structures/hammerhead.txt", "Hammer")); //index 6
+    structures.add(new Structure("Structures/Sir Robin.txt", "Sir Robin")); //index 7
+    structures.add(new Structure("Structures/copperhead.txt", "Copper")); //index 8
+    structures.add(new Structure("Structures/pulsar.txt", "Pulsar")); //index 9
+    structures.add(new Structure("Structures/kok's galaxy.txt", "Galaxy")); //index 10
+    structures.add(new Structure("Structures/rich's P16.txt", "P16")); //index 11
+    structures.add(new Structure("Structures/rocket.txt", "Rocket")); //index 12
+    structures.add(new Structure("Structures/flash oscillator.txt", "Flash")); //index 13
+    structures.add(new Structure("Structures/pentadecathalon.txt", "15")); //index 14
+    structures.add(new Structure("Structures/oddball.txt", "Oddball")); //index 15
+    structures.add(new Structure("Structures/fairy.txt", "Fairy")); //index 16
+    structures.add(new Structure("Structures/weekender.txt", "Weekender")); //index 17
     currentStructureActive = -1;
+}
+
+void setupMenus()
+{
+    setupStructures();
+    menus = new Menu[5];
+    menus[0] = setupGUI();
+    menus[1] = setupMainMenu();
+    menus[2] = setupOpenGameMenu();
+    menus[3] = setupSaveGameMenu();
+    menus[4] = setupStructureMenu();
 }
 
 void setup()
@@ -394,19 +110,13 @@ void setup()
 
     clearBoard(); // This clears the board, making sure everything is false
 
-    setupMenu(); // Sets just the menu and GUI
-    setupGUI();
-    inputFileBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
-    cancelOSButton = new Button(SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Cancel", 30);
-    doneButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 160, 50, "Done", 30);
-    dontSaveButton = new Button(SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Don't Save", 30);
+    setupMenus(); // Sets up all menus
 
     currentMenu = 1; // Makes sure you start in the menu
 
     frame.requestFocus(); // Makes the screen instantly focused
 
     // Images must be in the "data" directory to load correctly
-    img = loadImage("LIFE-IS-JUST-A-GAME.png");
 }
 
 void draw()

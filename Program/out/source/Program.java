@@ -14,7 +14,569 @@ import java.io.IOException;
 
 public class Program extends PApplet {
 
-public void mouseWheel(MouseEvent event) { // This is called when the user uses the scroll wheel
+public void resetToDefaults()
+{
+    for(Menu menu : menus)
+    {
+        menu.reset();
+    }
+    paused = true;
+    inStructureMenu = false;
+    currentMenu = 1;
+    screenXPos = START_GRID_X;
+    screenYPos = START_GRID_Y;
+    cellSize = ORIGINAL_CELL_SIZE;
+    screenGridHeight = ORIGINAL_SCREEN_GRID_HEIGHT;
+    screenGridWidth = ORIGINAL_SCREEN_GRID_WIDTH;
+    clearBoard();
+}
+
+public Menu setupMainMenu()
+{ // This creates all the buttons for the Menu
+    Button[] menuButtons = new Button[4];
+    menuButtons[0] = new Button("explore", (SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2), 280, 50, "Explore", 30);
+    menuButtons[1] = new Button("sandbox", (SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 60, 280, 50, "Sandbox", 30);
+    menuButtons[2] = new Button("openFileMenu", (SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 120, 280, 50, "Read From File", 30);
+    menuButtons[3] = new Button("exitGame", (SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 180, 280, 50, "Exit", 30);
+    GraphicImage img = new GraphicImage((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4), 60, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 3, "Images/LIFE-IS-JUST-A-GAME.png");
+    return new Menu(menuButtons, img);
+}
+
+public Menu setupGUI()
+{ // This creates all the buttons of the GUI
+    inStructureMenu = false;
+    Button[] menuButtons = new Button[4];
+    menuButtons[0] = new Button("spawnStructure", 1, 1, 140, 50, "Structure", 30);
+    menuButtons[1] = new Button("cancelPlacement", 1, 52, 140, 50, "Cancel", 30);
+    menuButtons[2] = new Button("playPause", 1, SCREEN_HEIGHT - 51, 120, 50, "PLAY", 30); // This is the play pause button - it can change its text :D
+    menuButtons[3] = new Button("mainMenu", SCREEN_WIDTH - 121, 1, 120, 50, "Menu", 30);
+    return new Menu(menuButtons);
+}
+
+public Menu setupOpenGameMenu()
+{
+    TextBox menuTextBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
+    Button[] menuButtons = new Button[2];
+    menuButtons[0] = new Button("cancelOpening", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Cancel", 30);
+    menuButtons[1] = new Button("openFile", SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 160, 50, "Open", 30);
+    return new Menu(SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, menuButtons, menuTextBox, color(255), color(0), 1, "Input name of saved game:");
+}
+
+public Menu setupSaveGameMenu()
+{
+    TextBox menuTextBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
+    Button[] menuButtons = new Button[2];
+    menuButtons[0] = new Button("dontSave", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Don't Save", 30);
+    menuButtons[1] = new Button("save", SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 160, 50, "Save", 30);
+    return new Menu(SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, menuButtons, menuTextBox, color(255), color(0), 0, "Input name of save:");
+}
+
+public Menu setupStructureMenu()
+{
+    GraphicalStructure[] menuStructures = new GraphicalStructure[18];
+    for(int i = 0; i < structures.size(); i++)
+    {
+        int structX = (i - PApplet.parseInt(i / STRUCTURE_MENU_WIDTH) * STRUCTURE_MENU_WIDTH) * 102 + 50;
+        int structY = PApplet.parseInt(i / STRUCTURE_MENU_WIDTH) * 102 + 50;
+        menuStructures[i] = new GraphicalStructure(structX, structY, i);
+    }
+
+    return new Menu(menuStructures, 0);
+}
+
+public void setupStructures()
+{
+    structures = new ArrayList<Structure>();
+    structures.add(new Structure("Structures/cell.txt", "Cell")); // This will now be index 0
+    structures.add(new Structure("Structures/glider.txt", "Glider")); // This will be index 1
+    structures.add(new Structure("Structures/glider gun.txt", "Glider Gun")); // This will be index 2
+    structures.add(new Structure("Structures/spaceship.txt", "Spaceship")); //index 3
+    structures.add(new Structure("Structures/dart.txt", "Dart")); //index 4
+    structures.add(new Structure("Structures/schick engine.txt", "Schick")); //index 5
+    structures.add(new Structure("Structures/hammerhead.txt", "Hammer")); //index 6
+    structures.add(new Structure("Structures/Sir Robin.txt", "Sir Robin")); //index 7
+    structures.add(new Structure("Structures/copperhead.txt", "Copper")); //index 8
+    structures.add(new Structure("Structures/pulsar.txt", "Pulsar")); //index 9
+    structures.add(new Structure("Structures/kok's galaxy.txt", "Galaxy")); //index 10
+    structures.add(new Structure("Structures/rich's P16.txt", "P16")); //index 11
+    structures.add(new Structure("Structures/rocket.txt", "Rocket")); //index 12
+    structures.add(new Structure("Structures/flash oscillator.txt", "Flash")); //index 13
+    structures.add(new Structure("Structures/pentadecathalon.txt", "15")); //index 14
+    structures.add(new Structure("Structures/oddball.txt", "Oddball")); //index 15
+    structures.add(new Structure("Structures/fairy.txt", "Fairy")); //index 16
+    structures.add(new Structure("Structures/weekender.txt", "Weekender")); //index 17
+    currentStructureActive = -1;
+}
+
+public void setupMenus()
+{
+    setupStructures();
+    menus = new Menu[5];
+    menus[0] = setupGUI();
+    menus[1] = setupMainMenu();
+    menus[2] = setupOpenGameMenu();
+    menus[3] = setupSaveGameMenu();
+    menus[4] = setupStructureMenu();
+}
+
+public void setup()
+{
+     // Sets the size of the window, and background colour
+    background(backgroundColour);
+
+    clearBoard(); // This clears the board, making sure everything is false
+
+    setupMenus(); // Sets up all menus
+
+    currentMenu = 1; // Makes sure you start in the menu
+
+    frame.requestFocus(); // Makes the screen instantly focused
+
+    // Images must be in the "data" directory to load correctly
+}
+
+public void draw()
+{ // This acts like a update and render function
+    checkKeys(); // This checks if any keys or mouse is pressed
+    checkMousePressed();
+    render(); // This renders everything on the screen
+
+    timeControl++;
+    if(timeControl == 8) // This limits how much it is updated
+    {
+        timeControl = 0;
+        god(); // Runs the function for updating the board
+    }
+}
+public void clearBoard()
+{ // This sets the whole board to 0
+    for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
+    {
+        for(int j = 0; j < BOARD_HEIGHT; j++)
+        {
+            board[i][j] = false;
+        }
+    }
+}
+
+public void randomBoard()
+{ // This randomizes the whole board
+    for(int i = 0; i < BOARD_WIDTH; i++)
+    {
+        for(int j = 0; j < BOARD_HEIGHT; j++)
+        {
+            int r = PApplet.parseInt(random(4));
+            if(r == 0)
+            {
+                board[i][j] = true;
+            }else {
+                board[i][j] = false;
+            }
+        }
+    }
+}
+
+public void setBoardToStruct(boolean[][] struct)
+{
+    if(struct.length < BOARD_WIDTH || struct[0].length < BOARD_HEIGHT)
+    {
+        int startX = PApplet.parseInt((BOARD_WIDTH - struct.length) / 2);
+        int startY = PApplet.parseInt((BOARD_HEIGHT - struct[0].length) / 2);
+        for(int i = 0; i < struct.length; i++)
+        {
+            for(int j = 0; j < struct[i].length; j++)
+            {
+                board[startX + i][startY + j] = struct[i][j];
+            }
+        }
+    }else
+    {
+        board = struct;
+    }
+}
+
+public void sandboxStart() {
+}
+
+public void startGame_Explore()
+{ // This randomizes the board and sets the mode to 1
+    randomBoard();
+    mode = 1;
+    currentMenu = 0;
+};
+
+public void startGame_file()
+{ // We might need do this at some point :D
+    clearBoard();
+    mode = 3;
+    currentMenu = 2;
+};
+
+public void startGame_sandbox()
+{
+    sandboxStart();
+    mode = 2;
+    currentMenu = 0;
+};
+
+// Updates the game
+public void god()
+{
+  if(paused == false) {
+      for (int i = 0; i < BOARD_WIDTH; i++) {
+          for (int j = 0; j < BOARD_HEIGHT; j++) {
+              boardcopy[i][j] = board[i][j];
+              int counter = 0;
+              // counting the number of alive cells around the cell
+              if (i != 0 && board[i-1][j]) {
+                  counter++;
+              }
+              if (i != BOARD_WIDTH - 1 && board[i+1][j]) {
+                  counter++;
+              }
+              if (i != 0 && j != 0 && board[i-1][j-1]) {
+                  counter++;
+              }
+              if (j != 0 && board[i][j-1]) {
+                  counter++;
+              }
+              if (i != BOARD_WIDTH - 1 && j != 0 && board[i+1][j-1]) {
+                  counter++;
+              }
+              if (i != 0 && j != BOARD_HEIGHT - 1 && board[i-1][j+1]) {
+                  counter++;
+              }
+              if (j != BOARD_HEIGHT - 1 && board[i][j+1]) {
+                  counter++;
+              }
+              if (j != BOARD_HEIGHT - 1 && i != BOARD_WIDTH - 1 && board[i+1][j+1]) {
+                  counter++;
+              }
+              //Running through the rules
+              if ((counter < 2) && (board[i][j])) {
+                  boardcopy[i][j] = false;
+              }
+              if ((counter > 3) && (board[i][j])) {
+                  boardcopy[i][j] = false;
+              }
+              if ((counter == 3) && (board[i][j] == false)) {
+                  boardcopy[i][j] = true;
+              }
+          }
+      }
+      for (int i = 0; i < BOARD_WIDTH; i++) {
+          for (int j = 0; j < BOARD_HEIGHT; j++){
+              board[i][j] = boardcopy[i][j];
+          }
+      }
+  }
+}
+// This is for when we want to display a button
+class Button extends GraphicalObject
+{
+    private String my_text;
+    private int my_textSize;
+    private int paddingX, paddingY;
+    private int textColour, baseColour, hoverColour, outline;
+    private String type;
+
+    // We might also want to pass in a function for when it is pressed
+    Button(String type, int x, int y, String text, int my_textSize)
+    {
+        super(x, y, textWidth(text) + 20, textAscent() * 0.8f + 20);
+        this.type = type;
+        textSize(my_textSize);
+        this.paddingX = 10;
+        this.paddingY = 10;
+
+        this.my_text = text;
+        this.my_textSize = my_textSize;
+        this.textColour = color(0);
+
+        this.outline = color(0);
+        this.baseColour = color(255);
+        this.hoverColour = color(150);
+    }
+
+    Button(String type, int x, int y, float my_width, float my_height)
+    {
+        super(x, y, my_width, my_height);
+        this.type = type;
+        this.paddingX = 10;
+        this.paddingY = 10;
+
+        this.my_text = "";
+        this.my_textSize = 30;
+        this.textColour = color(0);
+
+        this.outline = color(0);
+        this.baseColour = color(255);
+        this.hoverColour = color(150);
+    }
+
+    Button(String type, int x, int y, int my_width, int my_height, String text, int my_textSize)
+    {
+        super(x, y, my_width, my_height);
+        this.type = type;
+        textSize(my_textSize);
+        this.paddingX = PApplet.parseInt(my_width - textWidth(text)) / 2;
+        this.paddingY = PApplet.parseInt(my_height - textAscent()) / 2;
+
+        this.my_text = text;
+        this.my_textSize = my_textSize;
+        this.textColour = color(0);
+
+        this.outline = color(0);
+        this.baseColour = color(255);
+        this.hoverColour = color(150);
+    }
+
+    Button(String type, int x, int y, int paddingX, int paddingY, String text, int my_textSize, int textColour, int outline, int baseColour, int hoverColour)
+    {
+        super(x, y, textWidth(text) + 20, textAscent() * 0.8f + 20);
+        this.type = type;
+        textSize(my_textSize);
+        this.paddingX = paddingX;
+        this.paddingY = paddingY;
+
+        this.my_text = text;
+        this.my_textSize = my_textSize;
+        this.textColour = textColour;
+
+        this.outline = outline;
+        this.baseColour = baseColour;
+        this.hoverColour = hoverColour;
+    }
+
+    public void render()
+    { // This renders the button
+        if(!(
+            (type == "cancelPlacement" && currentStructureActive == -1)
+            || (type == "spawnStructure" && mode == 1)
+        ))
+        {
+            stroke(outline);
+            if(isMouseOver())
+            {
+                fill(hoverColour);
+            }else
+            {
+                fill(baseColour);
+            }
+            rect(x, y, my_width, my_height);
+            fill(textColour);
+            textSize(my_textSize);
+            text(my_text, x + paddingX, y + textAscent() * 0.8f + paddingY);
+        }
+    }
+
+    public boolean checkMousePressed(Menu menu,boolean hasSomethingBeenPressed)
+    {
+        if(isMouseOver() && !hasSomethingBeenPressed)
+        { // This goes through all the types of buttons and runs what they are meant to do when pressed
+          // It was done like this as processing doesn't allow you to write lambdas
+            if(currentStructureActive != -1)
+            { // This sets the rotation, if the user is placing down a structure
+                structures.get(currentStructureActive).resetRotated();
+                currentStructureActive = -1;
+            }
+            // GUI TYPES
+            if(type == "spawnStructure")
+            {
+                currentMenu = 4;
+                return true;
+            }else if(type == "cancelPlacement")
+            {
+                currentStructureActive = -1;
+                return true;
+            }else if(type == "playPause")
+            {
+                paused = !paused;
+                if(paused)
+                {
+                    my_text = "PLAY";
+                }else
+                {
+                    my_text = "PAUSE";
+                }
+                textSize(my_textSize);
+                this.paddingX = PApplet.parseInt(my_width - textWidth(my_text)) / 2;
+                return true;
+            }else if(type == "mainMenu")
+            {
+                currentMenu = 3;
+                return true;
+            }
+            // MAIN MENU TYPES
+            else if(type == "explore")
+            {
+                startGame_Explore();
+                return true;
+            }else if(type == "sandbox")
+            {
+                startGame_sandbox();
+                return true;
+            }else if(type == "openFileMenu")
+            {
+                startGame_file();
+                return true;
+            }else if(type == "exitGame")
+            {
+                exit(); // This just closes the window
+                // The rest of the code is never run
+            }
+            // OPEN FILE TYPES
+            else if(type == "cancelOpening")
+            {
+                resetToDefaults();
+            } else if(type == "openFile")
+            {
+                openSavedGame(menu.getInput() + ".gol");
+            }
+            // SAVE FILE TYPES
+            else if(type == "dontSave")
+            {
+                resetToDefaults();
+            }else if(type == "save")
+            {
+                saveGame(menu.getInput() + ".gol");
+            }
+        }
+        return false;
+    }
+
+    public String getType()
+    {
+        return "Button";
+    }
+
+    public void reset()
+    {
+        if(type == "playPause")
+        {
+            my_text = "PLAY";
+            textSize(my_textSize);
+            this.paddingX = PApplet.parseInt(my_width - textWidth(my_text)) / 2;
+        }
+    }
+};
+class GraphicalObject
+{
+    int x, y;
+    float my_width, my_height;
+
+    GraphicalObject(int x, int y, float my_width, float my_height)
+    {
+        this.x = x;
+        this.y = y;
+        this.my_width = my_width;
+        this.my_height = my_height;
+    }
+
+    public boolean isMouseOver()
+    {
+        if (mouseX >= x && mouseX <= x+my_width &&
+            mouseY >= y && mouseY <= y+my_height)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void render()
+    {
+        println("Calling base function");
+    }
+
+    public boolean checkMousePressed()
+    {
+        println("Calling base function");
+        return false;
+    }
+
+    public String getType()
+    {
+        println("Calling base function");
+        return "Base";
+    }
+}
+class GraphicalStructure extends GraphicalObject
+{
+    private int structureID;
+    private float my_cellSize;
+    private int textX, textY;
+
+    GraphicalStructure(int x, int y, int structureID)
+    {
+        super(x, y, 100, 100);
+        this.structureID = structureID;
+        if(structures.get(structureID).getWidth() > structures.get(structureID).getHeight())
+        {
+            my_cellSize = my_width / (structures.get(structureID).getWidth() + 2);
+        }else {
+            my_cellSize = my_height / (structures.get(structureID).getHeight() + 2);
+        }
+        textX = x + PApplet.parseInt((my_width - textWidth(structures.get(structureID).getName())) / 2);
+        textY = y + PApplet.parseInt(my_height) - 2;
+    }
+
+    public void render()
+    { // This renders the button side of it
+        stroke(0);
+        if(isMouseOver())
+        {
+            fill(150);
+        }else{
+            fill(255);
+        }
+        rect(x, y, my_width, my_height);
+        stroke(0,0,255);
+        fill(0,0,255);
+        for(int i = 0; i < structures.get(structureID).getWidth(); i++)
+        {
+            for(int j = 0; j < structures.get(structureID).getHeight(); j++)
+            {
+                if(structures.get(structureID).get(i, j))
+                {
+                    rect(x + i*my_cellSize + my_cellSize, y + j*my_cellSize + my_cellSize, my_cellSize, my_cellSize);
+                }
+            }
+        }
+        stroke(0);
+        fill(0);
+        textSize(20);
+        text(structures.get(structureID).getName(), textX, textY);
+    }
+
+    public boolean checkMousePressed()
+    {
+        if(isMouseOver())
+        {
+            currentMenu = 0;
+            currentStructureActive = structureID;
+            return true;
+        }
+        return false;
+    }
+}
+class GraphicImage extends GraphicalObject
+{
+    private PImage img;
+
+    GraphicImage(int x, int y, float my_width, float my_height, String filename)
+    {
+        super(x, y, my_width, my_height);
+        img = loadImage(filename);
+    }
+
+    public void render()
+    {
+        image(img, x, y, my_width, my_height);
+    }
+}
+public void mouseWheel(MouseEvent event)
+{ // This is called when the user uses the scroll wheel
     int e = PApplet.parseInt(event.getCount()); // This gets what direction the scroll wheel was used
     if(currentStructureActive != -1)
     {
@@ -50,135 +612,17 @@ public void checkMousePressed()
 {
     if(mousePressed)
     {
-        if(currentMenu == 1 && mousePressedDelay == 0) // Checks if in the main menu
+        if(mousePressedDelay == 0)
         {
-            if (randomStartButton.isMouseOver()) { // If we are it checks what button the mouse is over and runs the function
-                startGame_Explore();
-            }
-            if (readFromFile.isMouseOver()) {
-                startGame_file();
-            }
-            if (sandbox.isMouseOver()) {
-                startGame_sandbox();
-            }
-            if (exitButton.isMouseOver())
+            boolean anythingClicked = false;
+            anythingClicked = menus[currentMenu].checkMousePressed();
+            if(!anythingClicked && currentStructureActive != -1)
             {
-                exit(); // This just closes the window
-            }
-        } else if(currentMenu == 0)
-        { // This means that the GUI is active, so we need to check if any of those buttons have been pressed
-
-            if(menuButton.isMouseOver())
-            { // If the menu button is pressed it runs the given function
-                if(currentStructureActive != -1)
-                { // This sets the rotation, if the user is placing down a structure
-                    structures.get(currentStructureActive).resetRotated();
-                    currentStructureActive = -1;
-                }
-                mousePressedDelay = 20;
-                backToMenu();
-            }
-            if(pauseButton.isMouseOver() && paused == false && mousePressedDelay == 0) { // This checks if play/pause was pressed and pauses the game
-                paused = true;
-                mousePressedDelay = 20;
-                if(currentStructureActive != -1)
-                { // This sets the rotation, if the user is placing down a structure
-                    structures.get(currentStructureActive).resetRotated();
-                    currentStructureActive = -1;
-                }
-            } else if(playButton.isMouseOver() && paused == true && mousePressedDelay == 0) {
-                paused = false;
-                mousePressedDelay = 20;
-                if(currentStructureActive != -1)
-                { // This sets the rotation, if the user is placing down a structure
-                    structures.get(currentStructureActive).resetRotated();
-                    currentStructureActive = -1;
-                }
-            }
-
-            if (spawnStructureButton.isMouseOver() && !inStructureMenu && mousePressedDelay == 0) {
-                inStructureMenu = true; // This opens the structure menu
-                mousePressedDelay = 20; // The mousePressedDelay is set to stop causing some bugs
-                if(currentStructureActive != -1)
-                { // This sets the rotation, if the user is placing down a structure
-                    structures.get(currentStructureActive).resetRotated();
-                    currentStructureActive = -1;
-                }
-            } else if(inStructureMenu && mousePressedDelay == 0)
-            { // This checks if any of the structures were pressed (in the structure menu)
-                for(int i = 0; i < structures.size(); i++) // This goes through every structure in the list and checks its location
-                {
-                    if(structures.get(i).isMouseOver(
-                        (i - PApplet.parseInt(i / STRUCTURE_MENU_WIDTH) * STRUCTURE_MENU_WIDTH) * 102 + 50,
-                        PApplet.parseInt(i / STRUCTURE_MENU_WIDTH) * 102 + 50
-                    ))
-                    {
-                        currentStructureActive = i;
-                        break;
-                    }
-                }
-                inStructureMenu = false; // Closes the structure menu (even if a structure was not chosen)
-                mousePressedDelay = 20; // Sets the mousePressed delay so bugs aren't caused
-            }else if (currentStructureActive != -1 && mousePressedDelay == 0) {
-                if(!cancelButton.isMouseOver())
-                { // If the cancel button was not pressed, it calls the place function in the structure
-                    structures.get(currentStructureActive).place();
-                }else
+                structures.get(currentStructureActive).place();
+                if(shiftPressed)
                 {
                     currentStructureActive = -1;
                 }
-                if(!shiftPressed)
-                { // If the shift is pressed, then a mousePressedDelay is set and the structure stays active (so you can keep placing them)
-                    mousePressedDelay = 20;
-                }else
-                {
-                    structures.get(currentStructureActive).resetRotated(); // Otherwise the structure is reset and nothing is set to active
-                    currentStructureActive = -1;
-                }
-            }
-        } else if(currentMenu == 2)
-        { // Opening file menu
-            if(inputFileBox.isMouseOver() && !inputFileBox.getIsFocused())
-            {
-                inputFileBox.setFocused(true);
-            } else if (inputFileBox.getIsFocused() && !inputFileBox.isMouseOver())
-            {
-                inputFileBox.setFocused(false);
-            }
-            if(cancelOSButton.isMouseOver())
-            {
-                resetToDefaults();
-            }else if(doneButton.isMouseOver())
-            {
-                currentMenu = 0;
-                setBoardToStruct(readFromFile(inputFileBox.getInput()));
-                inputFileBox.clear();
-                inputFileBox.setFocused(false);
-            }
-            mousePressedDelay = 20;
-        } else if(currentMenu == 3)
-        { // Saving file menu
-            if(inputFileBox.isMouseOver() && !inputFileBox.getIsFocused())
-            {
-                inputFileBox.setFocused(true);
-            } else if (inputFileBox.getIsFocused() && !inputFileBox.isMouseOver())
-            {
-                inputFileBox.setFocused(false);
-            }
-            if(dontSaveButton.isMouseOver())
-            {
-                resetToDefaults();
-            }else if(doneButton.isMouseOver())
-            {
-                saveToFile(inputFileBox.getInput(), board);
-                resetToDefaults();
-            }else if((mouseX < SCREEN_WIDTH / 4 || mouseX > SCREEN_WIDTH - SCREEN_WIDTH/4
-                    || mouseY < SCREEN_HEIGHT / 4 || mouseY > SCREEN_HEIGHT - SCREEN_HEIGHT/4)
-                    && mousePressedDelay == 0)
-            {
-                currentMenu = 0;
-                inputFileBox.clear();
-                inputFileBox.setFocused(false);
             }
             mousePressedDelay = 20;
         }
@@ -199,34 +643,34 @@ public void keyPressed()
         if(currentMenu == 2)
         {
             currentMenu = 0;
-            setBoardToStruct(readFromFile(inputFileBox.getInput()));
-            inputFileBox.clear();
-            inputFileBox.setFocused(false);
+            setBoardToStruct(readFromFile(menus[currentMenu].getInput()));
+            menus[currentMenu].reset();
         }else if(currentMenu == 3)
         {
-            saveToFile(inputFileBox.getInput(), board);
+            saveToFile(menus[currentMenu].getInput(), board);
             resetToDefaults();
         }
-    }else if(inputFileBox.getIsFocused())
+    }else if(menus[currentMenu].isTextBoxFocused())
     {
-        inputFileBox.inputKey(key);
+        menus[currentMenu].getTextBox().inputKey(key);
     }else if(key == ESC)
     {
         if(currentMenu == 0)
         {
-            backToMenu();
+            currentMenu = 3;
         }else if(currentMenu == 1)
         {
             exit();
         } else if(currentMenu == 2)
         {
             resetToDefaults();
-        }
-        else if(currentMenu == 3)
+        } else if(currentMenu == 3)
         {
             currentMenu = 0;
-            inputFileBox.clear();
-            inputFileBox.setFocused(false);
+            menus[currentMenu].reset();
+        } else if(currentMenu == 4)
+        {
+            currentMenu = 0;
         }
         key = 0;
     } else if (key == CODED && currentMenu == 0) {
@@ -291,266 +735,6 @@ public void checkKeys()
     }
 }
 
-public void backToMenu()
-{ // This just clears the board to go back to the menu
-    currentMenu = 3;
-}
-
-// Updates the game
-public void god()
-{
-  if(paused == false) {
-      for (int i = 0; i < BOARD_WIDTH; i++) {
-          for (int j = 0; j < BOARD_HEIGHT; j++) {
-              boardcopy[i][j] = board[i][j];
-              int counter = 0;
-              // counting the number of alive cells around the cell
-              if (i != 0 && board[i-1][j]) {
-                  counter++;
-              }
-              if (i != BOARD_WIDTH - 1 && board[i+1][j]) {
-                  counter++;
-              }
-              if (i != 0 && j != 0 && board[i-1][j-1]) {
-                  counter++;
-              }
-              if (j != 0 && board[i][j-1]) {
-                  counter++;
-              }
-              if (i != BOARD_WIDTH - 1 && j != 0 && board[i+1][j-1]) {
-                  counter++;
-              }
-              if (i != 0 && j != BOARD_HEIGHT - 1 && board[i-1][j+1]) {
-                  counter++;
-              }
-              if (j != BOARD_HEIGHT - 1 && board[i][j+1]) {
-                  counter++;
-              }
-              if (j != BOARD_HEIGHT - 1 && i != BOARD_WIDTH - 1 && board[i+1][j+1]) {
-                  counter++;
-              }
-              //Running through the rules
-              if ((counter < 2) && (board[i][j])) {
-                  boardcopy[i][j] = false;
-              }
-              if ((counter > 3) && (board[i][j])) {
-                  boardcopy[i][j] = false;
-              }
-              if ((counter == 3) && (board[i][j] == false)) {
-                  boardcopy[i][j] = true;
-              }
-          }
-      }
-      for (int i = 0; i < BOARD_WIDTH; i++) {
-          for (int j = 0; j < BOARD_HEIGHT; j++){
-              board[i][j] = boardcopy[i][j];
-          }
-      }
-  }
-}
-
-public void resetToDefaults()
-{
-    inputFileBox.clear();
-    inputFileBox.setFocused(false);
-    paused = true;
-    currentMenu = 1;
-    screenXPos = START_GRID_X;
-    screenYPos = START_GRID_Y;
-    cellSize = ORIGINAL_CELL_SIZE;
-    screenGridHeight = ORIGINAL_SCREEN_GRID_HEIGHT;
-    screenGridWidth = ORIGINAL_SCREEN_GRID_WIDTH;
-    clearBoard();
-}
-
-public void setupMenu()
-{ // This creates all the buttons for the Menu
-    randomStartButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2), 280, 50, "Explore", 30);
-    sandbox = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 60, 280, 50, "Sandbox", 30);
-    readFromFile = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 120, 280, 50, "Read From File", 30);
-    exitButton = new Button((SCREEN_WIDTH / 2) - 140, (SCREEN_HEIGHT / 2) + 180, 280, 50, "Exit", 30);
-}
-
-public void setupGUI()
-{ // This creates all the buttons of the GUI
-    //spawnGliderButton = new Button(0, 0, 120, 50, "Glider", 30);
-    spawnStructureButton = new Button(1, 1, 140, 50, "Structure", 30);
-    inStructureMenu = false;
-    cancelButton = new Button(1, 52, 140, 50, "Cancel", 30);
-    pauseButton = new Button(1, SCREEN_HEIGHT - 51, 120, 50, "PAUSE", 30);
-    playButton = new Button(1, SCREEN_HEIGHT - 51, 120, 50, "PLAY", 30);
-    menuButton = new Button(SCREEN_WIDTH - 121, 1, 120, 50, "Menu", 30);
-
-    // Structures
-    structures.add(new Structure("cell.txt", "Cell")); // This will now be index 0
-    structures.add(new Structure("glider.txt", "Glider")); // This will be index 1
-    structures.add(new Structure("glider gun.txt", "Glider Gun")); // This will be index 2
-    structures.add(new Structure("spaceship.txt", "Spaceship")); //index 3
-    structures.add(new Structure("dart.txt", "Dart")); //index 4
-    structures.add(new Structure("schick engine.txt", "Schick")); //index 5
-    structures.add(new Structure("hammerhead.txt", "Hammer")); //index 6
-    structures.add(new Structure("Sir Robin.txt", "Sir Robin")); //index 7
-    structures.add(new Structure("copperhead.txt", "Copper")); //index 8
-    structures.add(new Structure("pulsar.txt", "Pulsar")); //index 9
-    structures.add(new Structure("kok's galaxy.txt", "Galaxy")); //index 10
-    structures.add(new Structure("rich's P16.txt", "P16")); //index 11
-    structures.add(new Structure("rocket.txt", "Rocket")); //index 12
-    structures.add(new Structure("flash oscillator.txt", "Flash")); //index 13
-    structures.add(new Structure("pentadecathalon.txt", "15")); //index 14
-    structures.add(new Structure("oddball.txt", "Oddball")); //index 15
-    structures.add(new Structure("fairy.txt", "Fairy")); //index 16
-    structures.add(new Structure("weekender.txt", "Weekender")); //index 17
-    currentStructureActive = -1;
-}
-
-public void setup()
-{
-     // Sets the size of the window, and background colour
-    background(backgroundColour);
-
-    clearBoard(); // This clears the board, making sure everything is false
-
-    setupMenu(); // Sets just the menu and GUI
-    setupGUI();
-    inputFileBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
-    cancelOSButton = new Button(SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Cancel", 30);
-    doneButton = new Button(SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 160, 50, "Done", 30);
-    dontSaveButton = new Button(SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Don't Save", 30);
-
-    currentMenu = 1; // Makes sure you start in the menu
-
-    frame.requestFocus(); // Makes the screen instantly focused
-
-    // Images must be in the "data" directory to load correctly
-    img = loadImage("LIFE-IS-JUST-A-GAME.png");
-}
-
-public void draw()
-{ // This acts like a update and render function
-    checkKeys(); // This checks if any keys or mouse is pressed
-    checkMousePressed();
-    render(); // This renders everything on the screen
-
-    timeControl++;
-    if(timeControl == 8) // This limits how much it is updated
-    {
-        timeControl = 0;
-        god(); // Runs the function for updating the board
-    }
-}
-// This is for when we want to display a button
-class Button
-{
-    private int x, y;
-    private float my_width, my_height;
-    private String my_text;
-    private int my_textSize;
-    private int paddingX, paddingY;
-    private int textColour, baseColour, hoverColour, outline;
-
-    // We might also want to pass in a function for when it is pressed
-    Button(int x, int y, String text, int my_textSize)
-    {
-        this.x = x;
-        this.y = y;
-        textSize(my_textSize);
-        this.my_width = textWidth(text) + 20;
-        this.my_height = textAscent() * 0.8f + 20;
-        this.paddingX = 10;
-        this.paddingY = 10;
-
-        this.my_text = text;
-        this.my_textSize = my_textSize;
-        this.textColour = color(0);
-
-        this.outline = color(0);
-        this.baseColour = color(255);
-        this.hoverColour = color(150);
-    }
-
-    Button(int x, int y, float my_width, float my_height)
-    {
-        this.x = x;
-        this.y = y;
-        this.my_width = my_width;
-        this.my_height = my_height;
-        this.paddingX = 10;
-        this.paddingY = 10;
-
-        this.my_text = "";
-        this.my_textSize = 30;
-        this.textColour = color(0);
-
-        this.outline = color(0);
-        this.baseColour = color(255);
-        this.hoverColour = color(150);
-    }
-
-    Button(int x, int y, int my_width, int my_height, String text, int my_textSize)
-    {
-        this.x = x;
-        this.y = y;
-        textSize(my_textSize);
-        this.my_width = my_width;
-        this.my_height = my_height;
-        this.paddingX = PApplet.parseInt(my_width - textWidth(text)) / 2;
-        this.paddingY = PApplet.parseInt(my_height - textAscent()) / 2;
-
-        this.my_text = text;
-        this.my_textSize = my_textSize;
-        this.textColour = color(0);
-
-        this.outline = color(0);
-        this.baseColour = color(255);
-        this.hoverColour = color(150);
-    }
-
-    Button(int x, int y, int paddingX, int paddingY, String text, int my_textSize, int textColour, int outline, int baseColour, int hoverColour)
-    {
-        this.x = x;
-        this.y = y;
-        textSize(my_textSize);
-        this.my_width = textWidth(text) + 2 * paddingX;
-        this.my_height = textAscent() * 0.8f + 2 * paddingX;
-        this.paddingX = paddingX;
-        this.paddingY = paddingY;
-
-        this.my_text = text;
-        this.my_textSize = my_textSize;
-        this.textColour = textColour;
-
-        this.outline = outline;
-        this.baseColour = baseColour;
-        this.hoverColour = hoverColour;
-    }
-
-    public boolean isMouseOver()
-    { // This checks if the mouse is over
-        if (mouseX >= x && mouseX <= x+my_width &&
-            mouseY >= y && mouseY <= y+my_height)
-        {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void render()
-    { // This renders the button
-        stroke(outline);
-        if(isMouseOver())
-        {
-            fill(hoverColour);
-        }else
-        {
-            fill(baseColour);
-        }
-        rect(x, y, my_width, my_height);
-        fill(textColour);
-        textSize(my_textSize);
-        text(my_text, x + paddingX, y + textAscent() * 0.8f + paddingY);
-    }
-};
 public boolean[][] readFromFile(String filename)
 {
     String[] lines = loadStrings(filename);
@@ -598,49 +782,273 @@ public void saveToFile(String filename, boolean[][] struct)
     }
     saveStrings(filename, lines);
 }
-PImage img;
 
-public void renderMenu()
-{ // Renders all the videos
-    randomStartButton.render();
-    readFromFile.render();
-    sandbox.render();
-    exitButton.render();
-    image(img, (SCREEN_WIDTH / 2) - (width / 4), 60, width / 2, height / 3);
+public void openSavedGame(String filename)
+{
+    currentMenu = 0;
+    setBoardToStruct(readFromFile("Saves/"+filename));
 }
-public void renderGUI()
-{ // Render process for the GUI will go in here
-    if(mode != 1){ // checks what mode you are in
-        if(inStructureMenu)
-        { // If in the structure menu it renders the structures
-            for(int i = 0; i < structures.size(); i++)
+
+public void saveGame(String filename)
+{
+    saveToFile("Saves/"+filename, board);
+    resetToDefaults();
+}
+public class Menu extends GraphicalObject
+{
+    private Button[] my_buttons;
+    private GraphicalStructure[] my_structures;
+    private TextBox my_textBox;
+    private Menu[] my_menus;
+    private GraphicImage my_image;
+    private boolean hasImage = false;
+    private boolean hasTextBox = false;
+    private boolean hasStructures = false;
+    private boolean hasButtons = false;
+    private boolean hasMenus = false;
+
+    private String text = "";
+    private int textX, textY;
+
+    private boolean hasBackground = false;
+    private int backgroundColour, outlineColour;
+    private int exitMenu = 1;
+
+    public Menu(Button[] my_buttons)
+    {
+        super(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        this.my_buttons = my_buttons;
+        hasButtons = true;
+    }
+
+    public Menu(Button[] my_buttons, GraphicImage img)
+    {
+        super(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        this.my_buttons = my_buttons;
+        this.my_image = img;
+        hasImage = true;
+        hasButtons = true;
+    }
+
+    public Menu(GraphicalStructure[] my_structures, int exitMenu)
+    {
+        super(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        this.my_structures = my_structures;
+        this.exitMenu = exitMenu;
+        hasStructures = true;
+    }
+
+    public Menu(Button[] my_buttons, TextBox my_textBox)
+    {
+        super(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        this.my_buttons = my_buttons;
+        this.my_textBox = my_textBox;
+        hasTextBox = true;
+        hasButtons = true;
+    }
+
+    public Menu(Menu[] my_menus)
+    {
+        super(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        this.my_menus = my_menus;
+        hasMenus = true;
+    }
+
+    public Menu(int x, int y,
+                int my_width, int my_height,
+                Button[] my_buttons, TextBox my_textBox,
+                int backgroundColour, int outlineColour,
+                int exitMenu,
+                String text)
+    {
+        super(x, y, my_width, my_height);
+
+        this.my_buttons = my_buttons;
+        hasButtons = true;
+        hasTextBox = true;
+        this.my_textBox = my_textBox;
+        hasBackground = true;
+
+        this.backgroundColour = backgroundColour;
+        this.outlineColour = outlineColour;
+
+        this.exitMenu = exitMenu;
+
+        this.text = text;
+        textX = x + (my_width / 2);
+        textY = y + (my_height / 2) - 20;
+    }
+
+    public void reset()
+    {
+        if(hasMenus)
+        {
+            for(Menu menu : my_menus)
             {
-                structures.get(i).render(
-                    (i - PApplet.parseInt(i / STRUCTURE_MENU_WIDTH) * STRUCTURE_MENU_WIDTH) * 102 + 50,
-                    PApplet.parseInt(i / STRUCTURE_MENU_WIDTH) * 102 + 50
-                );
+                menu.reset();
             }
-        } else
-        { // Otherwise it renders the structure button
-            spawnStructureButton.render();
         }
-        if(currentStructureActive != -1)
-        { // If the user is placing a structure, it updates the structure and renders the cancel button
-            cancelButton.render();
-            structures.get(currentStructureActive).update();
+        if(hasButtons)
+        {
+            for(Button button : my_buttons)
+            {
+                button.reset();
+            }
+        }
+        if(hasTextBox)
+        {
+            my_textBox.reset();
         }
     }
-    menuButton.render(); // Always renders the menuButton
-    if(mode != 0){ // Checks the right mode
-      if(paused == false){ // Renders the pause and play button
-        pauseButton.render();
-      }
-      if(paused == true){
-        playButton.render();
-      }
+
+    public boolean checkMousePressed()
+    {
+        boolean anythingClicked = false;
+        boolean pleaseExit = false;
+        boolean hasButtonBeenPressed = false;
+        boolean hasStructureBeenPressed = false;
+        if(hasButtons)
+        {
+            for(Button button : my_buttons)
+            {
+                if(hasButtonBeenPressed)
+                {
+                    button.checkMousePressed(this, hasButtonBeenPressed);
+                }else
+                {
+                    hasButtonBeenPressed = button.checkMousePressed(this, hasButtonBeenPressed);
+                }
+            }
+            anythingClicked = hasButtonBeenPressed;
+        }
+
+        if(hasMenus)
+        {
+            for(Menu menu : my_menus)
+            {
+                if(anythingClicked)
+                {
+                    menu.checkMousePressed();
+                }else
+                {
+                    anythingClicked = menu.checkMousePressed();
+                }
+            }
+        }
+
+        if(hasStructures)
+        {
+            pleaseExit = true; // If no structure has been pressed, it will exit
+            for(GraphicalStructure structure : my_structures)
+            {
+                hasStructureBeenPressed = structure.checkMousePressed();
+                if(hasStructureBeenPressed)
+                {
+                    pleaseExit = false;
+                }
+            }
+            if(!anythingClicked && !pleaseExit)
+            {
+                anythingClicked = true;
+            }
+        }
+
+        if(hasTextBox)
+        {
+            if(anythingClicked)
+            {
+                my_textBox.checkMousePressed();
+            }else{
+                anythingClicked = my_textBox.checkMousePressed();
+            }
+        }
+        if(mouseX > x + my_width || mouseX < x
+                || mouseY < y || mouseY > y + my_height
+                || pleaseExit)
+        {
+            currentMenu = exitMenu;
+            if(hasTextBox)
+            {
+                my_textBox.reset();
+            }
+        }
+        return anythingClicked;
+    }
+
+    public void render()
+    {
+        if(hasBackground)
+        {
+            stroke(outlineColour);
+            fill(backgroundColour);
+            rect(x, y, my_width, my_height);
+        }
+        if(hasButtons)
+        {
+            for(Button button : my_buttons)
+            {
+                button.render();
+            }
+        }
+        if(hasMenus)
+        {
+            for(Menu menu : my_menus)
+            {
+                menu.render();
+            }
+        }
+        if(hasStructures)
+        {
+            for(GraphicalStructure structure : my_structures)
+            {
+                structure.render();
+            }
+        }
+        if(hasTextBox)
+        {
+            my_textBox.render();
+        }
+
+        if(hasImage)
+        {
+            my_image.render();
+        }
+        textSize(30);
+        stroke(0);
+        fill(0);
+        textAlign(CENTER);
+        text(text, SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 20);
+        textAlign(LEFT);
+    }
+
+    public String getInput()
+    {
+        if(hasTextBox)
+        {
+            return my_textBox.getInput();
+        }
+        return "";
+    }
+
+    public boolean isTextBoxFocused()
+    {
+        if(hasTextBox)
+        {
+            return my_textBox.getIsFocused();
+        }
+        return false;
+    }
+
+    public TextBox getTextBox()
+    {
+        return my_textBox;
+    }
+
+    public String getType()
+    {
+        return "Menu";
     }
 }
-
 public void renderBoard()
 {
     boolean notDrawnStructuresLines = true; // This makes sure that we don't draw the lines around the structure multiple times
@@ -716,106 +1124,12 @@ public void render()
 { // This renders the background and then the other things
     background(backgroundColour);
     renderBoard();
-    if(currentMenu == 1) // Chooses the run the board or...
+    if(currentStructureActive != -1)
     {
-        renderMenu();
-    }else if(currentMenu == 0)
-    {
-        renderGUI();
-    }else if(currentMenu == 2 || currentMenu == 3)
-    {
-        fill(255);
-        stroke(0);
-        rect(SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-        textSize(30);
-        stroke(0);
-        fill(0);
-        textAlign(CENTER);
-        text("Input name of the save", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 20);
-        textAlign(LEFT);
-        inputFileBox.render();
-        doneButton.render();
-        if(currentMenu == 2)
-        {
-            cancelOSButton.render();
-        }else
-        {
-            dontSaveButton.render();
-        }
+        structures.get(currentStructureActive).update();
     }
-    //testBox.render();
+    menus[currentMenu].render();
 }
-public void clearBoard()
-{ // This sets the whole board to 0
-    for(int i = 0; i < BOARD_WIDTH; i++) // Sets the whole board to 0
-    {
-        for(int j = 0; j < BOARD_HEIGHT; j++)
-        {
-            board[i][j] = false;
-        }
-    }
-}
-
-public void randomBoard()
-{ // This randomizes the whole board
-    for(int i = 0; i < BOARD_WIDTH; i++)
-    {
-        for(int j = 0; j < BOARD_HEIGHT; j++)
-        {
-            int r = PApplet.parseInt(random(4));
-            if(r == 0)
-            {
-                board[i][j] = true;
-            }else {
-                board[i][j] = false;
-            }
-        }
-    }
-}
-
-public void setBoardToStruct(boolean[][] struct)
-{
-    if(struct.length < BOARD_WIDTH || struct[0].length < BOARD_HEIGHT)
-    {
-        int startX = PApplet.parseInt((BOARD_WIDTH - struct.length) / 2);
-        int startY = PApplet.parseInt((BOARD_HEIGHT - struct[0].length) / 2);
-        for(int i = 0; i < struct.length; i++)
-        {
-            for(int j = 0; j < struct[i].length; j++)
-            {
-                board[startX + i][startY + j] = struct[i][j];
-            }
-        }
-    }else
-    {
-        board = struct;
-    }
-}
-
-public void sandboxStart() {
-}
-
-public void startGame_Explore()
-{ // This randomizes the board and sets the mode to 1
-    randomBoard();
-    mode = 1;
-    currentMenu = 0;
-};
-
-public void startGame_file()
-{ // We might need do this at some point :D
-    clearBoard();
-    mode = 3;
-    inputFileBox.clear();
-    currentMenu = 2;
-};
-
-public void startGame_sandbox()
-{
-    sandboxStart();
-    mode = 2;
-    currentMenu = 0;
-};
 class Structure
 {
     private boolean[][] structure;
@@ -887,21 +1201,14 @@ class Structure
         return gridY;
     }
 
+    public String getName()
+    {
+        return name;
+    }
+
     public boolean get(int x, int y)
     {
         return rotatedStructure[x][y];
-    }
-
-    // Checks if the mouse is over it at a given x and y coordinate
-    public boolean isMouseOver(int x, int y)
-    {
-        if (mouseX >= x && mouseX <= x+100 &&
-            mouseY >= y && mouseY <= y+100)
-        {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public void resetRotated()
@@ -932,61 +1239,19 @@ class Structure
         }
         rotatedStructure = tempStructure;
     }
-
-    public void render(int x, int y)
-    { // This renders the button side of it
-        int my_boardSize = 100;
-        int my_cellSize;
-        if(my_width > my_height)
-        {
-            my_cellSize = my_boardSize / (my_width + 2);
-        }else {
-            my_cellSize = my_boardSize / (my_height + 2);
-        }
-        stroke(0);
-        if(isMouseOver(x, y))
-        {
-            fill(150);
-        }else{
-            fill(255);
-        }
-        rect(x, y, my_boardSize, my_boardSize);
-        for(int i = 0; i < my_width; i++)
-        {
-            for(int j = 0; j < my_height; j++)
-            {
-                if(structure[i][j])
-                {
-                    stroke(0,0,255);
-                    fill(0,0,255);
-                    rect(x + i*my_cellSize + my_cellSize, y + j*my_cellSize + my_cellSize, my_cellSize, my_cellSize);
-                }
-            }
-        }
-        stroke(0);
-        fill(0);
-        textSize(20);
-        int xGap = PApplet.parseInt((my_boardSize - textWidth(name)) / 2);
-        text(name, x + xGap, y + my_boardSize - 2);
-    }
 }
-class TextBox
+class TextBox extends GraphicalObject
 {
-    private int x, y;
     private boolean isFocused;
-    private float my_width, my_height;
     private String inputText;
     private boolean showCursor = true;
     private int cursorDelay = 0;
 
     TextBox(int x, int y, int my_width)
     {
-        this.x = x;
-        this.y = y;
-        this.my_width = my_width;
+        super(x, y, my_width, textAscent() * 0.8f + 10);
         textSize(20);
         inputText = "";
-        this.my_height = textAscent() * 0.8f + 10;
         isFocused = false;
     }
 
@@ -1046,17 +1311,6 @@ class TextBox
         isFocused = temp;
     }
 
-    public boolean isMouseOver()
-    {
-        if (mouseX >= x && mouseX <= x+my_width &&
-            mouseY >= y && mouseY <= y+my_height)
-        {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public String getInput()
     {
         return inputText;
@@ -1065,6 +1319,30 @@ class TextBox
     public boolean getIsFocused()
     {
         return isFocused;
+    }
+
+    public boolean checkMousePressed()
+    {
+        if(isMouseOver())
+        {
+            isFocused = true;
+            return true;
+        }else
+        {
+            isFocused = false;
+            return false;
+        }
+    }
+
+    public void reset()
+    {
+        clear();
+        setFocused(false);
+    }
+
+    public String getType()
+    {
+        return "TextBox";
     }
 }
 // Screen
@@ -1105,22 +1383,11 @@ boolean[][] boardcopy = new boolean[BOARD_HEIGHT][BOARD_WIDTH];
 
 int timeControl = 0;
 
-// Menu Buttons
-Button randomStartButton;
-Button readFromFile;
-Button sandbox;
-Button exitButton;
-
-// GUI Stuff
-//Button spawnGliderButton;
-Button spawnStructureButton;
+// Menus
+Menu[] menus;
 boolean inStructureMenu = false;
-ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
-Button cancelButton;
+ArrayList<Structure> structures; // This will store all the structures
 int currentStructureActive = -1;
-Button pauseButton;
-Button playButton;
-Button menuButton;
 
 
 // keys Pressed
@@ -1130,13 +1397,6 @@ Boolean rightPressed = false;
 Boolean leftPressed  = false;
 Boolean shiftPressed = false;
 int mousePressedDelay = 0;
-
-// openOrSaveGameMenu function stuff
-TextBox inputFileBox;
-Button doneButton;
-Button cancelOSButton;
-Button dontSaveButton;
-boolean enterPressed = false;
   public void settings() {  size(1000, 850); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Program" };

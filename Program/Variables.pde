@@ -36,22 +36,11 @@ boolean[][] boardcopy = new boolean[BOARD_HEIGHT][BOARD_WIDTH];
 
 int timeControl = 0;
 
-// Menu Buttons
-Button randomStartButton;
-Button readFromFile;
-Button sandbox;
-Button exitButton;
-
-// GUI Stuff
-//Button spawnGliderButton;
-Button spawnStructureButton;
+// Menus
+Menu[] menus;
 boolean inStructureMenu = false;
-ArrayList<Structure> structures = new ArrayList<Structure>(); // This will store all the structures
-Button cancelButton;
+ArrayList<Structure> structures; // This will store all the structures
 int currentStructureActive = -1;
-Button pauseButton;
-Button playButton;
-Button menuButton;
 
 
 // keys Pressed
@@ -61,10 +50,3 @@ Boolean rightPressed = false;
 Boolean leftPressed  = false;
 Boolean shiftPressed = false;
 int mousePressedDelay = 0;
-
-// openOrSaveGameMenu function stuff
-TextBox inputFileBox;
-Button doneButton;
-Button cancelOSButton;
-Button dontSaveButton;
-boolean enterPressed = false;
