@@ -1281,17 +1281,30 @@ class TextBox extends GraphicalObject
         textSize(20);
         if(inpKey == BACKSPACE)
         {
-            if(inputText.length() != 0)
+            if(cursorPosition != 0)
             {
-                inputText = inputText.substring(0, inputText.length() - 1);
+                inputText = inputText.substring(0, cursorPosition - 1) + inputText.substring(cursorPosition, inputText.length());
                 cursorPosition -= 1;
+            }
+        }else if(inpKey == DELETE)
+        {
+            if(cursorPosition != inputText.length())
+            {
+                inputText = inputText.substring(0, cursorPosition) + inputText.substring(cursorPosition + 1, inputText.length());
             }
         }else if(inpKey == CODED)
         {
+            if(keyCode == RIGHT && cursorPosition != inputText.length())
+            {
+                cursorPosition += 1;
+            }else if(keyCode == LEFT && cursorPosition != 0)
+            {
+                cursorPosition -= 1;
+            }
         }else if(textWidth(inputText + "W") + 10 < my_width)
         {
+            inputText = inputText.substring(0, cursorPosition) + inpKey + inputText.substring(cursorPosition, inputText.length());
             cursorPosition += 1;
-            inputText += inpKey;
         }
     }
 
@@ -1306,7 +1319,8 @@ class TextBox extends GraphicalObject
         text(inputText, x + 5, y + textAscent() * 0.8f + 10);
         if(showCursor && isFocused)
         {
-            line(x + textWidth(inputText) + 5, y + 5, x + textWidth(inputText) + 5, y + 10 + textAscent() * 0.8f);
+            String tempA = inputText.substring(0, cursorPosition);
+            line(x + textWidth(tempA) + 5, y + 5, x + textWidth(tempA) + 5, y + 10 + textAscent() * 0.8f);
         }
     }
 
