@@ -4,6 +4,7 @@ class TextBox extends GraphicalObject
     private String inputText;
     private boolean showCursor = true;
     private int cursorDelay = 0;
+    private int cursorPosition = 0;
 
     TextBox(int x, int y, int my_width)
     {
@@ -35,16 +36,19 @@ class TextBox extends GraphicalObject
 
     void inputKey(char inpKey)
     {
+        textSize(20);
         if(inpKey == BACKSPACE)
         {
             if(inputText.length() != 0)
             {
                 inputText = inputText.substring(0, inputText.length() - 1);
+                cursorPosition -= 1;
             }
-        }else if(inpKey == CODED && keyCode < 31)
+        }else if(inpKey == CODED)
         {
         }else if(textWidth(inputText + "W") + 10 < my_width)
         {
+            cursorPosition += 1;
             inputText += inpKey;
         }
     }
@@ -57,10 +61,10 @@ class TextBox extends GraphicalObject
         rect(x, y, my_width, my_height);
         fill(0);
         textSize(20);
-        text(inputText, x + 5, y + textAscent() * 0.8 + 5);
+        text(inputText, x + 5, y + textAscent() * 0.8 + 10);
         if(showCursor && isFocused)
         {
-            line(x + textWidth(inputText) + 5, y + 5, x + textWidth(inputText) + 5, y + 5 + textAscent() * 0.8);
+            line(x + textWidth(inputText) + 5, y + 5, x + textWidth(inputText) + 5, y + 10 + textAscent() * 0.8);
         }
     }
 
