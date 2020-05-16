@@ -50,7 +50,7 @@ class GraphicalStructure extends GraphicalObject
     {
         if(isMouseOver())
         {
-            currentMenu = 0;
+            changeMenu(0);
             currentStructureActive = structureID;
             return true;
         }

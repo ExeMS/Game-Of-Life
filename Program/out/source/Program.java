@@ -14,15 +14,18 @@ import java.io.IOException;
 
 public class Program extends PApplet {
 
+public void changeMenu(int menuIndex)
+{
+    menus[currentMenu].reset();
+    currentMenu = menuIndex;
+}
+
 public void resetToDefaults()
 {
-    for(Menu menu : menus)
-    {
-        menu.reset();
-    }
+    changeMenu(1);
+
     paused = true;
     inStructureMenu = false;
-    currentMenu = 1;
     screenXPos = START_GRID_X;
     screenYPos = START_GRID_Y;
     cellSize = ORIGINAL_CELL_SIZE;
@@ -132,7 +135,6 @@ public void setup()
 
     frame.requestFocus(); // Makes the screen instantly focused
 
-    // Images must be in the "data" directory to load correctly
 }
 
 public void draw()
@@ -202,21 +204,21 @@ public void startGame_Explore()
 { // This randomizes the board and sets the mode to 1
     randomBoard();
     mode = 1;
-    currentMenu = 0;
+    changeMenu(0);
 };
 
 public void startGame_file()
 { // We might need do this at some point :D
     clearBoard();
     mode = 3;
-    currentMenu = 2;
+    changeMenu(2);
 };
 
 public void startGame_sandbox()
 {
     sandboxStart();
     mode = 2;
-    currentMenu = 0;
+    changeMenu(0);
 };
 
 // Updates the game
@@ -383,7 +385,7 @@ class Button extends GraphicalObject
             // GUI TYPES
             if(type == "spawnStructure")
             {
-                currentMenu = 4;
+                changeMenu(4);
                 return true;
             }else if(type == "cancelPlacement")
             {
@@ -404,7 +406,7 @@ class Button extends GraphicalObject
                 return true;
             }else if(type == "mainMenu")
             {
-                currentMenu = 3;
+                changeMenu(3);
                 return true;
             }
             // MAIN MENU TYPES
@@ -553,7 +555,7 @@ class GraphicalStructure extends GraphicalObject
     {
         if(isMouseOver())
         {
-            currentMenu = 0;
+            changeMenu(0);
             currentStructureActive = structureID;
             return true;
         }
@@ -642,7 +644,7 @@ public void keyPressed()
     {
         if(currentMenu == 2)
         {
-            currentMenu = 0;
+            changeMenu(0);
             setBoardToStruct(readFromFile(menus[currentMenu].getInput()));
             menus[currentMenu].reset();
         }else if(currentMenu == 3)
@@ -657,7 +659,7 @@ public void keyPressed()
     {
         if(currentMenu == 0)
         {
-            currentMenu = 3;
+            changeMenu(3);
         }else if(currentMenu == 1)
         {
             exit();
@@ -666,11 +668,11 @@ public void keyPressed()
             resetToDefaults();
         } else if(currentMenu == 3)
         {
-            currentMenu = 0;
+            changeMenu(0);
             menus[currentMenu].reset();
         } else if(currentMenu == 4)
         {
-            currentMenu = 0;
+            changeMenu(0);
         }
         key = 0;
     } else if (key == CODED && currentMenu == 0) {
@@ -785,8 +787,17 @@ public void saveToFile(String filename, boolean[][] struct)
 
 public void openSavedGame(String filename)
 {
-    currentMenu = 0;
-    setBoardToStruct(readFromFile("Saves/"+filename));
+    File file = new File(sketchPath("Saves/"+filename));
+    println(file.exists());
+    if(file.exists())
+    {
+        changeMenu(0);
+        setBoardToStruct(readFromFile("Saves/"+filename));
+        menus[currentMenu].reset();
+    }else
+    {
+        menus[currentMenu].setString("Save does not exist!");
+    }
 }
 
 public void saveGame(String filename)
@@ -801,13 +812,15 @@ public class Menu extends GraphicalObject
     private TextBox my_textBox;
     private Menu[] my_menus;
     private GraphicImage my_image;
+
     private boolean hasImage = false;
     private boolean hasTextBox = false;
     private boolean hasStructures = false;
     private boolean hasButtons = false;
     private boolean hasMenus = false;
 
-    private String text = "";
+    private String my_text = "";
+    private String startText = "";
     private int textX, textY;
 
     private boolean hasBackground = false;
@@ -859,7 +872,7 @@ public class Menu extends GraphicalObject
                 Button[] my_buttons, TextBox my_textBox,
                 int backgroundColour, int outlineColour,
                 int exitMenu,
-                String text)
+                String my_text)
     {
         super(x, y, my_width, my_height);
 
@@ -874,7 +887,8 @@ public class Menu extends GraphicalObject
 
         this.exitMenu = exitMenu;
 
-        this.text = text;
+        this.my_text = my_text;
+        startText = my_text;
         textX = x + (my_width / 2);
         textY = y + (my_height / 2) - 20;
     }
@@ -899,6 +913,7 @@ public class Menu extends GraphicalObject
         {
             my_textBox.reset();
         }
+        my_text = startText;
     }
 
     public boolean checkMousePressed()
@@ -966,7 +981,7 @@ public class Menu extends GraphicalObject
                 || mouseY < y || mouseY > y + my_height
                 || pleaseExit)
         {
-            currentMenu = exitMenu;
+            changeMenu(exitMenu);
             if(hasTextBox)
             {
                 my_textBox.reset();
@@ -1017,7 +1032,7 @@ public class Menu extends GraphicalObject
         stroke(0);
         fill(0);
         textAlign(CENTER);
-        text(text, SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 20);
+        text(my_text, SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 20);
         textAlign(LEFT);
     }
 
@@ -1028,6 +1043,11 @@ public class Menu extends GraphicalObject
             return my_textBox.getInput();
         }
         return "";
+    }
+
+    public void setString(String newString)
+    {
+        my_text = newString;
     }
 
     public boolean isTextBoxFocused()

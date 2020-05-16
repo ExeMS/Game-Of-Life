@@ -1,12 +1,15 @@
+void changeMenu(int menuIndex)
+{
+    menus[currentMenu].reset();
+    currentMenu = menuIndex;
+}
+
 void resetToDefaults()
 {
-    for(Menu menu : menus)
-    {
-        menu.reset();
-    }
+    changeMenu(1);
+
     paused = true;
     inStructureMenu = false;
-    currentMenu = 1;
     screenXPos = START_GRID_X;
     screenYPos = START_GRID_Y;
     cellSize = ORIGINAL_CELL_SIZE;
@@ -116,7 +119,6 @@ void setup()
 
     frame.requestFocus(); // Makes the screen instantly focused
 
-    // Images must be in the "data" directory to load correctly
 }
 
 void draw()

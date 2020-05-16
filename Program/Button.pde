@@ -110,7 +110,7 @@ class Button extends GraphicalObject
             // GUI TYPES
             if(type == "spawnStructure")
             {
-                currentMenu = 4;
+                changeMenu(4);
                 return true;
             }else if(type == "cancelPlacement")
             {
@@ -131,7 +131,7 @@ class Button extends GraphicalObject
                 return true;
             }else if(type == "mainMenu")
             {
-                currentMenu = 3;
+                changeMenu(3);
                 return true;
             }
             // MAIN MENU TYPES

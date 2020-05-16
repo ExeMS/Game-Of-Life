@@ -52,21 +52,21 @@ void startGame_Explore()
 { // This randomizes the board and sets the mode to 1
     randomBoard();
     mode = 1;
-    currentMenu = 0;
+    changeMenu(0);
 };
 
 void startGame_file()
 { // We might need do this at some point :D
     clearBoard();
     mode = 3;
-    currentMenu = 2;
+    changeMenu(2);
 };
 
 void startGame_sandbox()
 {
     sandboxStart();
     mode = 2;
-    currentMenu = 0;
+    changeMenu(0);
 };
 
 // Updates the game

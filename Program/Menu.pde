@@ -5,13 +5,15 @@ public class Menu extends GraphicalObject
     private TextBox my_textBox;
     private Menu[] my_menus;
     private GraphicImage my_image;
+
     private boolean hasImage = false;
     private boolean hasTextBox = false;
     private boolean hasStructures = false;
     private boolean hasButtons = false;
     private boolean hasMenus = false;
 
-    private String text = "";
+    private String my_text = "";
+    private String startText = "";
     private int textX, textY;
 
     private boolean hasBackground = false;
@@ -63,7 +65,7 @@ public class Menu extends GraphicalObject
                 Button[] my_buttons, TextBox my_textBox,
                 color backgroundColour, color outlineColour,
                 int exitMenu,
-                String text)
+                String my_text)
     {
         super(x, y, my_width, my_height);
 
@@ -78,7 +80,8 @@ public class Menu extends GraphicalObject
 
         this.exitMenu = exitMenu;
 
-        this.text = text;
+        this.my_text = my_text;
+        startText = my_text;
         textX = x + (my_width / 2);
         textY = y + (my_height / 2) - 20;
     }
@@ -103,6 +106,7 @@ public class Menu extends GraphicalObject
         {
             my_textBox.reset();
         }
+        my_text = startText;
     }
 
     boolean checkMousePressed()
@@ -170,7 +174,7 @@ public class Menu extends GraphicalObject
                 || mouseY < y || mouseY > y + my_height
                 || pleaseExit)
         {
-            currentMenu = exitMenu;
+            changeMenu(exitMenu);
             if(hasTextBox)
             {
                 my_textBox.reset();
@@ -221,7 +225,7 @@ public class Menu extends GraphicalObject
         stroke(0);
         fill(0);
         textAlign(CENTER);
-        text(text, SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 20);
+        text(my_text, SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 20);
         textAlign(LEFT);
     }
 
@@ -232,6 +236,11 @@ public class Menu extends GraphicalObject
             return my_textBox.getInput();
         }
         return "";
+    }
+
+    void setString(String newString)
+    {
+        my_text = newString;
     }
 
     boolean isTextBoxFocused()

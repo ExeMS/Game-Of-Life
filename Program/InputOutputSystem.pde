@@ -65,7 +65,7 @@ void keyPressed()
     {
         if(currentMenu == 2)
         {
-            currentMenu = 0;
+            changeMenu(0);
             setBoardToStruct(readFromFile(menus[currentMenu].getInput()));
             menus[currentMenu].reset();
         }else if(currentMenu == 3)
@@ -80,7 +80,7 @@ void keyPressed()
     {
         if(currentMenu == 0)
         {
-            currentMenu = 3;
+            changeMenu(3);
         }else if(currentMenu == 1)
         {
             exit();
@@ -89,11 +89,11 @@ void keyPressed()
             resetToDefaults();
         } else if(currentMenu == 3)
         {
-            currentMenu = 0;
+            changeMenu(0);
             menus[currentMenu].reset();
         } else if(currentMenu == 4)
         {
-            currentMenu = 0;
+            changeMenu(0);
         }
         key = 0;
     } else if (key == CODED && currentMenu == 0) {
@@ -208,8 +208,16 @@ void saveToFile(String filename, boolean[][] struct)
 
 void openSavedGame(String filename)
 {
-    currentMenu = 0;
-    setBoardToStruct(readFromFile("Saves/"+filename));
+    File file = new File(sketchPath("Saves/"+filename));
+    if(file.exists())
+    {
+        changeMenu(0);
+        setBoardToStruct(readFromFile("Saves/"+filename));
+        menus[currentMenu].reset();
+    }else
+    {
+        menus[currentMenu].setString("Save does not exist!");
+    }
 }
 
 void saveGame(String filename)
