@@ -60,8 +60,8 @@ public Menu setupOpenGameMenu()
 {
     TextBox menuTextBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
     Button[] menuButtons = new Button[2];
-    menuButtons[0] = new Button("cancelOpening", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Cancel", 30);
-    menuButtons[1] = new Button("openFile", SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 160, 50, "Open", 30);
+    menuButtons[0] = new Button("cancelOpening", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 40, 160, 50, "Cancel", 30);
+    menuButtons[1] = new Button("openFile", SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 40, 160, 50, "Open", 30);
     return new Menu(SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, menuButtons, menuTextBox, color(255), color(0), 1, "Input name of saved game:");
 }
 
@@ -69,8 +69,8 @@ public Menu setupSaveGameMenu()
 {
     TextBox menuTextBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
     Button[] menuButtons = new Button[2];
-    menuButtons[0] = new Button("dontSave", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 20, 160, 50, "Don't Save", 30);
-    menuButtons[1] = new Button("save", SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 20, 160, 50, "Save", 30);
+    menuButtons[0] = new Button("dontSave", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 40, 160, 50, "Don't Save", 30);
+    menuButtons[1] = new Button("save", SCREEN_WIDTH / 2 + 5, SCREEN_HEIGHT / 2 + 40, 160, 50, "Save", 30);
     return new Menu(SCREEN_WIDTH/4, SCREEN_HEIGHT/4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, menuButtons, menuTextBox, color(255), color(0), 0, "Input name of save:");
 }
 
@@ -788,7 +788,6 @@ public void saveToFile(String filename, boolean[][] struct)
 public void openSavedGame(String filename)
 {
     File file = new File(sketchPath("Saves/"+filename));
-    println(file.exists());
     if(file.exists())
     {
         changeMenu(0);
