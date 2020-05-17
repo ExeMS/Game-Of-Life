@@ -150,21 +150,6 @@ public void draw()
     checkMousePressed();
     render(); // This renders everything on the screen
 
-    if(currentStructureActive != -1)
-    {
-        if(menus[currentMenu].isMouseOverElement())
-        {
-            renderStructure = false;
-        }else
-        {
-            renderStructure = true;
-            cursor(CROSS);
-        }
-    }else if(!menus[currentMenu].isMouseOverElement())
-    {
-        cursor(ARROW);
-    }
-
     timeControl++;
     if(timeControl == 8) // This limits how much it is updated
     {
@@ -383,7 +368,7 @@ class Button extends GraphicalObject
             if(isMouseOver())
             {
                 fill(hoverColour);
-                cursor(HAND);
+                mouseOverButton();
             }else
             {
                 fill(baseColour);
@@ -552,7 +537,7 @@ class GraphicalStructure extends GraphicalObject
         if(isMouseOver())
         {
             fill(150);
-            cursor(HAND);
+            mouseOverButton();
         }else{
             fill(255);
         }
@@ -1139,6 +1124,28 @@ public class Menu extends GraphicalObject
         return "Menu";
     }
 }
+// These functions change what the mouse cursor is
+// I've put these into functions so that you can more easily change the appeal of some things
+public void mouseOverButton()
+{
+    cursor(HAND);
+}
+
+public void mouseOverText()
+{
+    cursor(TEXT);
+}
+
+public void mousePlacing()
+{
+    cursor(CROSS);
+}
+
+public void mouseNormal()
+{
+    cursor(ARROW);
+}
+
 public void renderBoard()
 {
     boolean notDrawnStructuresLines = true; // This makes sure that we don't draw the lines around the structure multiple times
@@ -1213,6 +1220,20 @@ public void renderBoard()
 
 public void render()
 { // This renders the background and then the other things
+    if(currentStructureActive != -1) // This changes the mouse cursor depending on where it is
+    {
+        if(menus[currentMenu].isMouseOverElement())
+        {
+            renderStructure = false;
+        }else
+        {
+            renderStructure = true;
+            mousePlacing();
+        }
+    }else if(!menus[currentMenu].isMouseOverElement())
+    {
+        mouseNormal();
+    }
     background(backgroundColour);
     renderBoard();
     if(currentStructureActive != -1)
@@ -1404,7 +1425,7 @@ class TextBox extends GraphicalObject
         update();
         if(isMouseOver())
         {
-            cursor(TEXT);
+            mouseOverText();
         }
         stroke(0);
         fill(255);

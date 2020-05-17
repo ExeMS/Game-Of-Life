@@ -24,7 +24,7 @@ class GraphicalStructure extends GraphicalObject
         if(isMouseOver())
         {
             fill(150);
-            cursor(HAND);
+            mouseOverButton();
         }else{
             fill(255);
         }

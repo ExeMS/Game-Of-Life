@@ -134,21 +134,6 @@ void draw()
     checkMousePressed();
     render(); // This renders everything on the screen
 
-    if(currentStructureActive != -1)
-    {
-        if(menus[currentMenu].isMouseOverElement())
-        {
-            renderStructure = false;
-        }else
-        {
-            renderStructure = true;
-            cursor(CROSS);
-        }
-    }else if(!menus[currentMenu].isMouseOverElement())
-    {
-        cursor(ARROW);
-    }
-
     timeControl++;
     if(timeControl == 8) // This limits how much it is updated
     {

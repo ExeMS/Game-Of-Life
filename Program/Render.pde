@@ -1,3 +1,25 @@
+// These functions change what the mouse cursor is
+// I've put these into functions so that you can more easily change the appeal of some things
+void mouseOverButton()
+{
+    cursor(HAND);
+}
+
+void mouseOverText()
+{
+    cursor(TEXT);
+}
+
+void mousePlacing()
+{
+    cursor(CROSS);
+}
+
+void mouseNormal()
+{
+    cursor(ARROW);
+}
+
 void renderBoard()
 {
     boolean notDrawnStructuresLines = true; // This makes sure that we don't draw the lines around the structure multiple times
@@ -72,6 +94,20 @@ void renderBoard()
 
 void render()
 { // This renders the background and then the other things
+    if(currentStructureActive != -1) // This changes the mouse cursor depending on where it is
+    {
+        if(menus[currentMenu].isMouseOverElement())
+        {
+            renderStructure = false;
+        }else
+        {
+            renderStructure = true;
+            mousePlacing();
+        }
+    }else if(!menus[currentMenu].isMouseOverElement())
+    {
+        mouseNormal();
+    }
     background(backgroundColour);
     renderBoard();
     if(currentStructureActive != -1)

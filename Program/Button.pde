@@ -86,7 +86,7 @@ class Button extends GraphicalObject
             if(isMouseOver())
             {
                 fill(hoverColour);
-                cursor(HAND);
+                mouseOverButton();
             }else
             {
                 fill(baseColour);

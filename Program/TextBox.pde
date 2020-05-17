@@ -71,7 +71,7 @@ class TextBox extends GraphicalObject
         update();
         if(isMouseOver())
         {
-            cursor(TEXT);
+            mouseOverText();
         }
         stroke(0);
         fill(255);
