@@ -20,6 +20,12 @@ public void changeMenu(int menuIndex)
     currentMenu = menuIndex;
 }
 
+public void cancelPlacement()
+{
+    currentStructureActive = -1;
+    renderStructure = false;
+}
+
 public void resetToDefaults()
 {
     changeMenu(1);
@@ -109,6 +115,7 @@ public void setupStructures()
     structures.add(new Structure("Structures/fairy.txt", "Fairy")); //index 16
     structures.add(new Structure("Structures/weekender.txt", "Weekender")); //index 17
     currentStructureActive = -1;
+    renderStructure = false;
 }
 
 public void setupMenus()
@@ -142,6 +149,21 @@ public void draw()
     checkKeys(); // This checks if any keys or mouse is pressed
     checkMousePressed();
     render(); // This renders everything on the screen
+
+    if(currentStructureActive != -1)
+    {
+        if(menus[currentMenu].isMouseOverElement())
+        {
+            renderStructure = false;
+        }else
+        {
+            renderStructure = true;
+            cursor(CROSS);
+        }
+    }else if(!menus[currentMenu].isMouseOverElement())
+    {
+        cursor(ARROW);
+    }
 
     timeControl++;
     if(timeControl == 8) // This limits how much it is updated
@@ -361,6 +383,7 @@ class Button extends GraphicalObject
             if(isMouseOver())
             {
                 fill(hoverColour);
+                cursor(HAND);
             }else
             {
                 fill(baseColour);
@@ -389,7 +412,7 @@ class Button extends GraphicalObject
                 return true;
             }else if(type == "cancelPlacement")
             {
-                currentStructureActive = -1;
+                cancelPlacement();
                 return true;
             }else if(type == "playPause")
             {
@@ -529,6 +552,7 @@ class GraphicalStructure extends GraphicalObject
         if(isMouseOver())
         {
             fill(150);
+            cursor(HAND);
         }else{
             fill(255);
         }
@@ -557,6 +581,7 @@ class GraphicalStructure extends GraphicalObject
         {
             changeMenu(0);
             currentStructureActive = structureID;
+            renderStructure = true;
             return true;
         }
         return false;
@@ -915,6 +940,52 @@ public class Menu extends GraphicalObject
         my_text = startText;
     }
 
+    public boolean isMouseOverElement()
+    {
+        if(hasButtons)
+        {
+            for(Button button : my_buttons)
+            {
+                boolean temp = button.isMouseOver();
+                if(temp)
+                {
+                    return true;
+                }
+            }
+        }
+        if(hasMenus)
+        {
+            for(Menu menu : my_menus)
+            {
+                boolean temp = menu.isMouseOverElement();
+                if(temp)
+                {
+                    return true;
+                }
+            }
+        }
+        if(hasStructures)
+        {
+            for(GraphicalStructure structure : my_structures)
+            {
+                boolean temp = structure.isMouseOver();
+                if(temp)
+                {
+                    return true;
+                }
+            }
+        }
+        if(hasTextBox)
+        {
+            boolean temp = my_textBox.isMouseOver();
+            if(temp)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean checkMousePressed()
     {
         boolean anythingClicked = false;
@@ -1084,6 +1155,7 @@ public void renderBoard()
             }
             // This renders a structure, if the user is trying to place one (and also checks if things are in the right place)
             if(currentStructureActive != -1
+                && renderStructure
                 && i >= structures.get(currentStructureActive).getX()
                 && i < structures.get(currentStructureActive).getX() + structures.get(currentStructureActive).getWidth()
                 && j >= structures.get(currentStructureActive).getY()
@@ -1330,6 +1402,10 @@ class TextBox extends GraphicalObject
     public void render()
     {
         update();
+        if(isMouseOver())
+        {
+            cursor(TEXT);
+        }
         stroke(0);
         fill(255);
         rect(x, y, my_width, my_height);
@@ -1425,6 +1501,7 @@ Menu[] menus;
 boolean inStructureMenu = false;
 ArrayList<Structure> structures; // This will store all the structures
 int currentStructureActive = -1;
+boolean renderStructure = false;
 
 
 // keys Pressed

@@ -14,6 +14,7 @@ void renderBoard()
             }
             // This renders a structure, if the user is trying to place one (and also checks if things are in the right place)
             if(currentStructureActive != -1
+                && renderStructure
                 && i >= structures.get(currentStructureActive).getX()
                 && i < structures.get(currentStructureActive).getX() + structures.get(currentStructureActive).getWidth()
                 && j >= structures.get(currentStructureActive).getY()

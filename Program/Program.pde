@@ -4,6 +4,12 @@ void changeMenu(int menuIndex)
     currentMenu = menuIndex;
 }
 
+void cancelPlacement()
+{
+    currentStructureActive = -1;
+    renderStructure = false;
+}
+
 void resetToDefaults()
 {
     changeMenu(1);
@@ -93,6 +99,7 @@ void setupStructures()
     structures.add(new Structure("Structures/fairy.txt", "Fairy")); //index 16
     structures.add(new Structure("Structures/weekender.txt", "Weekender")); //index 17
     currentStructureActive = -1;
+    renderStructure = false;
 }
 
 void setupMenus()
@@ -126,6 +133,21 @@ void draw()
     checkKeys(); // This checks if any keys or mouse is pressed
     checkMousePressed();
     render(); // This renders everything on the screen
+
+    if(currentStructureActive != -1)
+    {
+        if(menus[currentMenu].isMouseOverElement())
+        {
+            renderStructure = false;
+        }else
+        {
+            renderStructure = true;
+            cursor(CROSS);
+        }
+    }else if(!menus[currentMenu].isMouseOverElement())
+    {
+        cursor(ARROW);
+    }
 
     timeControl++;
     if(timeControl == 8) // This limits how much it is updated

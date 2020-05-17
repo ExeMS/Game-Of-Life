@@ -24,6 +24,7 @@ class GraphicalStructure extends GraphicalObject
         if(isMouseOver())
         {
             fill(150);
+            cursor(HAND);
         }else{
             fill(255);
         }
@@ -52,6 +53,7 @@ class GraphicalStructure extends GraphicalObject
         {
             changeMenu(0);
             currentStructureActive = structureID;
+            renderStructure = true;
             return true;
         }
         return false;

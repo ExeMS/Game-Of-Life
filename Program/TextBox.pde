@@ -69,6 +69,10 @@ class TextBox extends GraphicalObject
     void render()
     {
         update();
+        if(isMouseOver())
+        {
+            cursor(TEXT);
+        }
         stroke(0);
         fill(255);
         rect(x, y, my_width, my_height);

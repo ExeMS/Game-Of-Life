@@ -86,6 +86,7 @@ class Button extends GraphicalObject
             if(isMouseOver())
             {
                 fill(hoverColour);
+                cursor(HAND);
             }else
             {
                 fill(baseColour);
@@ -114,7 +115,7 @@ class Button extends GraphicalObject
                 return true;
             }else if(type == "cancelPlacement")
             {
-                currentStructureActive = -1;
+                cancelPlacement();
                 return true;
             }else if(type == "playPause")
             {

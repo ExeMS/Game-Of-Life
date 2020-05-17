@@ -109,6 +109,52 @@ public class Menu extends GraphicalObject
         my_text = startText;
     }
 
+    boolean isMouseOverElement()
+    {
+        if(hasButtons)
+        {
+            for(Button button : my_buttons)
+            {
+                boolean temp = button.isMouseOver();
+                if(temp)
+                {
+                    return true;
+                }
+            }
+        }
+        if(hasMenus)
+        {
+            for(Menu menu : my_menus)
+            {
+                boolean temp = menu.isMouseOverElement();
+                if(temp)
+                {
+                    return true;
+                }
+            }
+        }
+        if(hasStructures)
+        {
+            for(GraphicalStructure structure : my_structures)
+            {
+                boolean temp = structure.isMouseOver();
+                if(temp)
+                {
+                    return true;
+                }
+            }
+        }
+        if(hasTextBox)
+        {
+            boolean temp = my_textBox.isMouseOver();
+            if(temp)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     boolean checkMousePressed()
     {
         boolean anythingClicked = false;
