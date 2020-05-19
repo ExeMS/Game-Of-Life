@@ -45,9 +45,6 @@ void setBoardToStruct(boolean[][] struct)
     }
 }
 
-void sandboxStart() {
-}
-
 void startGame_Explore()
 { // This randomizes the board and sets the mode to 1
     randomBoard();
@@ -64,7 +61,6 @@ void startGame_file()
 
 void startGame_sandbox()
 {
-    sandboxStart();
     mode = 2;
     changeMenu(0);
 };

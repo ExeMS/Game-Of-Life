@@ -104,7 +104,6 @@ void setupStructures()
 
 void setupMenus()
 {
-    setupStructures();
     menus = new Menu[5];
     menus[0] = setupGUI();
     menus[1] = setupMainMenu();
@@ -120,6 +119,7 @@ void setup()
 
     clearBoard(); // This clears the board, making sure everything is false
 
+    setupStructures();
     setupMenus(); // Sets up all menus
 
     currentMenu = 1; // Makes sure you start in the menu

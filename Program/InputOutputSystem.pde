@@ -65,13 +65,11 @@ void keyPressed()
     {
         if(currentMenu == 2)
         {
-            changeMenu(0);
-            setBoardToStruct(readFromFile(menus[currentMenu].getInput()));
+            openSavedGame(menus[currentMenu].getInput());
             menus[currentMenu].reset();
         }else if(currentMenu == 3)
         {
-            saveToFile(menus[currentMenu].getInput(), board);
-            resetToDefaults();
+            saveGame(menus[currentMenu].getInput());
         }
     }else if(menus[currentMenu].isTextBoxFocused())
     {
