@@ -1,7 +1,7 @@
 class GraphicalObject
 {
-    int x, y;
-    float my_width, my_height;
+    protected int x, y;
+    protected float my_width, my_height;
 
     GraphicalObject(int x, int y, float my_width, float my_height)
     {
