@@ -5,6 +5,7 @@ class TextBox extends GraphicalObject
     private boolean showCursor = true;
     private int cursorDelay = 0;
     private int cursorPosition = 0;
+    private int inputTextStartPos = 0;
 
     TextBox(int x, int y, int my_width)
     {
@@ -105,11 +106,42 @@ class TextBox extends GraphicalObject
     {
         if(isMouseOver())
         {
-            isFocused = true;
+            if(isFocused)
+            {
+                textSize(20);
+                if(mouseX - x + 5 >= textWidth(inputText))
+                {
+                    cursorPosition = inputText.length();
+                } else if(mouseX <= x + 5)
+                {
+                    cursorPosition = 0;
+                } else
+                {
+                    float tempX = mouseX - x + 5;
+                    for(int i = 0; i < inputText.length(); i++)
+                    {
+                        String substrBefore = inputText.substring(0, i);
+                        String substrChr = inputText.substring(i, i + 1);
+                        float substrWidth = textWidth(substrBefore);
+                        float chrWidth = textWidth(substrChr);
+                        if(tempX < substrWidth + chrWidth * 0.5)
+                        {
+                            continue;
+                        } else
+                        {
+                            cursorPosition = i;
+                        }
+                    }
+                }
+            }else
+            {
+                isFocused = true;
+            }
             return true;
         }else
         {
             isFocused = false;
+            inputTextStartPos = 0;
             return false;
         }
     }

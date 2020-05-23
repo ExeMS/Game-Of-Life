@@ -5,6 +5,7 @@
         "dont",
         "gosper",
         "screenheight",
-        "screenwidth"
+        "screenwidth",
+        "substr"
     ]
 }

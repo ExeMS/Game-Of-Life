@@ -120,7 +120,6 @@ public void setupStructures()
 
 public void setupMenus()
 {
-    setupStructures();
     menus = new Menu[5];
     menus[0] = setupGUI();
     menus[1] = setupMainMenu();
@@ -136,6 +135,7 @@ public void setup()
 
     clearBoard(); // This clears the board, making sure everything is false
 
+    setupStructures();
     setupMenus(); // Sets up all menus
 
     currentMenu = 1; // Makes sure you start in the menu
@@ -204,9 +204,6 @@ public void setBoardToStruct(boolean[][] struct)
     }
 }
 
-public void sandboxStart() {
-}
-
 public void startGame_Explore()
 { // This randomizes the board and sets the mode to 1
     randomBoard();
@@ -223,7 +220,6 @@ public void startGame_file()
 
 public void startGame_sandbox()
 {
-    sandboxStart();
     mode = 2;
     changeMenu(0);
 };
@@ -654,13 +650,11 @@ public void keyPressed()
     {
         if(currentMenu == 2)
         {
-            changeMenu(0);
-            setBoardToStruct(readFromFile(menus[currentMenu].getInput()));
+            openSavedGame(menus[currentMenu].getInput());
             menus[currentMenu].reset();
         }else if(currentMenu == 3)
         {
-            saveToFile(menus[currentMenu].getInput(), board);
-            resetToDefaults();
+            saveGame(menus[currentMenu].getInput());
         }
     }else if(menus[currentMenu].isTextBoxFocused())
     {
@@ -1459,7 +1453,37 @@ class TextBox extends GraphicalObject
     {
         if(isMouseOver())
         {
-            isFocused = true;
+            if(isFocused)
+            {
+                textSize(20);
+                if(mouseX - x + 5 >= textWidth(inputText))
+                {
+                    cursorPosition = inputText.length();
+                } else if(mouseX <= x + 5)
+                {
+                    cursorPosition = 0;
+                } else
+                {
+                    float tempX = mouseX - x + 5;
+                    for(int i = 0; i < inputText.length(); i++)
+                    {
+                        String substrBefore = inputText.substring(0, i);
+                        String substrChr = inputText.substring(i, i + 1);
+                        float substrWidth = textWidth(substrBefore);
+                        float chrWidth = textWidth(substrChr);
+                        if(tempX < substrWidth + chrWidth * 0.5f)
+                        {
+                            continue;
+                        } else
+                        {
+                            cursorPosition = i;
+                        }
+                    }
+                }
+            }else
+            {
+                isFocused = true;
+            }
             return true;
         }else
         {
