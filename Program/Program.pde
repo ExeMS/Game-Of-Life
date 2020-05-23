@@ -125,7 +125,6 @@ void setup()
     currentMenu = 1; // Makes sure you start in the menu
 
     frame.requestFocus(); // Makes the screen instantly focused
-
 }
 
 void draw()

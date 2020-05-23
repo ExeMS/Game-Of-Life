@@ -51,3 +51,5 @@ Boolean rightPressed = false;
 Boolean leftPressed  = false;
 Boolean shiftPressed = false;
 int mousePressedDelay = 0;
+
+static final float CHARACTER_WIDTH = 28.007812; // This is the width of m

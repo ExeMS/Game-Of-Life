@@ -141,7 +141,6 @@ public void setup()
     currentMenu = 1; // Makes sure you start in the menu
 
     frame.requestFocus(); // Makes the screen instantly focused
-
 }
 
 public void draw()
@@ -1350,16 +1349,55 @@ class TextBox extends GraphicalObject
 {
     private boolean isFocused;
     private String inputText;
+    private String visibleText;
     private boolean showCursor = true;
     private int cursorDelay = 0;
     private int cursorPosition = 0;
+    private int inputTextStartPos = 0;
 
     TextBox(int x, int y, int my_width)
     {
         super(x, y, my_width, textAscent() * 0.8f + 10);
         textSize(20);
         inputText = "";
+        visibleText = "";
         isFocused = false;
+    }
+
+    private void changeTextStartPos(int changeBy)
+    {
+        if(changeBy > 0)
+        {
+            while(cursorPosition - inputTextStartPos > visibleText.length())
+            {
+                inputTextStartPos += 1;
+                updateVisibleText();
+            }
+        }else
+        {
+            textSize(20);
+            while(inputTextStartPos != 0 && textWidth(visibleText + inputText.substring(inputTextStartPos - 1, inputTextStartPos)) + 10 <= my_width)
+            {
+                inputTextStartPos -= 1;
+                updateVisibleText();
+            }
+        }
+    }
+
+    private void updateVisibleText()
+    {
+        visibleText = "";
+        String tempText = inputText.substring(inputTextStartPos, inputText.length());
+        for(int i = 0; i < tempText.length(); i++)
+        {
+            if(textWidth(visibleText + inputText.substring(i, i + 1)) + 10 > my_width)
+            {
+                break;
+            }else
+            {
+                visibleText += tempText.charAt(i);
+            }
+        }
     }
 
     public void update()
@@ -1390,27 +1428,61 @@ class TextBox extends GraphicalObject
             if(cursorPosition != 0)
             {
                 inputText = inputText.substring(0, cursorPosition - 1) + inputText.substring(cursorPosition, inputText.length());
+                if(inputTextStartPos != 0)
+                {
+                    changeTextStartPos(-1);
+                }
                 cursorPosition -= 1;
+                updateVisibleText();
             }
         }else if(inpKey == DELETE)
         {
             if(cursorPosition != inputText.length())
             {
                 inputText = inputText.substring(0, cursorPosition) + inputText.substring(cursorPosition + 1, inputText.length());
+                if(inputTextStartPos != 0 && inputText.length() <= inputTextStartPos + visibleText.length())
+                {
+                    changeTextStartPos(-1);
+                }
+                updateVisibleText();
             }
         }else if(inpKey == CODED)
         {
-            if(keyCode == RIGHT && cursorPosition != inputText.length())
+            if(keyCode == RIGHT)
             {
-                cursorPosition += 1;
-            }else if(keyCode == LEFT && cursorPosition != 0)
+                if(inputText.length() == cursorPosition)
+                {} else if(cursorPosition - inputTextStartPos == visibleText.length() && textWidth(visibleText) + CHARACTER_WIDTH + 10 > my_width)
+                {
+                    changeTextStartPos(1);
+                    cursorPosition += 1;
+                }else
+                {
+                    cursorPosition += 1;
+                }
+            }else if(keyCode == LEFT)
             {
-                cursorPosition -= 1;
+                if(cursorPosition == 0)
+                {}else if(cursorPosition == inputTextStartPos)
+                {
+                    inputTextStartPos -= 1;
+                    updateVisibleText();
+                    cursorPosition -= 1;
+                }else
+                {
+                    cursorPosition -= 1;
+                }
             }
-        }else if(textWidth(inputText + "W") + 10 < my_width)
+        }else if(cursorPosition - inputTextStartPos == visibleText.length() && textWidth(visibleText) + CHARACTER_WIDTH + 10 > my_width)
+        {
+            inputText = inputText.substring(0, cursorPosition) + inpKey + inputText.substring(cursorPosition, inputText.length());
+            int totalWidth = 0;
+            cursorPosition += 1;
+            changeTextStartPos(1);
+        }else
         {
             inputText = inputText.substring(0, cursorPosition) + inpKey + inputText.substring(cursorPosition, inputText.length());
             cursorPosition += 1;
+            updateVisibleText();
         }
     }
 
@@ -1426,10 +1498,19 @@ class TextBox extends GraphicalObject
         rect(x, y, my_width, my_height);
         fill(0);
         textSize(20);
-        text(inputText, x + 5, y + textAscent() * 0.8f + 10);
+        text(visibleText, x + 5, y + textAscent() * 0.8f + 10);
         if(showCursor && isFocused)
         {
-            String tempA = inputText.substring(0, cursorPosition);
+            String tempA = "";
+            if(cursorPosition - inputTextStartPos > visibleText.length())
+            {
+                println(cursorPosition - inputTextStartPos);
+                println("What happened?");
+                tempA = visibleText.substring(0, visibleText.length());
+            }else
+            {
+                tempA = visibleText.substring(0, cursorPosition - inputTextStartPos);
+            }
             line(x + textWidth(tempA) + 5, y + 5, x + textWidth(tempA) + 5, y + 10 + textAscent() * 0.8f);
         }
     }
@@ -1488,6 +1569,7 @@ class TextBox extends GraphicalObject
         }else
         {
             isFocused = false;
+            inputTextStartPos = 0;
             return false;
         }
     }
@@ -1556,6 +1638,8 @@ Boolean rightPressed = false;
 Boolean leftPressed  = false;
 Boolean shiftPressed = false;
 int mousePressedDelay = 0;
+
+static final float CHARACTER_WIDTH = 28.007812f; // This is the width of m
   public void settings() {  size(1000, 850); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Program" };
