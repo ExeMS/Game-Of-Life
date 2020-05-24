@@ -42,6 +42,7 @@ class TextBox extends GraphicalObject
     {
         visibleText = "";
         String tempText = inputText.substring(inputTextStartPos, inputText.length());
+        textSize(20);
         for(int i = 0; i < tempText.length(); i++)
         {
             if(textWidth(visibleText + tempText.substring(i, i + 1)) + 10 > my_width)
@@ -109,6 +110,7 @@ class TextBox extends GraphicalObject
                 {
                     changeTextStartPos(1);
                     cursorPosition += 1;
+                    inputTextStartPos += 1;
                 }else
                 {
                     cursorPosition += 1;
@@ -188,42 +190,42 @@ class TextBox extends GraphicalObject
     {
         if(isMouseOver())
         {
-            if(isFocused)
+            isFocused = true;
+            textSize(20);
+            if(mouseX - x + 5 >= textWidth(visibleText))
             {
-                textSize(20);
-                if(mouseX - x + 5 >= textWidth(visibleText))
+                cursorPosition = inputTextStartPos + visibleText.length();
+            } else if(mouseX <= x + 5)
+            {
+                cursorPosition = 0;
+            } else
+            {
+                float tempX = mouseX - x + 5;
+                for(int i = 0; i < visibleText.length(); i++)
                 {
-                    cursorPosition = inputTextStartPos + visibleText.length();
-                } else if(mouseX <= x + 5)
-                {
-                    cursorPosition = 0;
-                } else
-                {
-                    float tempX = mouseX - x + 5;
-                    for(int i = 0; i < visibleText.length(); i++)
+                    String substrBefore = visibleText.substring(0, i);
+                    String substrChr = visibleText.substring(i, i + 1);
+                    float substrWidth = textWidth(substrBefore);
+                    float chrWidth = textWidth(substrChr);
+                    if(tempX < substrWidth + chrWidth * 0.5)
                     {
-                        String substrBefore = visibleText.substring(0, i);
-                        String substrChr = visibleText.substring(i, i + 1);
-                        float substrWidth = textWidth(substrBefore);
-                        float chrWidth = textWidth(substrChr);
-                        if(tempX < substrWidth + chrWidth * 0.5)
-                        {
-                            continue;
-                        } else
-                        {
-                            cursorPosition = inputTextStartPos + i;
-                        }
+                        continue;
+                    } else
+                    {
+                        cursorPosition = inputTextStartPos + i;
                     }
                 }
-            }else
-            {
-                isFocused = true;
             }
             return true;
         }else
         {
-            isFocused = false;
-            inputTextStartPos = 0;
+            if(isFocused)
+            {
+                isFocused = false;
+                inputTextStartPos = 0;
+                cursorPosition = 0;
+                updateVisibleText();
+            }
             return false;
         }
     }
@@ -232,6 +234,9 @@ class TextBox extends GraphicalObject
     {
         clear();
         setFocused(false);
+        inputTextStartPos = 0;
+        cursorPosition = 0;
+        updateVisibleText();
     }
 
     String getType()

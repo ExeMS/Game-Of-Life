@@ -31,7 +31,6 @@ public void resetToDefaults()
     changeMenu(1);
 
     paused = true;
-    inStructureMenu = false;
     screenXPos = START_GRID_X;
     screenYPos = START_GRID_Y;
     cellSize = ORIGINAL_CELL_SIZE;
@@ -53,7 +52,6 @@ public Menu setupMainMenu()
 
 public Menu setupGUI()
 { // This creates all the buttons of the GUI
-    inStructureMenu = false;
     Button[] menuButtons = new Button[4];
     menuButtons[0] = new Button("spawnStructure", 1, 1, 140, 50, "Structure", 30);
     menuButtons[1] = new Button("cancelPlacement", 1, 52, 140, 50, "Cancel", 30);
@@ -497,7 +495,7 @@ class GraphicalObject
     public boolean checkMousePressed()
     {
         println("Calling base function");
-        return false;
+        return isMouseOver();
     }
 
     public String getType()
@@ -584,7 +582,12 @@ class GraphicImage extends GraphicalObject
 }
 public void mouseWheel(MouseEvent event)
 { // This is called when the user uses the scroll wheel
-    int e = PApplet.parseInt(event.getCount()); // This gets what direction the scroll wheel was used
+    float temp = round(event.getCount()); // This gets what direction the scroll wheel was used
+    int e = 1;
+    if(temp < 0)
+    {
+        e = -1;
+    }
     if(currentStructureActive != -1)
     {
         structures.get(currentStructureActive).rotate(e); // This rotates the active structure
@@ -700,7 +703,7 @@ public void keyPressed()
 
 public void keyReleased()
 { // This is run when a key is released
-    if (key == CODED && currentMenu == 0) {
+    if (key == CODED) {
         if (keyCode == UP) { // When a key is released, it sets the given variable
             upPressed = false;
         }
@@ -795,7 +798,6 @@ public void openSavedGame(String filename)
     {
         changeMenu(0);
         setBoardToStruct(readFromFile("Saves/"+filename));
-        menus[currentMenu].reset();
     }else
     {
         menus[currentMenu].setString("Save does not exist!");
@@ -1388,9 +1390,15 @@ class TextBox extends GraphicalObject
     private void updateVisibleText()
     {
         visibleText = "";
+        println();
+        println(inputText);
         String tempText = inputText.substring(inputTextStartPos, inputText.length());
+        println(tempText);
+        println(my_width);
+        textSize(20);
         for(int i = 0; i < tempText.length(); i++)
         {
+            println(textWidth(visibleText + tempText.substring(i, i + 1)) + 10);
             if(textWidth(visibleText + tempText.substring(i, i + 1)) + 10 > my_width)
             {
                 break;
@@ -1399,6 +1407,7 @@ class TextBox extends GraphicalObject
                 visibleText += tempText.charAt(i);
             }
         }
+        println(visibleText);
     }
 
     public void update()
@@ -1456,6 +1465,7 @@ class TextBox extends GraphicalObject
                 {
                     changeTextStartPos(1);
                     cursorPosition += 1;
+                    inputTextStartPos += 1;
                 }else
                 {
                     cursorPosition += 1;
@@ -1516,9 +1526,9 @@ class TextBox extends GraphicalObject
         }
     }
 
-    public void setFocused(boolean temp)
+    public void setFocused(boolean newFocused)
     {
-        isFocused = temp;
+        isFocused = newFocused;
     }
 
     public String getInput()
@@ -1535,42 +1545,42 @@ class TextBox extends GraphicalObject
     {
         if(isMouseOver())
         {
-            if(isFocused)
+            isFocused = true;
+            textSize(20);
+            if(mouseX - x + 5 >= textWidth(visibleText))
             {
-                textSize(20);
-                if(mouseX - x + 5 >= textWidth(visibleText))
+                cursorPosition = inputTextStartPos + visibleText.length();
+            } else if(mouseX <= x + 5)
+            {
+                cursorPosition = 0;
+            } else
+            {
+                float tempX = mouseX - x + 5;
+                for(int i = 0; i < visibleText.length(); i++)
                 {
-                    cursorPosition = inputTextStartPos + visibleText.length();
-                } else if(mouseX <= x + 5)
-                {
-                    cursorPosition = 0;
-                } else
-                {
-                    float tempX = mouseX - x + 5;
-                    for(int i = 0; i < visibleText.length(); i++)
+                    String substrBefore = visibleText.substring(0, i);
+                    String substrChr = visibleText.substring(i, i + 1);
+                    float substrWidth = textWidth(substrBefore);
+                    float chrWidth = textWidth(substrChr);
+                    if(tempX < substrWidth + chrWidth * 0.5f)
                     {
-                        String substrBefore = visibleText.substring(0, i);
-                        String substrChr = visibleText.substring(i, i + 1);
-                        float substrWidth = textWidth(substrBefore);
-                        float chrWidth = textWidth(substrChr);
-                        if(tempX < substrWidth + chrWidth * 0.5f)
-                        {
-                            continue;
-                        } else
-                        {
-                            cursorPosition = inputTextStartPos + i;
-                        }
+                        continue;
+                    } else
+                    {
+                        cursorPosition = inputTextStartPos + i;
                     }
                 }
-            }else
-            {
-                isFocused = true;
             }
             return true;
         }else
         {
-            isFocused = false;
-            inputTextStartPos = 0;
+            if(isFocused)
+            {
+                isFocused = false;
+                inputTextStartPos = 0;
+                cursorPosition = 0;
+                updateVisibleText();
+            }
             return false;
         }
     }
@@ -1579,6 +1589,9 @@ class TextBox extends GraphicalObject
     {
         clear();
         setFocused(false);
+        inputTextStartPos = 0;
+        cursorPosition = 0;
+        updateVisibleText();
     }
 
     public String getType()
@@ -1626,7 +1639,6 @@ int timeControl = 0;
 
 // Menus
 Menu[] menus;
-boolean inStructureMenu = false;
 ArrayList<Structure> structures; // This will store all the structures
 int currentStructureActive = -1;
 boolean renderStructure = false;

@@ -30,7 +30,7 @@ class GraphicalObject
     boolean checkMousePressed()
     {
         println("Calling base function");
-        return false;
+        return isMouseOver();
     }
 
     String getType()

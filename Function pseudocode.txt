@@ -3,9 +3,9 @@ BEGINFUNCTION
 	SET canvas size TO 1080x1920
 	SET background TO backgroundColour
 	CALL clearBoard()
-    CALL
+    CALL setupStructures()
 	CALL setupMenus()
-	SET inMenu TO true
+	SET currentMenu TO 1
 ENDFUNCTION
 
 function draw()
@@ -16,7 +16,38 @@ BEGINFUNCTION
 	CALL god()
 ENDFUNCTION
 
-god(cellList)
+function setupMenus()
+BEGINFUNCTION
+    FOR each in MenuFunctions
+        SET menus[each] TO MenuFunctions[each]
+    ENDFOR
+ENDFUNCTION
+
+function resetToDefaults()
+BEGINFUNCTION
+    CALL changeMenu(1)
+    SET paused TO true
+    SET screenXPos TO START_GRID_X
+    SET screenYPos TO START_GRID_Y
+    SET cellSize TO ORIGINAL_CELL_SIZE
+    SET screenGridHeight = ORIGINAL_SCREEN_GRID_HEIGHT
+    SET screenGridWidth = ORIGINAL_SCREEN_GRID_WIDTH
+    CALL clearBoard()
+ENDFUNCTION
+
+function cancelPlacement()
+BEGINFUNCTION
+    SET currentStructureActive TO -1
+    SET renderStructure TO false
+ENDFUNCTION
+
+function changeMenu(menuIndex)
+BEGINFUNCTION
+    CALL menus[currentMenu].reset()
+    currentMenu = menuIndex
+ENDFUNCTION
+
+function god(cellList)
 BEGINFUNCTION
     IF not paused THEN
 	FOR i IN RANGE 0 TO BOARD_WIDTH
@@ -53,34 +84,51 @@ ENDFUNCTION
 function checkMousePressed()
 BEGINFUNCTION
     IF mousePressed THEN
-        IF inMenu THEN
-            IF randomStartButton IS pressed THEN
-                CALL startGame_random()
-            ELSE IF gosperGliderGunButton IS pressed THEN
-                CALL startGame_gun()
-            ELSE IF singleGliderButton IS pressed THEN
-                CALL startGame_glider()
-            ELSE IF readFromFileButton IS pressed THEN
-                CALL startGame_file()
-            ENDIF
-        ELSE
-            IF GUIButton pressed THEN
-                SET currentStructureActive TO relative index of structures
-            ELSE IF currentStructureActive IS NOT -1 THEN
-                IF cancelButton IS NOT pressed THEN
-                    PLACE currentStructureActive
-                ENDIF
-                IF SHIFT IS NOT pressed THEN
+        IF mousePressedDelay IS 0 THEN
+            SET anythingClicked TO menus[currentMenu].checkMousePressed()
+            IF NOT anythingClicked AND currentStructureActive IS NOT -1 THEN
+                PLACE currentStructure
+                IF shift IS pressed THEN
                     SET currentStructureActive TO -1
                 ENDIF
             ENDIF
+            SET mousePressedDelay TO 20
         ENDIF
+    ELSE
+        SET mousePressedDelay TO 0
+    ENDIF
+    IF mousePressedDelay IS NOT 0 THEN
+        MINUS 1 from mousePressedDelay
+    ENDIF
+ENDFUNCTION
+
+function mouseWheel(event)
+BEGINFUNCTION
+    IF currentStructureActive IS NOT -1 THEN
+        ROTATE structure
+    ELSE IF currentMenu IS 0
+        IF event IS 1 THEN
+            ZOOM in
+        ELSE
+            ZOOM out
+        ENDIF
+    ENDIF
+ENDFUNCTION
+
+function keyPressed()
+BEGINFUNCTION
+    IF key IS NEW_LINE_CHARACTER THEN
+        Goto next menu
+    ELSE IF textBox is focused THEN
+        CALL currentTextBox.inputKey(key)
+    ELSE IF key IS ESCAPE_KEY THEN
+        EXIT currentMenu
     ENDIF
 ENDFUNCTION
 
 function checkKeys()
 BEGINFUNCTION
-	IF not inMenu THEN
+	IF currentMenu IS 0 THEN
 		IF upArrow IS pressed THEN
 			MINUS screenSpeed from screenYPos
 		ELSE IF downArrow IS pressed THEN
@@ -93,10 +141,39 @@ BEGINFUNCTION
 	ENDIF
 ENDFUNCTION
 
-function readFromFile()
+function readFromFile(filename)
 BEGINFUNCTION
-	Hey Euan this IS you again :D
-	I don't think it is =D
+    open filename
+    SET structureWidth TO widest line
+    CREATE NEW boolean[][] CALLED struct
+    FOR i in file.lines
+        FOR j in lines.length
+            SET struct[i][j] TO lines[j]
+        ENDFOR
+    ENDFOR
+    RETURN struct
+ENDFUNCTION
+
+function saveToFile(filename, struct)
+BEGINFUNCTION
+    SAVE struct TO filename
+ENDFUNCTION
+
+function openSavedGame(filename)
+BEGINFUNCTION
+    IF filename exists THEN
+        CALL changeMenu(0)
+        CALL setBoardToStruct(filename)
+    ELSE
+        currentMenu.setString("Save does not exist!")
+    ENDIF
+ENDFUNCTION
+
+function saveGame(filename)
+BEGINFUNCTION
+    CAST board TO String
+	SET filename TO INPUT
+	SAVE board TO filename
 ENDFUNCTION
 
 function clearBoard()
@@ -109,32 +186,36 @@ BEGINFUNCTION
 	SET ALL values in board TO random integer between 0 and 1
 ENDFUNCTION
 
+function setBoardToStruct(struct)
+BEGINFUNCTION
+    PLACE struct in the middle of board
+ENDFUNCTION
+
 function startGame_Explore()
 BEGINFUNCTION
 	CALL randomBoard()
 	SET mode TO 1
-	SET currentMenu TO 0
+	CALL changeMenu(0)
 ENDFUNCTION
 
 function startGame_file()
 BEGINFUNCTION
-	With this one Euan, just write what you think the finished function should do e.g. get user TO input file and then set board...
+    CALL clearBoard()
+    SET mode TO 3
+    CALL changeMenu(2)
 ENDFUNCTION
 
 function startGame_sandbox()
 BEGINFUNCTION
 	SET mode TO 2
-	SET currentMenu TO 0
+	CALL changeMenu(0)
 ENDFUNCTION
 
 function render()
 BEGINFUNCTION
 	RENDER background as backgroundColour
 	CALL renderBoard()
-	IF inMenu THEN
-		CALL renderMenu()
-	ELSE
-		CALL renderGUI()
+    CALL currentMenu.render()
 ENDFUNCTION
 
 function renderBoard()
@@ -162,54 +243,34 @@ BEGINFUNCTION
     ENDFOR
 ENDFUNCTION
 
-function renderGUI()
-BEGINFUNCTION
-	FOR button in GUIButtons
-		CALL button.render()
-	ENDFOR
-    IF currentStructureActive IS NOT -1 THEN
-        CALL cancelButton.render()
-        RENDER currentStructureActive
-    ENDIF
-ENDFUNCTION
+class GraphicalObject
+BEGINCLASS
+    function isMouseOver()
+	BEGINFUNCTION
+		IF mouse IS over this THEN
+			return True
+		ELSE
+			return False
+		ENDIF
+	ENDFUNCTION
 
-function renderMenu()
-BEGINFUNCTION
-	FOR button in MenuButtons
-		CALL button.render()
-	ENDFOR
-ENDFUNCTION
+    function render()
+    BEGINFUNCTION
+    ENDFUNCTION
 
-function saveGame()
-BEGINFUNCTION
-	CAST board TO String
-	SET filename TO INPUT
-	SAVE board TO filename
-ENDFUNCTION
+    function checkMousePressed()
+    BEGINFUNCTION
+        RETURN isMouseOver()
+    ENDFUNCTION
 
-function setupMenu()
-BEGINFUNCTION
-	CREATE randomStartButton
-	CREATE gosperGliderGunButton
-	CREATE singleGliderButton
-	CREATE readFromFileButton
-ENDFUNCTION
-
-function setupGUI()
-BEGINFUNCTION
-	FOR each in structureFiles
-        SET structures[each] TO readFromFile(each)
-        CREATE Button
-    ENDFOR
-    SET cancelButton TO NEW Button
-    SET pauseButton TO NEW Button
-    SET playButton TO NEW Button
-    SET menuButton TO NEW Button
-    SET currentStructureActive TO -1
-ENDFUNCTION
+    function getType()
+    BEGINFUNCTION
+        RETURN "Base"
+    ENDFUNCTION
+ENDCLASS
 
 
-class Button
+class Button INHERITS FROM GraphicalObject
 BEGINCLASS
 	function isMouseOver()
 	BEGINFUNCTION
@@ -232,6 +293,28 @@ BEGINCLASS
 		SET textSize TO this.my_textSize
 		DRAW text
 	ENDFUNCTION
+
+    function checkMousePressed(menu, hasSomethingBeenPressed)
+    BEGINFUNCTION
+        IF isMouseOver() AND NOT hasSomethingBeenPressed THEN
+            IF currentStructureActive IS NOT -1 THEN
+                SET currentStructureActive TO -1
+            ENDIF
+            CALL my_function(menu)
+        ENDIF
+    ENDFUNCTION
+
+    function getType()
+    BEGINFUNCTION
+        RETURN "Button"
+    ENDFUNCTION
+
+    function reset()
+    BEGINFUNCTION
+        IF type IS "playPause" THEN
+            SET my_text TO "PLAY"
+        ENDIF
+    ENDFUNCTION
 ENDCLASS
 
 class Structure
@@ -244,7 +327,12 @@ BEGINCLASS
 
     function place()
     BEGINFUNCTION
-        place structure on the board
+        PLACE structure on the board
+    ENDFUNCTION
+
+    function placeInLocation(x, y)
+    BEGINFUNCTION
+        PLACE structure on the board
     ENDFUNCTION
 
     function getWidth()
@@ -267,8 +355,204 @@ BEGINCLASS
         RETURN gridY
     ENDFUNCTION
 
-    boolean get(int x, int y)
+    function get(int x, int y)
     BEGINFUNCTION
         RETURN structure[x][y]
+    ENDFUNCTION
+
+    function resetRotated()
+    BEGINFUNCTION
+        SET rotatedStructure TO structure
+        SET my_RHeight TO my_height
+        SET my_RWidth TO my_width
+    ENDFUNCTION
+
+    function rotate(r)
+    BEGINFUNCTION
+        ROTATE rotatedStructure
+        SET my_RWidth to my_RHeight
+        SET my_RHeight to my_RWidth
+    ENDFUNCTION
+ENDCLASS
+
+
+class TextBox INHERITS FROM GraphicalObject
+BEGINCLASS
+    function changeTextStartPos(changeBy)
+    BEGINFUNCTION
+        inputTextStartPos += changeBy
+        updateVisibleText()
+    ENDFUNCTION
+
+    function updateVisibleText()
+    BEGINFUNCTION
+        SET visibleText TO substring of inputText beginning at inputTextStartPos
+    ENDFUNCTION
+
+    function update()
+    BEGINFUNCTION
+        SET showCursor TO NOT showCursor
+    ENDFUNCTION
+
+    function clear()
+    BEGINFUNCTION
+        CLEAR inputText
+    ENDFUNCTION
+
+    function inputKey(key)
+    BEGINFUNCTION
+        ADD key TO inputText
+    ENDFUNCTION
+
+    function render()
+    BEGINFUNCTION
+        CALL update()
+        DRAW rectangle
+        DRAW visibleText
+        DRAW cursor AT cursorPosition
+    ENDFUNCTION
+
+    function setFocused(newFocused)
+    BEGINFUNCTION
+        isFocused = newFocused
+    ENDFUNCTION
+
+    function getInput()
+    BEGINFUNCTION
+        RETURN inputText
+    ENDFUNCTION
+
+    function getIsFocused()
+    BEGINFUNCTION
+        RETURN isFocused
+    ENDFUNCTION
+
+    function checkMousePressed()
+    BEGINFUNCTION
+        IF isMouseOver() THEN
+            SET cursorPosition TO mouseX
+            isFocused = true
+        ELSE
+            SET isFocused TO false
+            SET inputTextStartPos TO 0
+            SET cursorPosition TO 0
+            CALL updateVisibleText()
+    ENDFUNCTION
+
+    function reset()
+    BEGINFUNCTION
+        CALL clear()
+        CALL setFocused(false)
+        SET inputTextStartPos TO 0
+        SET cursorPosition TO 0
+        CALL updateVisibleText()
+    ENDFUNCTION
+
+    function getType()
+    BEGINFUNCTION
+        RETURN "TextBox"
+    ENDFUNCTION
+ENDCLASS
+
+class Menu INHERITS FROM GraphicalObject
+BEGINCLASS
+    function reset()
+    BEGINFUNCTION
+        RESET my_menus
+        RESET my_buttons
+        RESET my_textBox
+        SET my_text TO startText
+    ENDFUNCTION
+
+    function isMouseOverElement()
+    BEGINFUNCTION
+        IF my_buttons.isMouseOver() THEN
+            RETURN true
+        ELSE IF my_menus.isMouseOverElement() THEN
+            RETURN true
+        ELSE IF my_structures.isMouseOver() THEN
+            RETURN true
+        ELSE IF my_textBox.isMouseOver() THEN
+            RETURN true
+        ELSE
+            RETURN false
+        ENDIF
+    ENDFUNCTION
+
+    function checkMousePressed()
+    BEGINFUNCTION
+        SET hasButtonBeenPressed TO my_buttons.checkMousePressed(this, hasButtonBeenPressed)
+        CALL my_menus.checkMousePressed()
+        CALL my_structures.checkMousePressed()
+        CALL my_textBox.checkMousePressed()
+        IF mouse IS outOfBounds THEN
+            CALL changeMenu(exitMenu)
+            CALL my_textBox.reset()
+        ENDIF
+    ENDFUNCTION
+
+    function render()
+    BEGINFUNCTION
+        RENDER ALL objects
+    ENDFUNCTION
+
+    function getInput()
+    BEGINFUNCTION
+        IF hasTextBox THEN
+            RETURN my_textBox.getInput()
+        ELSE
+            RETURN ""
+        ENDIF
+    ENDFUNCTION
+
+    function setString(newString)
+    BEGINFUNCTION
+        SET my_text TO newString
+    ENDFUNCTION
+
+    function isTextBoxFocused()
+    BEGINFUNCTION
+        IF hasTextBox THEN
+            RETURN my_textBox.getIsFocused()
+        ELSE
+            RETURN false
+        ENDIF
+    ENDFUNCTION
+
+    function getTextBox()
+    BEGINFUNCTION
+        RETURN my_textBox
+    ENDFUNCTION
+
+    function getType()
+    BEGINFUNCTION
+        RETURN "Menu"
+    ENDFUNCTION
+ENDCLASS
+
+class GraphicalStructure INHERITS FROM GraphicalObject
+BEGINCLASS
+    function render()
+    BEGINFUNCTION
+        DRAW square
+        DRAW structure
+        DRAW name
+    ENDFUNCTION
+
+    function checkMousePressed()
+    BEGINFUNCTION
+        IF isMouseOver THEN
+            CALL changeMenu(0)
+            SET currentStructureActive TO structureID
+            SET renderStructure TO true
+        ENDIF
+    ENDFUNCTION
+ENDCLASS
+
+class GraphicImage INHERITS FROM GraphicalObject
+BEGINCLASS
+    function render()
+    BEGINFUNCTION
+        RENDER img
     ENDFUNCTION
 ENDCLASS

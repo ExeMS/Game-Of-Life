@@ -1,6 +1,11 @@
 void mouseWheel(MouseEvent event)
 { // This is called when the user uses the scroll wheel
-    int e = int(event.getCount()); // This gets what direction the scroll wheel was used
+    float temp = round(event.getCount()); // This gets what direction the scroll wheel was used
+    int e = 1;
+    if(temp < 0)
+    {
+        e = -1;
+    }
     if(currentStructureActive != -1)
     {
         structures.get(currentStructureActive).rotate(e); // This rotates the active structure
@@ -116,7 +121,7 @@ void keyPressed()
 
 void keyReleased()
 { // This is run when a key is released
-    if (key == CODED && currentMenu == 0) {
+    if (key == CODED) {
         if (keyCode == UP) { // When a key is released, it sets the given variable
             upPressed = false;
         }
@@ -211,7 +216,6 @@ void openSavedGame(String filename)
     {
         changeMenu(0);
         setBoardToStruct(readFromFile("Saves/"+filename));
-        menus[currentMenu].reset();
     }else
     {
         menus[currentMenu].setString("Save does not exist!");
