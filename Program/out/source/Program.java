@@ -1366,6 +1366,7 @@ class TextBox extends GraphicalObject
 
     private void changeTextStartPos(int changeBy)
     {
+        updateVisibleText();
         if(changeBy > 0)
         {
             while(cursorPosition - inputTextStartPos > visibleText.length())
@@ -1376,10 +1377,17 @@ class TextBox extends GraphicalObject
         }else
         {
             textSize(20);
+            println();
+            println(visibleText);
+            println(inputText.substring(inputTextStartPos - 1, inputTextStartPos));
+            println(inputText);
             while(inputTextStartPos != 0 && textWidth(visibleText + inputText.substring(inputTextStartPos - 1, inputTextStartPos)) + 10 <= my_width)
             {
+                println(visibleText);
                 inputTextStartPos -= 1;
                 updateVisibleText();
+                println("After");
+                println(visibleText);
             }
         }
     }
@@ -1390,7 +1398,7 @@ class TextBox extends GraphicalObject
         String tempText = inputText.substring(inputTextStartPos, inputText.length());
         for(int i = 0; i < tempText.length(); i++)
         {
-            if(textWidth(visibleText + inputText.substring(i, i + 1)) + 10 > my_width)
+            if(textWidth(visibleText + tempText.substring(i, i + 1)) + 10 > my_width)
             {
                 break;
             }else
