@@ -1377,17 +1377,10 @@ class TextBox extends GraphicalObject
         }else
         {
             textSize(20);
-            println();
-            println(visibleText);
-            println(inputText.substring(inputTextStartPos - 1, inputTextStartPos));
-            println(inputText);
             while(inputTextStartPos != 0 && textWidth(visibleText + inputText.substring(inputTextStartPos - 1, inputTextStartPos)) + 10 <= my_width)
             {
-                println(visibleText);
                 inputTextStartPos -= 1;
                 updateVisibleText();
-                println("After");
-                println(visibleText);
             }
         }
     }
@@ -1545,19 +1538,19 @@ class TextBox extends GraphicalObject
             if(isFocused)
             {
                 textSize(20);
-                if(mouseX - x + 5 >= textWidth(inputText))
+                if(mouseX - x + 5 >= textWidth(visibleText))
                 {
-                    cursorPosition = inputText.length();
+                    cursorPosition = inputTextStartPos + visibleText.length();
                 } else if(mouseX <= x + 5)
                 {
                     cursorPosition = 0;
                 } else
                 {
                     float tempX = mouseX - x + 5;
-                    for(int i = 0; i < inputText.length(); i++)
+                    for(int i = 0; i < visibleText.length(); i++)
                     {
-                        String substrBefore = inputText.substring(0, i);
-                        String substrChr = inputText.substring(i, i + 1);
+                        String substrBefore = visibleText.substring(0, i);
+                        String substrChr = visibleText.substring(i, i + 1);
                         float substrWidth = textWidth(substrBefore);
                         float chrWidth = textWidth(substrChr);
                         if(tempX < substrWidth + chrWidth * 0.5f)
@@ -1565,7 +1558,7 @@ class TextBox extends GraphicalObject
                             continue;
                         } else
                         {
-                            cursorPosition = i;
+                            cursorPosition = inputTextStartPos + i;
                         }
                     }
                 }
