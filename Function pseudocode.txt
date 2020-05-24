@@ -3,8 +3,8 @@ BEGINFUNCTION
 	SET canvas size TO 1080x1920
 	SET background TO backgroundColour
 	CALL clearBoard()
-	CALL setupMenu()
-	CALL setupGUI
+    CALL
+	CALL setupMenus()
 	SET inMenu TO true
 ENDFUNCTION
 

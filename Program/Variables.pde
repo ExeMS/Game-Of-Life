@@ -38,7 +38,6 @@ int timeControl = 0;
 
 // Menus
 Menu[] menus;
-boolean inStructureMenu = false;
 ArrayList<Structure> structures; // This will store all the structures
 int currentStructureActive = -1;
 boolean renderStructure = false;

@@ -15,7 +15,6 @@ void resetToDefaults()
     changeMenu(1);
 
     paused = true;
-    inStructureMenu = false;
     screenXPos = START_GRID_X;
     screenYPos = START_GRID_Y;
     cellSize = ORIGINAL_CELL_SIZE;
@@ -37,7 +36,6 @@ Menu setupMainMenu()
 
 Menu setupGUI()
 { // This creates all the buttons of the GUI
-    inStructureMenu = false;
     Button[] menuButtons = new Button[4];
     menuButtons[0] = new Button("spawnStructure", 1, 1, 140, 50, "Structure", 30);
     menuButtons[1] = new Button("cancelPlacement", 1, 52, 140, 50, "Cancel", 30);

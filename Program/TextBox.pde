@@ -169,9 +169,9 @@ class TextBox extends GraphicalObject
         }
     }
 
-    void setFocused(boolean temp)
+    void setFocused(boolean newFocused)
     {
-        isFocused = temp;
+        isFocused = newFocused;
     }
 
     String getInput()
