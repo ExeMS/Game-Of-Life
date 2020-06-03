@@ -14,7 +14,7 @@ class GraphicalStructure extends GraphicalObject
         }else {
             my_cellSize = my_height / (structures.get(structureID).getHeight() + 2);
         }
-        textX = x + int((my_width - textWidth(structures.get(structureID).getName())) / 2);
+        textX = x + int(my_width - (textWidth(structures.get(structureID).getName())) / 2);
         textY = y + int(my_height) - 2;
     }
 
@@ -43,7 +43,7 @@ class GraphicalStructure extends GraphicalObject
         }
         stroke(0);
         fill(0);
-        textSize(20);
+        textSize(15);
         text(structures.get(structureID).getName(), textX, textY);
     }
 
