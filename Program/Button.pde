@@ -93,6 +93,7 @@ class Button extends GraphicalObject
             }
             rect(x, y, my_width, my_height);
             fill(textColour);
+            textAlign(LEFT);
             textSize(my_textSize);
             text(my_text, x + paddingX, y + textAscent() * 0.8 + paddingY);
         }

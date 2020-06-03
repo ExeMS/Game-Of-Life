@@ -368,6 +368,7 @@ class Button extends GraphicalObject
             }
             rect(x, y, my_width, my_height);
             fill(textColour);
+            textAlign(LEFT);
             textSize(my_textSize);
             text(my_text, x + paddingX, y + textAscent() * 0.8f + paddingY);
         }
@@ -520,7 +521,7 @@ class GraphicalStructure extends GraphicalObject
         }else {
             my_cellSize = my_height / (structures.get(structureID).getHeight() + 2);
         }
-        textX = x + PApplet.parseInt((my_width - textWidth(structures.get(structureID).getName())) / 2);
+        textX = x + PApplet.parseInt(my_width - (textWidth(structures.get(structureID).getName())) / 2);
         textY = y + PApplet.parseInt(my_height) - 2;
     }
 
@@ -549,7 +550,8 @@ class GraphicalStructure extends GraphicalObject
         }
         stroke(0);
         fill(0);
-        textSize(20);
+        textAlign(CENTER);
+        textSize(15);
         text(structures.get(structureID).getName(), textX, textY);
     }
 
@@ -1390,15 +1392,10 @@ class TextBox extends GraphicalObject
     private void updateVisibleText()
     {
         visibleText = "";
-        println();
-        println(inputText);
         String tempText = inputText.substring(inputTextStartPos, inputText.length());
-        println(tempText);
-        println(my_width);
         textSize(20);
         for(int i = 0; i < tempText.length(); i++)
         {
-            println(textWidth(visibleText + tempText.substring(i, i + 1)) + 10);
             if(textWidth(visibleText + tempText.substring(i, i + 1)) + 10 > my_width)
             {
                 break;
@@ -1407,7 +1404,6 @@ class TextBox extends GraphicalObject
                 visibleText += tempText.charAt(i);
             }
         }
-        println(visibleText);
     }
 
     public void update()

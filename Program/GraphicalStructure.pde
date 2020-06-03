@@ -43,6 +43,7 @@ class GraphicalStructure extends GraphicalObject
         }
         stroke(0);
         fill(0);
+        textAlign(LEFT);
         textSize(15);
         text(structures.get(structureID).getName(), textX, textY);
     }
