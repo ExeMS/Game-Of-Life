@@ -42,10 +42,30 @@ Significant Versions:
 
 A model of a representation of the problem, possibly a drawing.
 
-# Design
+Sections that we should write for each one
+## 1.1 Intoduction
+We decided to create a program to simulate cellular automata. This is a system involving a finitely dimensioned grid, where cells can exist in one of a finite number of states (e.g. on and off), and where a cell's neibourhood is directly affected by it, under a finite number of rules, usually a mathmatical function. Depending on the pattern of cells, they can either create or destroy a cell, this allows the program, depending on the pattern, to create a moving object and also simulate a very basic version of cellular interactions. 
+Our program should allow the user to explore and view a randomly generated map, and also allow them to create their own patterns on a blank map.
+
+## 1.2 Background 
+(talk about original game)
+## 1.3 End user input 
+(Just write the questions we could have asked)
+## 1.4 Objectives
+
+## 1.5 Proposed Solution
+The program will be written in processing-java as it allows us to easily create a GUI. It will also be split up into multiple menus, to make it easier to navigate the program and also to minimise repeating code.
+
+## 1.6 Challenges
+
+
+
+
+
+# 2 Design
 In design.docx
 
-# Evaluation
+# 3 Evaluation
 Suggest Improvements:
 1) Add a larger range of structures.
 2) Add a speed controller to the game, so the player can change how fast the game moves.
