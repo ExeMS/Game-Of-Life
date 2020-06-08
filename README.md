@@ -49,16 +49,26 @@ Our program should allow the user to explore and view a randomly generated map, 
 
 ## 1.2 Background 
 (talk about original game)
+
 ## 1.3 End user input 
 (Just write the questions we could have asked)
+
 ## 1.4 Objectives
 
 ## 1.5 Proposed Solution
 The program will be written in processing-java as it allows us to easily create a GUI. It will also be split up into multiple menus, to make it easier to navigate the program and also to minimise repeating code.
+The main menu was just a simple menu to chose if you wanted the default mode (play) where a world is randomly generated or the sandbox mode which allowed you to create their own pattern.
+![Image of main menu](https://github.com/ExeMS/Game-Of-Life/blob/master/Main%20Menu.png)
+The GUI allows the user to play or pause the game, in the bottom left corner, go back to the menu, in the top right corner, or access the structures through the "Structures" button in the top left
+![Image of GUI](https://github.com/ExeMS/Game-Of-Life/blob/master/GUI.png)
+The "Structures" button would take you to a menu to select which structure to place in.
+![Image of Structure Menu](https://github.com/ExeMS/Game-Of-Life/blob/master/Structure%20Menu.png)
+
+The program will use a boolean 2d array to store the board, which contains all the cells. The cells will be represented by a boolean variable (whether they are alive, true, or dead, false). As the board is much bigger than what can be represented on the screen, we will allow the user to traverse the board with the arrow keys. Objects will also be used for the menu features (e.g. the buttons).
 
 ## 1.6 Challenges
-
-
+We predicted a few challenges that we might face when creating the game. First of all, the representation of all the cells, as we could have represented them as a class with co-ordinates. However, this would have made it tricky to create the system for creating and deleting cells. So instead, we decided to use a 2d array and effectively allow a cell to be dead and also be visible to the program.
+Another problem, was to render the board correctly and make a smooth transision. A solution to this is to render cells the cells around the screen, that are not totally visible to the user, this makes the traversal of the board smooth. This allows us to not render the whole board, which would make the program slow, while also making it feel as though the whole board is rendered at once.
 
 
 
