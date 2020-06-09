@@ -90,7 +90,7 @@ class TextBox extends GraphicalObject
                 cursorPosition -= 1;
                 updateVisibleText();
             }
-        }else if(inpKey == DELETE)
+        } else if(inpKey == DELETE)
         {
             if(cursorPosition != inputText.length())
             {
@@ -101,7 +101,7 @@ class TextBox extends GraphicalObject
                 }
                 updateVisibleText();
             }
-        }else if(inpKey == CODED)
+        } else if(inpKey == CODED)
         {
             if(keyCode == RIGHT)
             {
@@ -128,13 +128,22 @@ class TextBox extends GraphicalObject
                     cursorPosition -= 1;
                 }
             }
-        }else if(cursorPosition - inputTextStartPos == visibleText.length() && textWidth(visibleText) + CHARACTER_WIDTH + 10 > my_width)
+        } else if(inpKey == ENTER)
+        {
+            if(currentMenu == 2)
+            {
+                openSavedGame(inputText);
+            } else if(currentMenu == 3)
+            {
+                saveGame(inputText + ".gol");
+            }
+        } else if(cursorPosition - inputTextStartPos == visibleText.length() && textWidth(visibleText) + CHARACTER_WIDTH + 10 > my_width)
         {
             inputText = inputText.substring(0, cursorPosition) + inpKey + inputText.substring(cursorPosition, inputText.length());
             int totalWidth = 0;
             cursorPosition += 1;
             changeTextStartPos(1);
-        }else
+        } else
         {
             inputText = inputText.substring(0, cursorPosition) + inpKey + inputText.substring(cursorPosition, inputText.length());
             cursorPosition += 1;
