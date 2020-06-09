@@ -133,7 +133,7 @@ class Button extends GraphicalObject
                 return true;
             }else if(type == "mainMenu")
             {
-                changeMenu(3);
+                openSaveMenu();
                 return true;
             }
             // MAIN MENU TYPES
@@ -160,7 +160,7 @@ class Button extends GraphicalObject
                 resetToDefaults();
             } else if(type == "openFile")
             {
-                openSavedGame(menu.getInput() + ".gol");
+                openSavedGame(menu.getInput());
             }
             // SAVE FILE TYPES
             else if(type == "dontSave")

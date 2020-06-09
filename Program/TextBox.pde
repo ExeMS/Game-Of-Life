@@ -176,6 +176,12 @@ class TextBox extends GraphicalObject
         isFocused = newFocused;
     }
 
+    void setInputText(String newInput)
+    {
+        inputText = newInput;
+        updateVisibleText();
+    }
+
     String getInput()
     {
         return inputText;

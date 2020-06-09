@@ -284,6 +284,14 @@ public class Menu extends GraphicalObject
         return "";
     }
 
+    void setInputText(String newString)
+    {
+        if(hasTextBox)
+        {
+            my_textBox.setInputText(newString);
+        }
+    }
+
     void setString(String newString)
     {
         my_text = newString;

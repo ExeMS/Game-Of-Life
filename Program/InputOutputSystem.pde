@@ -211,11 +211,12 @@ void saveToFile(String filename, boolean[][] struct)
 
 void openSavedGame(String filename)
 {
-    File file = new File(sketchPath("Saves/"+filename));
+    File file = new File(sketchPath("Saves/"+filename+".gol"));
     if(file.exists())
     {
+        currentFilename = filename;
         changeMenu(0);
-        setBoardToStruct(readFromFile("Saves/"+filename));
+        setBoardToStruct(readFromFile("Saves/"+filename+".gol"));
     }else
     {
         menus[currentMenu].setString("Save does not exist!");

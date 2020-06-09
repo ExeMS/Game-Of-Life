@@ -26,6 +26,12 @@ public void cancelPlacement()
     renderStructure = false;
 }
 
+public void openSaveMenu()
+{
+    changeMenu(3);
+    menus[currentMenu].setInputText(currentFilename);
+}
+
 public void resetToDefaults()
 {
     changeMenu(1);
@@ -36,6 +42,7 @@ public void resetToDefaults()
     cellSize = ORIGINAL_CELL_SIZE;
     screenGridHeight = ORIGINAL_SCREEN_GRID_HEIGHT;
     screenGridWidth = ORIGINAL_SCREEN_GRID_WIDTH;
+    currentFilename = "";
     clearBoard();
 }
 
@@ -408,7 +415,7 @@ class Button extends GraphicalObject
                 return true;
             }else if(type == "mainMenu")
             {
-                changeMenu(3);
+                openSaveMenu();
                 return true;
             }
             // MAIN MENU TYPES
@@ -435,7 +442,7 @@ class Button extends GraphicalObject
                 resetToDefaults();
             } else if(type == "openFile")
             {
-                openSavedGame(menu.getInput() + ".gol");
+                openSavedGame(menu.getInput());
             }
             // SAVE FILE TYPES
             else if(type == "dontSave")
@@ -550,7 +557,7 @@ class GraphicalStructure extends GraphicalObject
         }
         stroke(0);
         fill(0);
-        textAlign(CENTER);
+        textAlign(LEFT);
         textSize(15);
         text(structures.get(structureID).getName(), textX, textY);
     }
@@ -795,11 +802,12 @@ public void saveToFile(String filename, boolean[][] struct)
 
 public void openSavedGame(String filename)
 {
-    File file = new File(sketchPath("Saves/"+filename));
+    File file = new File(sketchPath("Saves/"+filename+".gol"));
     if(file.exists())
     {
+        currentFilename = filename;
         changeMenu(0);
-        setBoardToStruct(readFromFile("Saves/"+filename));
+        setBoardToStruct(readFromFile("Saves/"+filename+".gol"));
     }else
     {
         menus[currentMenu].setString("Save does not exist!");
@@ -1095,6 +1103,14 @@ public class Menu extends GraphicalObject
             return my_textBox.getInput();
         }
         return "";
+    }
+
+    public void setInputText(String newString)
+    {
+        if(hasTextBox)
+        {
+            my_textBox.setInputText(newString);
+        }
     }
 
     public void setString(String newString)
@@ -1527,6 +1543,12 @@ class TextBox extends GraphicalObject
         isFocused = newFocused;
     }
 
+    public void setInputText(String newInput)
+    {
+        inputText = newInput;
+        updateVisibleText();
+    }
+
     public String getInput()
     {
         return inputText;
@@ -1649,6 +1671,8 @@ Boolean shiftPressed = false;
 int mousePressedDelay = 0;
 
 static final float CHARACTER_WIDTH = 28.007812f; // This is the width of m
+
+String currentFilename = "";
   public void settings() {  size(1000, 850); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Program" };

@@ -10,6 +10,12 @@ void cancelPlacement()
     renderStructure = false;
 }
 
+void openSaveMenu()
+{
+    changeMenu(3);
+    menus[currentMenu].setInputText(currentFilename);
+}
+
 void resetToDefaults()
 {
     changeMenu(1);
@@ -20,6 +26,7 @@ void resetToDefaults()
     cellSize = ORIGINAL_CELL_SIZE;
     screenGridHeight = ORIGINAL_SCREEN_GRID_HEIGHT;
     screenGridWidth = ORIGINAL_SCREEN_GRID_WIDTH;
+    currentFilename = "";
     clearBoard();
 }
 
