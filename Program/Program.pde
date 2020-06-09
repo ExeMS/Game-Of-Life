@@ -107,6 +107,17 @@ void setupStructures()
     renderStructure = false;
 }
 
+void setupGameSaves()
+{
+    gameSaves = new ArrayList<String>();
+    String[] lines = loadStrings(GAME_SAVES_FILENAME);
+    for(String s : lines)
+    {
+        if(s == "") { continue; }
+        gameSaves.add(s);
+    }
+}
+
 void setupMenus()
 {
     menus = new Menu[5];
@@ -126,6 +137,8 @@ void setup()
 
     setupStructures();
     setupMenus(); // Sets up all menus
+
+    setupGameSaves();
 
     currentMenu = 1; // Makes sure you start in the menu
 

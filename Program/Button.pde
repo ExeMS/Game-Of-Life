@@ -168,7 +168,7 @@ class Button extends GraphicalObject
                 resetToDefaults();
             }else if(type == "save")
             {
-                saveGame(menu.getInput() + ".gol");
+                saveGame(menu.getInput());
             }
         }
         return false;

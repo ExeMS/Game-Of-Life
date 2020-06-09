@@ -225,6 +225,21 @@ void openSavedGame(String filename)
 
 void saveGame(String filename)
 {
-    saveToFile("Saves/"+filename, board);
+    boolean newSave = true;
+    for(String s : gameSaves)
+    {
+        if(s == filename)
+        {
+            newSave = false;
+            break;
+        }
+    }
+    if(newSave)
+    {
+        gameSaves.add(filename);
+        String[] lines = gameSaves.toArray(new String[gameSaves.size()]);
+        saveStrings(GAME_SAVES_FILENAME, lines);
+    }
+    saveToFile("Saves/"+filename+".gol", board);
     resetToDefaults();
 }

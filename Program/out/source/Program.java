@@ -123,6 +123,17 @@ public void setupStructures()
     renderStructure = false;
 }
 
+public void setupGameSaves()
+{
+    gameSaves = new ArrayList<String>();
+    String[] lines = loadStrings(GAME_SAVES_FILENAME);
+    for(String s : lines)
+    {
+        if(s == "") { continue; }
+        gameSaves.add(s);
+    }
+}
+
 public void setupMenus()
 {
     menus = new Menu[5];
@@ -142,6 +153,8 @@ public void setup()
 
     setupStructures();
     setupMenus(); // Sets up all menus
+
+    setupGameSaves();
 
     currentMenu = 1; // Makes sure you start in the menu
 
@@ -450,7 +463,7 @@ class Button extends GraphicalObject
                 resetToDefaults();
             }else if(type == "save")
             {
-                saveGame(menu.getInput() + ".gol");
+                saveGame(menu.getInput());
             }
         }
         return false;
@@ -816,7 +829,22 @@ public void openSavedGame(String filename)
 
 public void saveGame(String filename)
 {
-    saveToFile("Saves/"+filename, board);
+    boolean newSave = true;
+    for(String s : gameSaves)
+    {
+        if(s == filename)
+        {
+            newSave = false;
+            break;
+        }
+    }
+    if(newSave)
+    {
+        gameSaves.add(filename);
+        String[] lines = gameSaves.toArray(new String[gameSaves.size()]);
+        saveStrings(GAME_SAVES_FILENAME, lines);
+    }
+    saveToFile("Saves/"+filename+".gol", board);
     resetToDefaults();
 }
 public class Menu extends GraphicalObject
@@ -1370,6 +1398,7 @@ class TextBox extends GraphicalObject
     private boolean isFocused;
     private String inputText;
     private String visibleText;
+    private String tempString = "";
     private boolean showCursor = true;
     private int cursorDelay = 0;
     private int cursorPosition = 0;
@@ -1447,6 +1476,7 @@ class TextBox extends GraphicalObject
         textSize(20);
         if(inpKey == BACKSPACE)
         {
+            tempString = "";
             if(cursorPosition != 0)
             {
                 inputText = inputText.substring(0, cursorPosition - 1) + inputText.substring(cursorPosition, inputText.length());
@@ -1459,6 +1489,7 @@ class TextBox extends GraphicalObject
             }
         } else if(inpKey == DELETE)
         {
+            tempString = "";
             if(cursorPosition != inputText.length())
             {
                 inputText = inputText.substring(0, cursorPosition) + inputText.substring(cursorPosition + 1, inputText.length());
@@ -1470,6 +1501,7 @@ class TextBox extends GraphicalObject
             }
         } else if(inpKey == CODED)
         {
+            tempString = "";
             if(keyCode == RIGHT)
             {
                 if(inputText.length() == cursorPosition)
@@ -1497,21 +1529,74 @@ class TextBox extends GraphicalObject
             }
         } else if(inpKey == ENTER)
         {
+            tempString = "";
             if(currentMenu == 2)
             {
                 openSavedGame(inputText);
             } else if(currentMenu == 3)
             {
-                saveGame(inputText + ".gol");
+                saveGame(inputText);
+            }
+        } else if(inpKey == TAB)
+        {
+            if(tempString == "")
+            {
+                for(String s : gameSaves)
+                {
+                    int inpStrLength = inputText.length();
+                    if(inpStrLength <= s.length() && s.toLowerCase().substring(0, inpStrLength).equals(inputText.toLowerCase()))
+                    {
+                        tempString = inputText;
+                        setInputText(s);
+                        break;
+                    }
+                }
+            } else
+            {
+                boolean looking = false;
+                boolean foundNothing = true;
+                for(String s : gameSaves)
+                {
+                    if(looking)
+                    {
+                        int inpStrLength = tempString.length();
+                        if(inpStrLength <= s.length() && s.toLowerCase().substring(0, inpStrLength).equals(tempString.toLowerCase()))
+                        {
+                            foundNothing = false;
+                            setInputText(s);
+                            break;
+                        }
+                    }else
+                    {
+                        if(s == inputText)
+                        {
+                            looking = true;
+                        }
+                    }
+                }
+                if(foundNothing) // This starts the process from the beginning (a complete cycle)
+                {
+                    for(String s : gameSaves)
+                    {
+                        int inpStrLength = tempString.length();
+                        if(inpStrLength <= s.length() && s.toLowerCase().substring(0, inpStrLength).equals(tempString.toLowerCase()))
+                        {
+                            setInputText(s);
+                            break;
+                        }
+                    }
+                }
             }
         } else if(cursorPosition - inputTextStartPos == visibleText.length() && textWidth(visibleText) + CHARACTER_WIDTH + 10 > my_width)
         {
+            tempString = "";
             inputText = inputText.substring(0, cursorPosition) + inpKey + inputText.substring(cursorPosition, inputText.length());
             int totalWidth = 0;
             cursorPosition += 1;
             changeTextStartPos(1);
         } else
         {
+            tempString = "";
             inputText = inputText.substring(0, cursorPosition) + inpKey + inputText.substring(cursorPosition, inputText.length());
             cursorPosition += 1;
             updateVisibleText();
@@ -1547,6 +1632,26 @@ class TextBox extends GraphicalObject
         }
     }
 
+    public void sendCursorToEnd()
+    {
+        cursorPosition = inputText.length();
+        String tempText = "";
+        inputTextStartPos = 0;
+        textSize(20);
+        for(int i = cursorPosition - 1; i > -1; i--)
+        {
+            if(textWidth(tempText + inputText.charAt(i)) + 10 > my_width)
+            {
+                inputTextStartPos = i + 1;
+                break;
+            }else
+            {
+                tempText = inputText.charAt(i) + tempText;
+            }
+        }
+        visibleText = tempText;
+    }
+
     public void setFocused(boolean newFocused)
     {
         isFocused = newFocused;
@@ -1555,7 +1660,7 @@ class TextBox extends GraphicalObject
     public void setInputText(String newInput)
     {
         inputText = newInput;
-        updateVisibleText();
+        sendCursorToEnd();
     }
 
     public String getInput()
@@ -1618,6 +1723,7 @@ class TextBox extends GraphicalObject
         setFocused(false);
         inputTextStartPos = 0;
         cursorPosition = 0;
+        tempString = "";
         updateVisibleText();
     }
 
@@ -1682,6 +1788,8 @@ int mousePressedDelay = 0;
 static final float CHARACTER_WIDTH = 28.007812f; // This is the width of m
 
 String currentFilename = "";
+ArrayList<String> gameSaves;
+static final String GAME_SAVES_FILENAME = "Saves/Game Saves.txt";
   public void settings() {  size(1000, 850); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Program" };
