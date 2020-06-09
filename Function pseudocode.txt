@@ -5,6 +5,7 @@ BEGINFUNCTION
 	CALL clearBoard()
     CALL setupStructures()
 	CALL setupMenus()
+    CALL setupGameSaves()
 	SET currentMenu TO 1
 ENDFUNCTION
 
@@ -23,6 +24,12 @@ BEGINFUNCTION
     ENDFOR
 ENDFUNCTION
 
+function setupGameSaves()
+BEGINFUNCTION
+    open GAME_SAVES_FILENAME
+    SET gameSaves TO lines
+ENDFUNCTION
+
 function resetToDefaults()
 BEGINFUNCTION
     CALL changeMenu(1)
@@ -33,6 +40,12 @@ BEGINFUNCTION
     SET screenGridHeight = ORIGINAL_SCREEN_GRID_HEIGHT
     SET screenGridWidth = ORIGINAL_SCREEN_GRID_WIDTH
     CALL clearBoard()
+ENDFUNCTION
+
+function openSaveMenu()
+BEGINFUNCTION
+    CALL changeMenu(3)
+    CALL currentMenu.setInputText(currentFilename)
 ENDFUNCTION
 
 function cancelPlacement()
@@ -162,6 +175,7 @@ ENDFUNCTION
 function openSavedGame(filename)
 BEGINFUNCTION
     IF filename exists THEN
+        ADD filename TO gameSaves
         CALL changeMenu(0)
         CALL setBoardToStruct(filename)
     ELSE
@@ -452,6 +466,18 @@ BEGINCLASS
     BEGINFUNCTION
         RETURN "TextBox"
     ENDFUNCTION
+
+    function sendCursorToEnd()
+    BEGINFUNCTION
+        SET cursorPosition TO length of inputText
+        CALL updateVisibleText()
+    ENDFUNCTION
+
+    function setInputText(newString)
+    BEGINFUNCTION
+        SET inputText TO newText
+        CALL sendCursorToEnd()
+    ENDFUNCTION
 ENDCLASS
 
 class Menu INHERITS FROM GraphicalObject
@@ -527,6 +553,13 @@ BEGINCLASS
     function getType()
     BEGINFUNCTION
         RETURN "Menu"
+    ENDFUNCTION
+
+    function setInputText(newString)
+    BEGINFUNCTION
+        IF hasTextBox THEN
+            textBox.setInputText(newString)
+        ENDIF
     ENDFUNCTION
 ENDCLASS
 
