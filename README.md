@@ -13,7 +13,8 @@ Our program should allow the user to explore and view a randomly generated map, 
 
 ## 1.2 Background 
 Conway's Game of Life is a form of Celular Automaton created by John Conway in 1970, often refered to as just 'Life'. It is a Zero-Player Game, meaning the only input is the initial state of the 'universe' and interaction of the 'player' beyond this point is limited to observation of the outcome. Conway's study was based on the work of John von Neumann, who some years prior (late 1940) defined life as a creation (as a being or organism) which can reproduce itself and simulate a Turing machine. This definition was taken by Stanislaw Ulam, who invented Cellular Automata intended to simulate Neumann's theoretical constructions of life.
-Conway began his experiments in 1968, testing a variety of different laws for a two dimensional Cellular Automata. He dvised a set of rules, ensuring that the laws he created would fit certain criteria:
+
+Conway began his experiments in 1968, testing a variety of different laws for a two dimensional Cellular Automata. He devised a set of criteria, ensuring that the laws he created would fit the following conditions:
 1) There should be no explosive growth.
 2) There should exist small initial patterns with chaotic, unpredictable outcomes.
 3) There should be potential for von Neumann universal constructors.
