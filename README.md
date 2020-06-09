@@ -27,9 +27,9 @@ The Laws of The Game of Life's 'universe' are as follows:
 ## 1.3 End User Input 
 Questions we could have asked in our survey:
 1) Have you ever come across the Game of life before?
-2) Have you ever used the Game of Life before?
+2) Have you ever played the Game of Life before?
 3) Do you know the laws behind the game?
-4) Are you aware of any patterns from the Game of Life, such as gliders, spaceships or ocsillators?
+4) Are you aware of any patterns from the Game of Life, such as gliders, spaceships or oscillators?
 5) Would you prefer a simple GUI with limited control, or a more complicated GUI with more control over the game?
 6) Is the ability to add pre-made structures into the game a good idea?
 
