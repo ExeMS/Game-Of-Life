@@ -18,6 +18,7 @@ Conway began his experiments in 1968, testing a variety of different laws for a 
 2) There should exist small initial patterns with chaotic, unpredictable outcomes.
 3) There should be potential for von Neumann universal constructors.
 4) The rules should be as simple as possible, whilst adhering to the above constraints
+
 The Game of Life first appeared in the magazine: 'Scientific American' in October 1970, in a Mathematical Games column written by Martin Gardner. Since then The Game of Life has been involved in many studies in a variety of different fields, including computer science, physics, biology, biochemistry, economics, mathematics, philosophy, and generative sciences. Studies by cognative scientist Daniel Dennet even used the Game of Life to illustrate the rise of philisophical constructs such as consciousness and free will from the basic laws of our universe.
 
 The Game of Life is a basic cellular automata, existing in an infinite, two-dimensional, orthoganal universe of cells, where each cell can be in either one of two states: Alive or Dead. A cell's state at the initial point of the game is decided upon by the player, and is determined from then on by a set of laws.
