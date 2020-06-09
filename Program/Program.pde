@@ -5,7 +5,7 @@ void changeMenu(int menuIndex)
 }
 
 void cancelPlacement()
-{
+{ // This cancels the currently selected structure
     currentStructureActive = -1;
     renderStructure = false;
 }
@@ -17,7 +17,7 @@ void openSaveMenu()
 }
 
 void resetToDefaults()
-{
+{ // Sets all variables for the display to their pre-determined defaults
     changeMenu(1);
 
     paused = true;
@@ -70,7 +70,7 @@ Menu setupSaveGameMenu()
 }
 
 Menu setupStructureMenu()
-{
+{ // Initialises up the stucture menu
     GraphicalStructure[] menuStructures = new GraphicalStructure[18];
     for(int i = 0; i < structures.size(); i++)
     {
@@ -83,26 +83,26 @@ Menu setupStructureMenu()
 }
 
 void setupStructures()
-{
+{ // This creates the list of structures, and sets the current structure to a non-existant index (no structure displayed).
     structures = new ArrayList<Structure>();
-    structures.add(new Structure("Structures/cell.txt", "Cell")); // This will now be index 0
-    structures.add(new Structure("Structures/glider.txt", "Glider")); // This will be index 1
-    structures.add(new Structure("Structures/glider gun.txt", "Glider Gun")); // This will be index 2
-    structures.add(new Structure("Structures/spaceship.txt", "Spaceship")); //index 3
-    structures.add(new Structure("Structures/dart.txt", "Dart")); //index 4
-    structures.add(new Structure("Structures/schick engine.txt", "Schick")); //index 5
-    structures.add(new Structure("Structures/hammerhead.txt", "Hammer")); //index 6
-    structures.add(new Structure("Structures/Sir Robin.txt", "Sir Robin")); //index 7
-    structures.add(new Structure("Structures/copperhead.txt", "Copper")); //index 8
-    structures.add(new Structure("Structures/pulsar.txt", "Pulsar")); //index 9
-    structures.add(new Structure("Structures/kok's galaxy.txt", "Galaxy")); //index 10
-    structures.add(new Structure("Structures/rich's P16.txt", "P16")); //index 11
-    structures.add(new Structure("Structures/rocket.txt", "Rocket")); //index 12
-    structures.add(new Structure("Structures/flash oscillator.txt", "Flash")); //index 13
-    structures.add(new Structure("Structures/pentadecathalon.txt", "15")); //index 14
-    structures.add(new Structure("Structures/oddball.txt", "Oddball")); //index 15
-    structures.add(new Structure("Structures/fairy.txt", "Fairy")); //index 16
-    structures.add(new Structure("Structures/weekender.txt", "Weekender")); //index 17
+    structures.add(new Structure("Structures/cell.txt", "Cell")); // index 0
+    structures.add(new Structure("Structures/glider.txt", "Glider")); // index 1
+    structures.add(new Structure("Structures/glider gun.txt", "Glider Gun")); // index 2
+    structures.add(new Structure("Structures/spaceship.txt", "Spaceship")); // index 3
+    structures.add(new Structure("Structures/dart.txt", "Dart")); // index 4
+    structures.add(new Structure("Structures/schick engine.txt", "Schick")); // index 5
+    structures.add(new Structure("Structures/hammerhead.txt", "Hammer")); // index 6
+    structures.add(new Structure("Structures/Sir Robin.txt", "Sir Robin")); // index 7
+    structures.add(new Structure("Structures/copperhead.txt", "Copper")); // index 8
+    structures.add(new Structure("Structures/pulsar.txt", "Pulsar")); // index 9
+    structures.add(new Structure("Structures/kok's galaxy.txt", "Galaxy")); // index 10
+    structures.add(new Structure("Structures/rich's P16.txt", "P16")); // index 11
+    structures.add(new Structure("Structures/rocket.txt", "Rocket")); // index 12
+    structures.add(new Structure("Structures/flash oscillator.txt", "Flash")); // index 13
+    structures.add(new Structure("Structures/pentadecathalon.txt", "15")); // index 14
+    structures.add(new Structure("Structures/oddball.txt", "Oddball")); // index 15
+    structures.add(new Structure("Structures/fairy.txt", "Fairy")); // index 16
+    structures.add(new Structure("Structures/weekender.txt", "Weekender")); // index 17
     currentStructureActive = -1;
     renderStructure = false;
 }
