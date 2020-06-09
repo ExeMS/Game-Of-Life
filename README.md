@@ -1,11 +1,7 @@
 # JC's Game Of Life
 
 # Analysis
-Cellular Automata: a system involving a finitely dimensioned grid, where cells can exist in one of a finite number of states (e.g. on and off), and where a cell's neibourhood is directly affected by it, under a finite number of rules, usually a mathmatical function.
-
-How the problem was researched:
-1) Google Search Conway's Game Of Life for rules and common patterns.
-2) Do some programming.
+## Cellular Automata: a system involving a finitely dimensioned grid, where cells can exist in one of a finite number of states (e.g. on and off), and where a cell's neibourhood is directly affected by it, under a finite number of rules, usually a mathmatical function.
 
 ## 1.1 Intoduction
 We decided to create a program to simulate cellular automata. This is a system involving a finitely dimensioned grid, where cells can exist in one of a finite number of states (e.g. on and off), and where a cell's neibourhood is directly affected by it, under a finite number of rules, usually a mathmatical function. Depending on the pattern of cells, they can either create or destroy a cell, this allows the program, depending on the pattern, to create a moving object and also simulate a very basic version of cellular interactions. 
