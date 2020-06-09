@@ -53,6 +53,6 @@ int mousePressedDelay = 0;
 
 static final float CHARACTER_WIDTH = 28.007812; // This is the width of m
 
-String currentFilename = "";
-ArrayList<String> gameSaves;
-static final String GAME_SAVES_FILENAME = "Saves/Game Saves.txt";
+String currentFilename = ""; // Stores the name of the current game
+ArrayList<String> gameSaves; // This stores all the names to the games
+static final String GAME_SAVES_FILENAME = "Saves/Game Saves.txt"; // Stores the filename of the file that stores all the names to the games

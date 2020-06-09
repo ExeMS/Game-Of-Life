@@ -1,5 +1,5 @@
 void changeMenu(int menuIndex)
-{
+{ // changes the menu and resets the previous one
     menus[currentMenu].reset();
     currentMenu = menuIndex;
 }
@@ -12,6 +12,7 @@ void cancelPlacement()
 
 void openSaveMenu()
 {
+    // Opens the save menu
     changeMenu(3);
     menus[currentMenu].setInputText(currentFilename);
 }
@@ -52,7 +53,7 @@ Menu setupGUI()
 }
 
 Menu setupOpenGameMenu()
-{
+{ // creates the open game menu
     TextBox menuTextBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
     Button[] menuButtons = new Button[2];
     menuButtons[0] = new Button("cancelOpening", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 40, 160, 50, "Cancel", 30);
@@ -61,7 +62,7 @@ Menu setupOpenGameMenu()
 }
 
 Menu setupSaveGameMenu()
-{
+{ // creates the save game menu
     TextBox menuTextBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
     Button[] menuButtons = new Button[2];
     menuButtons[0] = new Button("dontSave", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 40, 160, 50, "Don't Save", 30);
@@ -70,7 +71,7 @@ Menu setupSaveGameMenu()
 }
 
 Menu setupStructureMenu()
-{ // Initialises up the stucture menu
+{ // Initialises up the structure menu
     GraphicalStructure[] menuStructures = new GraphicalStructure[18];
     for(int i = 0; i < structures.size(); i++)
     {
@@ -83,7 +84,7 @@ Menu setupStructureMenu()
 }
 
 void setupStructures()
-{ // This creates the list of structures, and sets the current structure to a non-existant index (no structure displayed).
+{ // This creates the list of structures, and sets the current structure to a non-existent index (no structure displayed).
     structures = new ArrayList<Structure>();
     structures.add(new Structure("Structures/cell.txt", "Cell")); // index 0
     structures.add(new Structure("Structures/glider.txt", "Glider")); // index 1
@@ -108,7 +109,7 @@ void setupStructures()
 }
 
 void setupGameSaves()
-{
+{ // This reads from GAME_SAVES_FILENAME file and makes the gameSaves array
     gameSaves = new ArrayList<String>();
     String[] lines = loadStrings(GAME_SAVES_FILENAME);
     for(String s : lines)
@@ -119,7 +120,7 @@ void setupGameSaves()
 }
 
 void setupMenus()
-{
+{ // This sets up all the menus and adds them to the menus array
     menus = new Menu[5];
     menus[0] = setupGUI();
     menus[1] = setupMainMenu();

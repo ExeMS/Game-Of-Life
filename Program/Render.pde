@@ -108,11 +108,13 @@ void render()
     {
         mouseNormal();
     }
+    // sets the background colour
     background(backgroundColour);
-    renderBoard();
-    if(currentStructureActive != -1)
+    renderBoard(); // Renders the board
+    if(currentStructureActive != -1) // Updates the structure - if one is being placed
     {
         structures.get(currentStructureActive).update();
     }
+    // Renders the current menu
     menus[currentMenu].render();
 }

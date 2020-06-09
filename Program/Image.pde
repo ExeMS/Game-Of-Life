@@ -10,6 +10,7 @@ class GraphicImage extends GraphicalObject
 
     void render()
     {
+        // Renders the image
         image(img, x, y, my_width, my_height);
     }
 }

@@ -15,25 +15,26 @@ import java.io.IOException;
 public class Program extends PApplet {
 
 public void changeMenu(int menuIndex)
-{
+{ // changes the menu and resets the previous one
     menus[currentMenu].reset();
     currentMenu = menuIndex;
 }
 
 public void cancelPlacement()
-{
+{ // This cancels the currently selected structure
     currentStructureActive = -1;
     renderStructure = false;
 }
 
 public void openSaveMenu()
 {
+    // Opens the save menu
     changeMenu(3);
     menus[currentMenu].setInputText(currentFilename);
 }
 
 public void resetToDefaults()
-{
+{ // Sets all variables for the display to their pre-determined defaults
     changeMenu(1);
 
     paused = true;
@@ -68,7 +69,7 @@ public Menu setupGUI()
 }
 
 public Menu setupOpenGameMenu()
-{
+{ // creates the open game menu
     TextBox menuTextBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
     Button[] menuButtons = new Button[2];
     menuButtons[0] = new Button("cancelOpening", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 40, 160, 50, "Cancel", 30);
@@ -77,7 +78,7 @@ public Menu setupOpenGameMenu()
 }
 
 public Menu setupSaveGameMenu()
-{
+{ // creates the save game menu
     TextBox menuTextBox = new TextBox(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 - 10, 240);
     Button[] menuButtons = new Button[2];
     menuButtons[0] = new Button("dontSave", SCREEN_WIDTH / 2 - 165, SCREEN_HEIGHT / 2 + 40, 160, 50, "Don't Save", 30);
@@ -86,7 +87,7 @@ public Menu setupSaveGameMenu()
 }
 
 public Menu setupStructureMenu()
-{
+{ // Initialises up the structure menu
     GraphicalStructure[] menuStructures = new GraphicalStructure[18];
     for(int i = 0; i < structures.size(); i++)
     {
@@ -99,32 +100,32 @@ public Menu setupStructureMenu()
 }
 
 public void setupStructures()
-{
+{ // This creates the list of structures, and sets the current structure to a non-existent index (no structure displayed).
     structures = new ArrayList<Structure>();
-    structures.add(new Structure("Structures/cell.txt", "Cell")); // This will now be index 0
-    structures.add(new Structure("Structures/glider.txt", "Glider")); // This will be index 1
-    structures.add(new Structure("Structures/glider gun.txt", "Glider Gun")); // This will be index 2
-    structures.add(new Structure("Structures/spaceship.txt", "Spaceship")); //index 3
-    structures.add(new Structure("Structures/dart.txt", "Dart")); //index 4
-    structures.add(new Structure("Structures/schick engine.txt", "Schick")); //index 5
-    structures.add(new Structure("Structures/hammerhead.txt", "Hammer")); //index 6
-    structures.add(new Structure("Structures/Sir Robin.txt", "Sir Robin")); //index 7
-    structures.add(new Structure("Structures/copperhead.txt", "Copper")); //index 8
-    structures.add(new Structure("Structures/pulsar.txt", "Pulsar")); //index 9
-    structures.add(new Structure("Structures/kok's galaxy.txt", "Galaxy")); //index 10
-    structures.add(new Structure("Structures/rich's P16.txt", "P16")); //index 11
-    structures.add(new Structure("Structures/rocket.txt", "Rocket")); //index 12
-    structures.add(new Structure("Structures/flash oscillator.txt", "Flash")); //index 13
-    structures.add(new Structure("Structures/pentadecathalon.txt", "15")); //index 14
-    structures.add(new Structure("Structures/oddball.txt", "Oddball")); //index 15
-    structures.add(new Structure("Structures/fairy.txt", "Fairy")); //index 16
-    structures.add(new Structure("Structures/weekender.txt", "Weekender")); //index 17
+    structures.add(new Structure("Structures/cell.txt", "Cell")); // index 0
+    structures.add(new Structure("Structures/glider.txt", "Glider")); // index 1
+    structures.add(new Structure("Structures/glider gun.txt", "Glider Gun")); // index 2
+    structures.add(new Structure("Structures/spaceship.txt", "Spaceship")); // index 3
+    structures.add(new Structure("Structures/dart.txt", "Dart")); // index 4
+    structures.add(new Structure("Structures/schick engine.txt", "Schick")); // index 5
+    structures.add(new Structure("Structures/hammerhead.txt", "Hammer")); // index 6
+    structures.add(new Structure("Structures/Sir Robin.txt", "Sir Robin")); // index 7
+    structures.add(new Structure("Structures/copperhead.txt", "Copper")); // index 8
+    structures.add(new Structure("Structures/pulsar.txt", "Pulsar")); // index 9
+    structures.add(new Structure("Structures/kok's galaxy.txt", "Galaxy")); // index 10
+    structures.add(new Structure("Structures/rich's P16.txt", "P16")); // index 11
+    structures.add(new Structure("Structures/rocket.txt", "Rocket")); // index 12
+    structures.add(new Structure("Structures/flash oscillator.txt", "Flash")); // index 13
+    structures.add(new Structure("Structures/pentadecathalon.txt", "15")); // index 14
+    structures.add(new Structure("Structures/oddball.txt", "Oddball")); // index 15
+    structures.add(new Structure("Structures/fairy.txt", "Fairy")); // index 16
+    structures.add(new Structure("Structures/weekender.txt", "Weekender")); // index 17
     currentStructureActive = -1;
     renderStructure = false;
 }
 
 public void setupGameSaves()
-{
+{ // This reads from GAME_SAVES_FILENAME file and makes the gameSaves array
     gameSaves = new ArrayList<String>();
     String[] lines = loadStrings(GAME_SAVES_FILENAME);
     for(String s : lines)
@@ -135,7 +136,7 @@ public void setupGameSaves()
 }
 
 public void setupMenus()
-{
+{ // This sets up all the menus and adds them to the menus array
     menus = new Menu[5];
     menus[0] = setupGUI();
     menus[1] = setupMainMenu();
@@ -203,13 +204,13 @@ public void randomBoard()
 }
 
 public void setBoardToStruct(boolean[][] struct)
-{
+{ // This sets the board to a given structure
     if(struct.length < BOARD_WIDTH || struct[0].length < BOARD_HEIGHT)
     {
-        int startX = PApplet.parseInt((BOARD_WIDTH - struct.length) / 2);
+        int startX = PApplet.parseInt((BOARD_WIDTH - struct.length) / 2); // Works out where to start placing the structure so it is in the center
         int startY = PApplet.parseInt((BOARD_HEIGHT - struct[0].length) / 2);
         for(int i = 0; i < struct.length; i++)
-        {
+        { // Goes through the structure and copies it to the board
             for(int j = 0; j < struct[i].length; j++)
             {
                 board[startX + i][startY + j] = struct[i][j];
@@ -229,14 +230,14 @@ public void startGame_Explore()
 };
 
 public void startGame_file()
-{ // We might need do this at some point :D
+{ // sets the menu to open file menu
     clearBoard();
     mode = 3;
     changeMenu(2);
 };
 
 public void startGame_sandbox()
-{
+{ // This opens a blank board
     mode = 2;
     changeMenu(0);
 };
@@ -302,7 +303,7 @@ class Button extends GraphicalObject
     private int textColour, baseColour, hoverColour, outline;
     private String type;
 
-    // We might also want to pass in a function for when it is pressed
+    // These are all the setup functions
     Button(String type, int x, int y, String text, int my_textSize)
     {
         super(x, y, textWidth(text) + 20, textAscent() * 0.8f + 20);
@@ -341,7 +342,7 @@ class Button extends GraphicalObject
         super(x, y, my_width, my_height);
         this.type = type;
         textSize(my_textSize);
-        this.paddingX = PApplet.parseInt(my_width - textWidth(text)) / 2;
+        this.paddingX = PApplet.parseInt(my_width - textWidth(text)) / 2; // Works out the padding needed
         this.paddingY = PApplet.parseInt(my_height - textAscent()) / 2;
 
         this.my_text = text;
@@ -372,14 +373,14 @@ class Button extends GraphicalObject
 
     public void render()
     { // This renders the button
-        if(!(
+        if(!( // Checks that is supposed to be rendered at that point
             (type == "cancelPlacement" && currentStructureActive == -1)
             || (type == "spawnStructure" && mode == 1)
         ))
         {
             stroke(outline);
             if(isMouseOver())
-            {
+            { // Changes the colour if the mouse is over it
                 fill(hoverColour);
                 mouseOverButton();
             }else
@@ -476,6 +477,7 @@ class Button extends GraphicalObject
 
     public void reset()
     {
+        // This resets the playPause button
         if(type == "playPause")
         {
             my_text = "PLAY";
@@ -499,6 +501,7 @@ class GraphicalObject
 
     public boolean isMouseOver()
     {
+        // Works out if the mouse is over the coordinates
         if (mouseX >= x && mouseX <= x+my_width &&
             mouseY >= y && mouseY <= y+my_height)
         {
@@ -535,12 +538,14 @@ class GraphicalStructure extends GraphicalObject
     {
         super(x, y, 100, 100);
         this.structureID = structureID;
+        // This calculates the cellsize based on the size of the structure
         if(structures.get(structureID).getWidth() > structures.get(structureID).getHeight())
         {
             my_cellSize = my_width / (structures.get(structureID).getWidth() + 2);
         }else {
             my_cellSize = my_height / (structures.get(structureID).getHeight() + 2);
         }
+        // Works out the position of the text
         textX = x + PApplet.parseInt(my_width - (textWidth(structures.get(structureID).getName())) / 2);
         textY = y + PApplet.parseInt(my_height) - 2;
     }
@@ -550,6 +555,7 @@ class GraphicalStructure extends GraphicalObject
         stroke(0);
         if(isMouseOver())
         {
+            // Changes the colour depending on if the mouse is over it
             fill(150);
             mouseOverButton();
         }else{
@@ -558,6 +564,7 @@ class GraphicalStructure extends GraphicalObject
         rect(x, y, my_width, my_height);
         stroke(0,0,255);
         fill(0,0,255);
+        // Renders the structure inside the grid
         for(int i = 0; i < structures.get(structureID).getWidth(); i++)
         {
             for(int j = 0; j < structures.get(structureID).getHeight(); j++)
@@ -579,6 +586,7 @@ class GraphicalStructure extends GraphicalObject
     {
         if(isMouseOver())
         {
+            // Sets the menu to 0 and then sets the currentStructureAction to this structure
             changeMenu(0);
             currentStructureActive = structureID;
             renderStructure = true;
@@ -599,6 +607,7 @@ class GraphicImage extends GraphicalObject
 
     public void render()
     {
+        // Renders the image
         image(img, x, y, my_width, my_height);
     }
 }
@@ -615,6 +624,7 @@ public void mouseWheel(MouseEvent event)
         structures.get(currentStructureActive).rotate(e); // This rotates the active structure
     } else if (currentMenu == 0)
     {
+        // This recalculates the cellSize - for the zooming effect also recalculates the x and y coordinates of the screen
         if(e == 1 && cellSize != 3)
         {
             screenXPos = screenXPos * (cellSize - 1) / cellSize;
@@ -626,6 +636,7 @@ public void mouseWheel(MouseEvent event)
             screenYPos = screenYPos * (cellSize + 1) / cellSize;
             cellSize += 1;
         }
+        // This repositions the board to make sure that is not out-of-bounds
         if((screenXPos + SCREEN_WIDTH)/cellSize >= 1000)
         {
             screenXPos = 1000*cellSize - SCREEN_WIDTH;
@@ -647,9 +658,9 @@ public void checkMousePressed()
         if(mousePressedDelay == 0)
         {
             boolean anythingClicked = false;
-            anythingClicked = menus[currentMenu].checkMousePressed();
+            anythingClicked = menus[currentMenu].checkMousePressed(); // Runs the menu's checkMousePressed
             if(!anythingClicked && currentStructureActive != -1)
-            {
+            { // If nothing clicked and the user is placing a structure - it places the structure on the board
                 structures.get(currentStructureActive).place();
                 if(shiftPressed)
                 {
@@ -670,36 +681,33 @@ public void checkMousePressed()
 
 public void keyPressed()
 { // This is run when a key is pressed
-    if(key == '\n')
+    if(menus[currentMenu].isTextBoxFocused())
     {
-        if(currentMenu == 2)
-        {
-            openSavedGame(menus[currentMenu].getInput());
-            menus[currentMenu].reset();
-        }else if(currentMenu == 3)
-        {
-            saveGame(menus[currentMenu].getInput());
-        }
-    }else if(menus[currentMenu].isTextBoxFocused())
-    {
-        menus[currentMenu].getTextBox().inputKey(key);
+        menus[currentMenu].getTextBox().inputKey(key); // Passes the keys onto the TextBox - to be handled there
+        key = 0; // Makes sure the program doesn't do anything else
     }else if(key == ESC)
-    {
+    { // If esc is pressed, it changes the menu
         if(currentMenu == 0)
         {
-            changeMenu(3);
+            if(currentStructureActive != -1)
+            { // Cancels structure placement
+                currentStructureActive = -1;
+            } else
+            { // Goes to the save game menu
+                changeMenu(3);
+            }
         }else if(currentMenu == 1)
         {
-            exit();
+            exit(); // Exits the program
         } else if(currentMenu == 2)
         {
-            resetToDefaults();
+            resetToDefaults(); // Resets the defaults (Goes back to main menu)
         } else if(currentMenu == 3)
         {
-            changeMenu(0);
+            changeMenu(0); // Goes back to game and resets the current menu
             menus[currentMenu].reset();
         } else if(currentMenu == 4)
-        {
+        { // Goes into the game
             changeMenu(0);
         }
         key = 0;
@@ -767,7 +775,10 @@ public void checkKeys()
 
 public boolean[][] readFromFile(String filename)
 {
+    // Reads the lines from each file
     String[] lines = loadStrings(filename);
+
+    // Gets the longest line width in the file
     int structureWidth = 0;
     for (int i = 0 ; i < lines.length; i++) {
         if(lines[i].length() > structureWidth)
@@ -775,6 +786,8 @@ public boolean[][] readFromFile(String filename)
             structureWidth = lines[i].length();
         }
     }
+
+    // Creates the structure and sets everything to false
     boolean[][] struct = new boolean[structureWidth][lines.length];
     for (int i = 0 ; i < structureWidth; i++) {
         for(int j = 0; j < lines.length; j++)
@@ -782,6 +795,8 @@ public boolean[][] readFromFile(String filename)
             struct[i][j] = false;
         }
     }
+
+    // If there is an X in a spot, it is placed in that location
     for (int j = 0; j < lines.length; j++)
     {
         for(int i = 0; i < lines[j].length(); i++)
@@ -797,6 +812,7 @@ public boolean[][] readFromFile(String filename)
 
 public void saveToFile(String filename, boolean[][] struct)
 {
+    // Creates lines from the struct
     String[] lines = new String[struct[0].length];
     for(int i = 0; i < struct.length; i++)
     {
@@ -810,25 +826,30 @@ public void saveToFile(String filename, boolean[][] struct)
             }
         }
     }
+    // Saves it to the filename
     saveStrings(filename, lines);
 }
 
 public void openSavedGame(String filename)
 {
+    // Checks if the file exists
     File file = new File(sketchPath("Saves/"+filename+".gol"));
     if(file.exists())
     {
+        // Sets the file to the board
         currentFilename = filename;
         changeMenu(0);
         setBoardToStruct(readFromFile("Saves/"+filename+".gol"));
     }else
     {
+        // Changes the menu text to say the file does not exist
         menus[currentMenu].setString("Save does not exist!");
     }
 }
 
 public void saveGame(String filename)
 {
+    // Checks if it is a new save - if so it adds it to the gameSaves array and updates the "Game Saves.txt" file
     boolean newSave = true;
     for(String s : gameSaves)
     {
@@ -844,6 +865,7 @@ public void saveGame(String filename)
         String[] lines = gameSaves.toArray(new String[gameSaves.size()]);
         saveStrings(GAME_SAVES_FILENAME, lines);
     }
+    // Saves the game to the file and goes back to the main menu
     saveToFile("Saves/"+filename+".gol", board);
     resetToDefaults();
 }
@@ -869,6 +891,7 @@ public class Menu extends GraphicalObject
     private int backgroundColour, outlineColour;
     private int exitMenu = 1;
 
+    // Constructors set all the variables
     public Menu(Button[] my_buttons)
     {
         super(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -937,6 +960,7 @@ public class Menu extends GraphicalObject
 
     public void reset()
     {
+        // This resets all the objects in the menu
         if(hasMenus)
         {
             for(Menu menu : my_menus)
@@ -960,6 +984,7 @@ public class Menu extends GraphicalObject
 
     public boolean isMouseOverElement()
     {
+        // Goes through checking if the mouse is over any element
         if(hasButtons)
         {
             for(Button button : my_buttons)
@@ -1010,6 +1035,7 @@ public class Menu extends GraphicalObject
         boolean pleaseExit = false;
         boolean hasButtonBeenPressed = false;
         boolean hasStructureBeenPressed = false;
+        // Goes through each object and making them check if they have been pressed
         if(hasButtons)
         {
             for(Button button : my_buttons)
@@ -1069,17 +1095,15 @@ public class Menu extends GraphicalObject
                 || mouseY < y || mouseY > y + my_height
                 || pleaseExit)
         {
+            // If nothing has been pressed, or the mouse is out-of-bounds it changes the menu to the exitMenu
             changeMenu(exitMenu);
-            if(hasTextBox)
-            {
-                my_textBox.reset();
-            }
         }
         return anythingClicked;
     }
 
     public void render()
     {
+        // This renders everything
         if(hasBackground)
         {
             stroke(outlineColour);
@@ -1126,6 +1150,7 @@ public class Menu extends GraphicalObject
 
     public String getInput()
     {
+        // This gets the input of the text box - if it has one
         if(hasTextBox)
         {
             return my_textBox.getInput();
@@ -1135,6 +1160,7 @@ public class Menu extends GraphicalObject
 
     public void setInputText(String newString)
     {
+        // sets the input of the text box - if it has one
         if(hasTextBox)
         {
             my_textBox.setInputText(newString);
@@ -1143,11 +1169,13 @@ public class Menu extends GraphicalObject
 
     public void setString(String newString)
     {
+        // Changes the text on the menu
         my_text = newString;
     }
 
     public boolean isTextBoxFocused()
     {
+        // Checks if the text box is focused - if it has one
         if(hasTextBox)
         {
             return my_textBox.getIsFocused();
@@ -1156,7 +1184,7 @@ public class Menu extends GraphicalObject
     }
 
     public TextBox getTextBox()
-    {
+    { // Returns the textBox
         return my_textBox;
     }
 
@@ -1275,12 +1303,14 @@ public void render()
     {
         mouseNormal();
     }
+    // sets the background colour
     background(backgroundColour);
-    renderBoard();
-    if(currentStructureActive != -1)
+    renderBoard(); // Renders the board
+    if(currentStructureActive != -1) // Updates the structure - if one is being placed
     {
         structures.get(currentStructureActive).update();
     }
+    // Renders the current menu
     menus[currentMenu].render();
 }
 class Structure
@@ -1292,6 +1322,7 @@ class Structure
     private int my_RWidth, my_RHeight; // Stores the height and width of the rotated structure
     private String name;
 
+    // Constructor
     Structure(String filename, String name)
     {
         structure = readFromFile(filename);
@@ -1333,7 +1364,7 @@ class Structure
         }
     }
 
-    // Get functions:
+    // Getter functions:
     public int getWidth()
     {
         return my_RWidth;
@@ -1404,6 +1435,7 @@ class TextBox extends GraphicalObject
     private int cursorPosition = 0;
     private int inputTextStartPos = 0;
 
+    // Constructor
     TextBox(int x, int y, int my_width)
     {
         super(x, y, my_width, textAscent() * 0.8f + 10);
@@ -1414,7 +1446,7 @@ class TextBox extends GraphicalObject
     }
 
     private void changeTextStartPos(int changeBy)
-    {
+    { // Changes the textStartPosition
         updateVisibleText();
         if(changeBy > 0)
         {
@@ -1435,14 +1467,14 @@ class TextBox extends GraphicalObject
     }
 
     private void updateVisibleText()
-    {
+    { // Updates the visible text - so it includes the cursor
         visibleText = "";
         String tempText = inputText.substring(inputTextStartPos, inputText.length());
         textSize(20);
         for(int i = 0; i < tempText.length(); i++)
         {
             if(textWidth(visibleText + tempText.substring(i, i + 1)) + 10 > my_width)
-            {
+            { // If no more characters fit in the width, it stops there
                 break;
             }else
             {
@@ -1453,6 +1485,7 @@ class TextBox extends GraphicalObject
 
     public void update()
     {
+        // Makes the cursor flash
         if(isFocused)
         {
             if(cursorDelay == 0)
@@ -1467,7 +1500,7 @@ class TextBox extends GraphicalObject
     }
 
     public void clear()
-    {
+    { // Clears the inputText
         inputText = "";
     }
 
@@ -1475,7 +1508,7 @@ class TextBox extends GraphicalObject
     {
         textSize(20);
         if(inpKey == BACKSPACE)
-        {
+        {// Deletes the character before the cursor
             tempString = "";
             if(cursorPosition != 0)
             {
@@ -1488,7 +1521,7 @@ class TextBox extends GraphicalObject
                 updateVisibleText();
             }
         } else if(inpKey == DELETE)
-        {
+        {// Deletes the character after the cursor
             tempString = "";
             if(cursorPosition != inputText.length())
             {
@@ -1500,10 +1533,10 @@ class TextBox extends GraphicalObject
                 updateVisibleText();
             }
         } else if(inpKey == CODED)
-        {
+        {// Checks if arrow keys have been moved
             tempString = "";
             if(keyCode == RIGHT)
-            {
+            { // Moves the cursor right
                 if(inputText.length() == cursorPosition)
                 {} else if(cursorPosition - inputTextStartPos == visibleText.length() && textWidth(visibleText) + CHARACTER_WIDTH + 10 > my_width)
                 {
@@ -1515,7 +1548,7 @@ class TextBox extends GraphicalObject
                     cursorPosition += 1;
                 }
             }else if(keyCode == LEFT)
-            {
+            { // Moves the cursor left
                 if(cursorPosition == 0)
                 {}else if(cursorPosition == inputTextStartPos)
                 {
@@ -1537,12 +1570,15 @@ class TextBox extends GraphicalObject
             {
                 saveGame(inputText);
             }
-        } else if(inpKey == TAB)
+        } else if(inpKey == ESC)
         {
+            isFocused = false;
+        } else if(inpKey == TAB)
+        { // Autocomplete
             if(tempString == "")
             {
                 for(String s : gameSaves)
-                {
+                { // Checks if there are any things like it
                     int inpStrLength = inputText.length();
                     if(inpStrLength <= s.length() && s.toLowerCase().substring(0, inpStrLength).equals(inputText.toLowerCase()))
                     {
@@ -1552,7 +1588,7 @@ class TextBox extends GraphicalObject
                     }
                 }
             } else
-            {
+            { // Goes through in a loop of all the possibilities
                 boolean looking = false;
                 boolean foundNothing = true;
                 for(String s : gameSaves)
@@ -1588,14 +1624,14 @@ class TextBox extends GraphicalObject
                 }
             }
         } else if(cursorPosition - inputTextStartPos == visibleText.length() && textWidth(visibleText) + CHARACTER_WIDTH + 10 > my_width)
-        {
+        { // Updates the visibleText and places a character
             tempString = "";
             inputText = inputText.substring(0, cursorPosition) + inpKey + inputText.substring(cursorPosition, inputText.length());
             int totalWidth = 0;
             cursorPosition += 1;
             changeTextStartPos(1);
         } else
-        {
+        { // Places a character
             tempString = "";
             inputText = inputText.substring(0, cursorPosition) + inpKey + inputText.substring(cursorPosition, inputText.length());
             cursorPosition += 1;
@@ -1604,7 +1640,7 @@ class TextBox extends GraphicalObject
     }
 
     public void render()
-    {
+    { // This renders the text function
         update();
         if(isMouseOver())
         {
@@ -1620,7 +1656,7 @@ class TextBox extends GraphicalObject
         {
             String tempA = "";
             if(cursorPosition - inputTextStartPos > visibleText.length())
-            {
+            { // If the cursor is out-of-bounds it shouts a lot
                 println(cursorPosition - inputTextStartPos);
                 println("What happened?");
                 tempA = visibleText.substring(0, visibleText.length());
@@ -1628,12 +1664,13 @@ class TextBox extends GraphicalObject
             {
                 tempA = visibleText.substring(0, cursorPosition - inputTextStartPos);
             }
+            // draws the cursor
             line(x + textWidth(tempA) + 5, y + 5, x + textWidth(tempA) + 5, y + 10 + textAscent() * 0.8f);
         }
     }
 
     public void sendCursorToEnd()
-    {
+    { // This puts the cursor at the end of the text + deals with the visibleText
         cursorPosition = inputText.length();
         String tempText = "";
         inputTextStartPos = 0;
@@ -1653,32 +1690,33 @@ class TextBox extends GraphicalObject
     }
 
     public void setFocused(boolean newFocused)
-    {
+    { // Sets isFocused
         isFocused = newFocused;
     }
 
     public void setInputText(String newInput)
-    {
+    { // Sets the inputText and sends the cursor to the back
         inputText = newInput;
         sendCursorToEnd();
     }
 
     public String getInput()
-    {
+    { // Returns the input
         return inputText;
     }
 
     public boolean getIsFocused()
-    {
+    { // returns isFocused
         return isFocused;
     }
 
     public boolean checkMousePressed()
-    {
+    { // Checks if the mouse has pressed it
         if(isMouseOver())
         {
             isFocused = true;
             textSize(20);
+            // Calculates where it should place the cursor, depending on the position of the mouse
             if(mouseX - x + 5 >= textWidth(visibleText))
             {
                 cursorPosition = inputTextStartPos + visibleText.length();
@@ -1706,6 +1744,7 @@ class TextBox extends GraphicalObject
             return true;
         }else
         {
+            // If it has not been placed, it shows only the beginning of the text and sets isFocused to false
             if(isFocused)
             {
                 isFocused = false;
@@ -1718,7 +1757,7 @@ class TextBox extends GraphicalObject
     }
 
     public void reset()
-    {
+    { // Resets all the variables
         clear();
         setFocused(false);
         inputTextStartPos = 0;
@@ -1787,9 +1826,9 @@ int mousePressedDelay = 0;
 
 static final float CHARACTER_WIDTH = 28.007812f; // This is the width of m
 
-String currentFilename = "";
-ArrayList<String> gameSaves;
-static final String GAME_SAVES_FILENAME = "Saves/Game Saves.txt";
+String currentFilename = ""; // Stores the name of the current game
+ArrayList<String> gameSaves; // This stores all the names to the games
+static final String GAME_SAVES_FILENAME = "Saves/Game Saves.txt"; // Stores the filename of the file that stores all the names to the games
   public void settings() {  size(1000, 850); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Program" };

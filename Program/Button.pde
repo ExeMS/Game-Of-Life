@@ -7,7 +7,7 @@ class Button extends GraphicalObject
     private color textColour, baseColour, hoverColour, outline;
     private String type;
 
-    // We might also want to pass in a function for when it is pressed
+    // These are all the setup functions
     Button(String type, int x, int y, String text, int my_textSize)
     {
         super(x, y, textWidth(text) + 20, textAscent() * 0.8 + 20);
@@ -46,7 +46,7 @@ class Button extends GraphicalObject
         super(x, y, my_width, my_height);
         this.type = type;
         textSize(my_textSize);
-        this.paddingX = int(my_width - textWidth(text)) / 2;
+        this.paddingX = int(my_width - textWidth(text)) / 2; // Works out the padding needed
         this.paddingY = int(my_height - textAscent()) / 2;
 
         this.my_text = text;
@@ -77,14 +77,14 @@ class Button extends GraphicalObject
 
     void render()
     { // This renders the button
-        if(!(
+        if(!( // Checks that is supposed to be rendered at that point
             (type == "cancelPlacement" && currentStructureActive == -1)
             || (type == "spawnStructure" && mode == 1)
         ))
         {
             stroke(outline);
             if(isMouseOver())
-            {
+            { // Changes the colour if the mouse is over it
                 fill(hoverColour);
                 mouseOverButton();
             }else
@@ -181,6 +181,7 @@ class Button extends GraphicalObject
 
     void reset()
     {
+        // This resets the playPause button
         if(type == "playPause")
         {
             my_text = "PLAY";

@@ -20,6 +20,7 @@ public class Menu extends GraphicalObject
     private color backgroundColour, outlineColour;
     private int exitMenu = 1;
 
+    // Constructors set all the variables
     public Menu(Button[] my_buttons)
     {
         super(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -88,6 +89,7 @@ public class Menu extends GraphicalObject
 
     void reset()
     {
+        // This resets all the objects in the menu
         if(hasMenus)
         {
             for(Menu menu : my_menus)
@@ -111,6 +113,7 @@ public class Menu extends GraphicalObject
 
     boolean isMouseOverElement()
     {
+        // Goes through checking if the mouse is over any element
         if(hasButtons)
         {
             for(Button button : my_buttons)
@@ -161,6 +164,7 @@ public class Menu extends GraphicalObject
         boolean pleaseExit = false;
         boolean hasButtonBeenPressed = false;
         boolean hasStructureBeenPressed = false;
+        // Goes through each object and making them check if they have been pressed
         if(hasButtons)
         {
             for(Button button : my_buttons)
@@ -220,17 +224,15 @@ public class Menu extends GraphicalObject
                 || mouseY < y || mouseY > y + my_height
                 || pleaseExit)
         {
+            // If nothing has been pressed, or the mouse is out-of-bounds it changes the menu to the exitMenu
             changeMenu(exitMenu);
-            if(hasTextBox)
-            {
-                my_textBox.reset();
-            }
         }
         return anythingClicked;
     }
 
     void render()
     {
+        // This renders everything
         if(hasBackground)
         {
             stroke(outlineColour);
@@ -277,6 +279,7 @@ public class Menu extends GraphicalObject
 
     String getInput()
     {
+        // This gets the input of the text box - if it has one
         if(hasTextBox)
         {
             return my_textBox.getInput();
@@ -286,6 +289,7 @@ public class Menu extends GraphicalObject
 
     void setInputText(String newString)
     {
+        // sets the input of the text box - if it has one
         if(hasTextBox)
         {
             my_textBox.setInputText(newString);
@@ -294,11 +298,13 @@ public class Menu extends GraphicalObject
 
     void setString(String newString)
     {
+        // Changes the text on the menu
         my_text = newString;
     }
 
     boolean isTextBoxFocused()
     {
+        // Checks if the text box is focused - if it has one
         if(hasTextBox)
         {
             return my_textBox.getIsFocused();
@@ -307,7 +313,7 @@ public class Menu extends GraphicalObject
     }
 
     TextBox getTextBox()
-    {
+    { // Returns the textBox
         return my_textBox;
     }
 

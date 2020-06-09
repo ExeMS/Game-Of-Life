@@ -27,13 +27,13 @@ void randomBoard()
 }
 
 void setBoardToStruct(boolean[][] struct)
-{
+{ // This sets the board to a given structure
     if(struct.length < BOARD_WIDTH || struct[0].length < BOARD_HEIGHT)
     {
-        int startX = int((BOARD_WIDTH - struct.length) / 2);
+        int startX = int((BOARD_WIDTH - struct.length) / 2); // Works out where to start placing the structure so it is in the center
         int startY = int((BOARD_HEIGHT - struct[0].length) / 2);
         for(int i = 0; i < struct.length; i++)
-        {
+        { // Goes through the structure and copies it to the board
             for(int j = 0; j < struct[i].length; j++)
             {
                 board[startX + i][startY + j] = struct[i][j];
@@ -53,14 +53,14 @@ void startGame_Explore()
 };
 
 void startGame_file()
-{ // We might need do this at some point :D
+{ // sets the menu to open file menu
     clearBoard();
     mode = 3;
     changeMenu(2);
 };
 
 void startGame_sandbox()
-{
+{ // This opens a blank board
     mode = 2;
     changeMenu(0);
 };

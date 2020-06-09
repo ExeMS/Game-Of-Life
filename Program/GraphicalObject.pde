@@ -13,6 +13,7 @@ class GraphicalObject
 
     boolean isMouseOver()
     {
+        // Works out if the mouse is over the coordinates
         if (mouseX >= x && mouseX <= x+my_width &&
             mouseY >= y && mouseY <= y+my_height)
         {

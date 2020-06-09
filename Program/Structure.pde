@@ -7,6 +7,7 @@ class Structure
     private int my_RWidth, my_RHeight; // Stores the height and width of the rotated structure
     private String name;
 
+    // Constructor
     Structure(String filename, String name)
     {
         structure = readFromFile(filename);
@@ -48,7 +49,7 @@ class Structure
         }
     }
 
-    // Get functions:
+    // Getter functions:
     int getWidth()
     {
         return my_RWidth;

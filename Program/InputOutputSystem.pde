@@ -11,6 +11,7 @@ void mouseWheel(MouseEvent event)
         structures.get(currentStructureActive).rotate(e); // This rotates the active structure
     } else if (currentMenu == 0)
     {
+        // This recalculates the cellSize - for the zooming effect also recalculates the x and y coordinates of the screen
         if(e == 1 && cellSize != 3)
         {
             screenXPos = screenXPos * (cellSize - 1) / cellSize;
@@ -22,6 +23,7 @@ void mouseWheel(MouseEvent event)
             screenYPos = screenYPos * (cellSize + 1) / cellSize;
             cellSize += 1;
         }
+        // This repositions the board to make sure that is not out-of-bounds
         if((screenXPos + SCREEN_WIDTH)/cellSize >= 1000)
         {
             screenXPos = 1000*cellSize - SCREEN_WIDTH;
@@ -43,9 +45,9 @@ void checkMousePressed()
         if(mousePressedDelay == 0)
         {
             boolean anythingClicked = false;
-            anythingClicked = menus[currentMenu].checkMousePressed();
+            anythingClicked = menus[currentMenu].checkMousePressed(); // Runs the menu's checkMousePressed
             if(!anythingClicked && currentStructureActive != -1)
-            {
+            { // If nothing clicked and the user is placing a structure - it places the structure on the board
                 structures.get(currentStructureActive).place();
                 if(shiftPressed)
                 {
@@ -66,36 +68,33 @@ void checkMousePressed()
 
 void keyPressed()
 { // This is run when a key is pressed
-    if(key == '\n')
+    if(menus[currentMenu].isTextBoxFocused())
     {
-        if(currentMenu == 2)
-        {
-            openSavedGame(menus[currentMenu].getInput());
-            menus[currentMenu].reset();
-        }else if(currentMenu == 3)
-        {
-            saveGame(menus[currentMenu].getInput());
-        }
-    }else if(menus[currentMenu].isTextBoxFocused())
-    {
-        menus[currentMenu].getTextBox().inputKey(key);
+        menus[currentMenu].getTextBox().inputKey(key); // Passes the keys onto the TextBox - to be handled there
+        key = 0; // Makes sure the program doesn't do anything else
     }else if(key == ESC)
-    {
+    { // If esc is pressed, it changes the menu
         if(currentMenu == 0)
         {
-            changeMenu(3);
+            if(currentStructureActive != -1)
+            { // Cancels structure placement
+                currentStructureActive = -1;
+            } else
+            { // Goes to the save game menu
+                changeMenu(3);
+            }
         }else if(currentMenu == 1)
         {
-            exit();
+            exit(); // Exits the program
         } else if(currentMenu == 2)
         {
-            resetToDefaults();
+            resetToDefaults(); // Resets the defaults (Goes back to main menu)
         } else if(currentMenu == 3)
         {
-            changeMenu(0);
+            changeMenu(0); // Goes back to game and resets the current menu
             menus[currentMenu].reset();
         } else if(currentMenu == 4)
-        {
+        { // Goes into the game
             changeMenu(0);
         }
         key = 0;
@@ -163,7 +162,10 @@ void checkKeys()
 
 boolean[][] readFromFile(String filename)
 {
+    // Reads the lines from each file
     String[] lines = loadStrings(filename);
+
+    // Gets the longest line width in the file
     int structureWidth = 0;
     for (int i = 0 ; i < lines.length; i++) {
         if(lines[i].length() > structureWidth)
@@ -171,6 +173,8 @@ boolean[][] readFromFile(String filename)
             structureWidth = lines[i].length();
         }
     }
+
+    // Creates the structure and sets everything to false
     boolean[][] struct = new boolean[structureWidth][lines.length];
     for (int i = 0 ; i < structureWidth; i++) {
         for(int j = 0; j < lines.length; j++)
@@ -178,6 +182,8 @@ boolean[][] readFromFile(String filename)
             struct[i][j] = false;
         }
     }
+
+    // If there is an X in a spot, it is placed in that location
     for (int j = 0; j < lines.length; j++)
     {
         for(int i = 0; i < lines[j].length(); i++)
@@ -193,6 +199,7 @@ boolean[][] readFromFile(String filename)
 
 void saveToFile(String filename, boolean[][] struct)
 {
+    // Creates lines from the struct
     String[] lines = new String[struct[0].length];
     for(int i = 0; i < struct.length; i++)
     {
@@ -206,25 +213,30 @@ void saveToFile(String filename, boolean[][] struct)
             }
         }
     }
+    // Saves it to the filename
     saveStrings(filename, lines);
 }
 
 void openSavedGame(String filename)
 {
+    // Checks if the file exists
     File file = new File(sketchPath("Saves/"+filename+".gol"));
     if(file.exists())
     {
+        // Sets the file to the board
         currentFilename = filename;
         changeMenu(0);
         setBoardToStruct(readFromFile("Saves/"+filename+".gol"));
     }else
     {
+        // Changes the menu text to say the file does not exist
         menus[currentMenu].setString("Save does not exist!");
     }
 }
 
 void saveGame(String filename)
 {
+    // Checks if it is a new save - if so it adds it to the gameSaves array and updates the "Game Saves.txt" file
     boolean newSave = true;
     for(String s : gameSaves)
     {
@@ -240,6 +252,7 @@ void saveGame(String filename)
         String[] lines = gameSaves.toArray(new String[gameSaves.size()]);
         saveStrings(GAME_SAVES_FILENAME, lines);
     }
+    // Saves the game to the file and goes back to the main menu
     saveToFile("Saves/"+filename+".gol", board);
     resetToDefaults();
 }
