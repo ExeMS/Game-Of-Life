@@ -37,7 +37,7 @@ Objectives for the project:
 The extent to which each objective has been achieved:
 1) We have a fully functioning game of life, with all the bugs we've found along the way removed.
 2) Sandbox mode is an interactive interface, allowing the player to create their own start patterns with the cell structure.
-3) The file reading function works for both regular and apple keyboards.
+3) The file reading function works for both regular and apple keyboards, including the ability to freely navigate the textbox input using the mouse and arrow keys.
 4) The save to file function operates perfectly.
 
 Extra features we've added:
@@ -70,7 +70,6 @@ Suggest Improvements:
 1) Add a larger range of structures.
 2) Add a speed controller to the game, so the player can change how fast the game moves.
 3) Add a "single stage" button, so the user can move forward one stage at a time.
-4) Allow the user to use the forward and back keys in the textboxes for readFromFile and SaveToFile.
 
 # 4 Significant Versions:
 1) ee026b2 - Initial layout. - 2/5/2020
