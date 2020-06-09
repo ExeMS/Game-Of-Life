@@ -12,7 +12,19 @@ We decided to create a program to simulate cellular automata. This is a system i
 Our program should allow the user to explore and view a randomly generated map, and also allow them to create their own patterns on a blank map.
 
 ## 1.2 Background 
-(talk about original game)
+Conway's Game of Life is a form of Celular Automaton created by John Conway in 1970, often refered to as just 'Life'. It is a Zero-Player Game, meaning the only input is the initial state of the 'universe' and interaction of the 'player' beyond this point is limited to observation of the outcome. Conway's study was based on the work of John von Neumann, who some years prior (late 1940) defined life as a creation (as a being or organism) which can reproduce itself and simulate a Turing machine. This definition was taken by Stanislaw Ulam, who invented Cellular Automata intended to simulate Neumann's theoretical constructions of life.
+Conway began his experiments in 1968, testing a variety of different laws for a two dimensional Cellular Automata. He dvised a set of rules, ensuring that the laws he created would fit certain criteria:
+1) There should be no explosive growth.
+2) There should exist small initial patterns with chaotic, unpredictable outcomes.
+3) There should be potential for von Neumann universal constructors.
+4) The rules should be as simple as possible, whilst adhering to the above constraints
+The Game of Life first appeared in the magazine: 'Scientific American' in October 1970, in a Mathematical Games column written by Martin Gardner. Since then The Game of Life has been involved in many studies in a variety of different fields, including computer science, physics, biology, biochemistry, economics, mathematics, philosophy, and generative sciences. Studies by cognative scientist Daniel Dennet even used the Game of Life to illustrate the rise of philisophical constructs such as consciousness and free will from the basic laws of our universe.
+
+The Game of Life is a basic cellular automata, existing in an infinite, two-dimensional, orthoganal universe of cells, where each cell can be in either one of two states: Alive or Dead. A cell's state at the initial point of the game is decided upon by the player, and is determined from then on by a set of laws.
+The Laws of The Game of Life's 'universe' are as follows:
+1) If a dead cell has exactly three neighbors, it comes to life.
+2) If a live cell has two or three neibors, it stays alive.
+3) Any live cell not meeting the above criteria dies, and likewise, any dead cell not meeting the criteria stays dead.
 
 ## 1.3 End user input 
 (Just write the questions we could have asked)
