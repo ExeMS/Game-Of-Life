@@ -2,11 +2,11 @@
 
 # 1 Analysis
 
-[link to analysis](Design/analysis.md)
+[Link to analysis](Design/analysis.md)
 
 # 2 Design
 
-[link to design](Design/design.md)
+[Link to design](Design/design.md)
 
 # 3 Evaluation
 

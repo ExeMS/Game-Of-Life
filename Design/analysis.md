@@ -1,15 +1,15 @@
 # Analysis
 
-## Cellular Automata: a system involving a finitely dimensioned grid, where cells can exist in one of a finite number of states (e.g. on and off), and where a cell's neibourhood is directly affected by it, under a finite number of rules, usually a mathmatical function.
+## Cellular Automata: a system involving a finitely dimensioned grid, where cells can exist in one of a finite number of states (e.g. on and off), and where a cell's neighborhood is directly affected by it, under a finite number of rules, usually a mathematical function.
 
-## 1.1 Intoduction
+## 1.1 Introduction
 
-We decided to create a program to simulate cellular automata. This is a system involving a finitely dimensioned grid, where cells can exist in one of a finite number of states (e.g. on and off), and where a cell's neibourhood is directly affected by it, under a finite number of rules, usually a mathmatical function. Depending on the pattern of cells, they can either create or destroy a cell, this allows the program, depending on the pattern, to create a moving object and also simulate a very basic version of cellular interactions.
+We decided to create a program to simulate cellular automata. This is a system involving a finitely dimensioned grid, where cells can exist in one of a finite number of states (e.g. on and off), and where a cell's neighborhood is directly affected by it, under a finite number of rules, usually a mathematical function. Depending on the pattern of cells, they can either create or destroy a cell, this allows the program, depending on the pattern, to create a moving object and also simulate a very basic version of cellular interactions.
 Our program should allow the user to explore and view a randomly generated map, and also allow them to create their own patterns on a blank map.
 
 ## 1.2 Background
 
-Conway's Game of Life is a form of Celular Automaton created by John Conway in 1970, often refered to as just 'Life'. It is a Zero-Player Game, meaning the only input is the initial state of the 'universe' and interaction of the 'player' beyond this point is limited to observation of the outcome. Conway's study was based on the work of John von Neumann, who some years prior (late 1940) defined life as a creation (as a being or organism) which can reproduce itself and simulate a Turing machine. This definition was taken by Stanislaw Ulam, who invented Cellular Automata intended to simulate Neumann's theoretical constructions of life.
+Conway's Game of Life is a form of Cellular Automaton created by John Conway in 1970, often refereed to as just 'Life'. It is a Zero-Player Game, meaning the only input is the initial state of the 'universe' and interaction of the 'player' beyond this point is limited to observation of the outcome. Conway's study was based on the work of John von Neumann, who some years prior (late 1940) defined life as a creation (as a being or organism) which can reproduce itself and simulate a Turing machine. This definition was taken by Stanislaw Ulam, who invented Cellular Automata intended to simulate Neumann's theoretical constructions of life.
 
 Conway began his experiments in 1968, testing a variety of different laws for a two dimensional Cellular Automata. He devised a set of criteria, ensuring that the laws he created would fit the following conditions:
 
@@ -18,13 +18,13 @@ Conway began his experiments in 1968, testing a variety of different laws for a 
 3. There should be potential for von Neumann universal constructors.
 4. The rules should be as simple as possible, whilst adhering to the above constraints
 
-The Game of Life first appeared in the magazine: 'Scientific American' in October 1970, in a Mathematical Games column written by Martin Gardner. Since then The Game of Life has been involved in many studies in a variety of different fields, including computer science, physics, biology, biochemistry, economics, mathematics, philosophy, and generative sciences. Studies by cognative scientist Daniel Dennet even used the Game of Life to illustrate the rise of philisophical constructs such as consciousness and free will from the basic laws of our universe.
+The Game of Life first appeared in the magazine: 'Scientific American' in October 1970, in a Mathematical Games column written by Martin Gardner. Since then The Game of Life has been involved in many studies in a variety of different fields, including computer science, physics, biology, biochemistry, economics, mathematics, philosophy, and generative sciences. Studies by cognitive scientist Daniel Dennet even used the Game of Life to illustrate the rise of philosophical constructs such as consciousness and free will from the basic laws of our universe.
 
-The Game of Life is a basic cellular automata, existing in an infinite, two-dimensional, orthoganal universe of cells, where each cell can be in either one of two states: Alive or Dead. A cell's state at the initial point of the game is decided upon by the player, and is determined from then on by a set of laws.
+The Game of Life is a basic cellular automata, existing in an infinite, two-dimensional, orthogonal universe of cells, where each cell can be in either one of two states: Alive or Dead. A cell's state at the initial point of the game is decided upon by the player, and is determined from then on by a set of laws.
 The Laws of The Game of Life's 'universe' are as follows:
 
 1. If a dead cell has exactly three neighbors, it comes to life.
-2. If a live cell has two or three neibors, it stays alive.
+2. If a live cell has two or three neighbors, it stays alive.
 3. Any live cell not meeting the above criteria dies, and likewise, any dead cell not meeting the criteria stays dead.
 
 ## 1.3 End User Input
@@ -75,4 +75,4 @@ The program will use a boolean 2d array to store the board, which contains all t
 ## 1.6 Challenges
 
 We predicted a few challenges that we might face when creating the game. First of all, the representation of all the cells, as we could have represented them as a class with co-ordinates. However, this would have made it tricky to create the system for creating and deleting cells. So instead, we decided to use a 2d array and effectively allow a cell to be dead and also be visible to the program.
-Another problem, was to render the board correctly and make a smooth transision. A solution to this is to render cells the cells around the screen, that are not totally visible to the user, this makes the traversal of the board smooth. This allows us to not render the whole board, which would make the program slow, while also making it feel as though the whole board is rendered at once.
+Another problem, was to render the board correctly and make a smooth transition. A solution to this is to render cells the cells around the screen, that are not totally visible to the user, this makes the traversal of the board smooth. This allows us to not render the whole board, which would make the program slow, while also making it feel as though the whole board is rendered at once.

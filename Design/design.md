@@ -10,11 +10,11 @@ Processing
 
 ## 2.3 System diagram
 
-[link to program diagram](ProgramDiagram.pdf)
+[Link to program diagram](ProgramDiagram.pdf)
 
 ## 2.4 Pseudo Code
 
-[link to pseudo code](FunctionPseudoCode.txt)
+[Link to pseudo code](FunctionPseudoCode.txt)
 
 ## 2.5 Full outline of each function
 
