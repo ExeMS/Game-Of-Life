@@ -66,11 +66,11 @@ Extra features we've added:
 
 The program will be written in processing-java as it allows us to easily create a GUI. It will also be split up into multiple menus, to make it easier to navigate the program and also to minimise repeating code.
 The main menu was just a simple menu to chose if you wanted the default mode (play) where a world is randomly generated or the sandbox mode which allowed you to create their own pattern.
-![Image of main menu](MainMenu.png)
+![Image of main menu](img/MainMenu.png)
 The GUI allows the user to play or pause the game, in the bottom left corner, go back to the menu, in the top right corner, or access the structures through the "Structures" button in the top left
-![Image of GUI](/GUI.png)
+![Image of GUI](img/GUI.png)
 The "Structures" button would take you to a menu to select which structure to place in.
-![Image of Structure Menu](StructureMenu.png)
+![Image of Structure Menu](img/StructureMenu.png)
 
 The program will use a boolean 2d array to store the board, which contains all the cells. The cells will be represented by a boolean variable (whether they are alive, true, or dead, false). As the board is much bigger than what can be represented on the screen, we will allow the user to traverse the board with the arrow keys. Objects will also be used for the menu features (e.g. the buttons).
 
