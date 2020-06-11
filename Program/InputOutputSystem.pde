@@ -44,17 +44,21 @@ void checkMousePressed()
     {
         if(mousePressedDelay == 0)
         {
+            mousePressedDelay = 20;
             boolean anythingClicked = false;
             anythingClicked = menus[currentMenu].checkMousePressed(); // Runs the menu's checkMousePressed
             if(!anythingClicked && currentStructureActive != -1)
             { // If nothing clicked and the user is placing a structure - it places the structure on the board
                 structures.get(currentStructureActive).place();
-                if(shiftPressed)
+                if((currentStructureActive == 0 && shiftPressed)
+                    || (currentStructureActive != 0 && !shiftPressed))
                 {
                     currentStructureActive = -1;
+                } else if(currentStructureActive == 0 && paused)
+                {
+                    mousePressedDelay = 0;
                 }
             }
-            mousePressedDelay = 20;
         }
     }else
     { // If the mouse is not pressed the mousePressedDelay is set to 0

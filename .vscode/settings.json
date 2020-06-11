@@ -7,5 +7,6 @@
         "screenheight",
         "screenwidth",
         "substr"
-    ]
+    ],
+    "commentAnchors.tagHighlights.enabled": true
 }
