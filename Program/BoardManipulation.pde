@@ -68,52 +68,50 @@ void startGame_sandbox()
 // Updates the game
 void god()
 {
-  if(paused == false) {
-      for (int i = 0; i < BOARD_WIDTH; i++) {
-          for (int j = 0; j < BOARD_HEIGHT; j++) {
-              boardcopy[i][j] = board[i][j];
-              int counter = 0;
-              // counting the number of alive cells around the cell
-              if (i != 0 && board[i-1][j]) {
-                  counter++;
-              }
-              if (i != BOARD_WIDTH - 1 && board[i+1][j]) {
-                  counter++;
-              }
-              if (i != 0 && j != 0 && board[i-1][j-1]) {
-                  counter++;
-              }
-              if (j != 0 && board[i][j-1]) {
-                  counter++;
-              }
-              if (i != BOARD_WIDTH - 1 && j != 0 && board[i+1][j-1]) {
-                  counter++;
-              }
-              if (i != 0 && j != BOARD_HEIGHT - 1 && board[i-1][j+1]) {
-                  counter++;
-              }
-              if (j != BOARD_HEIGHT - 1 && board[i][j+1]) {
-                  counter++;
-              }
-              if (j != BOARD_HEIGHT - 1 && i != BOARD_WIDTH - 1 && board[i+1][j+1]) {
-                  counter++;
-              }
-              //Running through the rules
-              if ((counter < 2) && (board[i][j])) {
-                  boardcopy[i][j] = false;
-              }
-              if ((counter > 3) && (board[i][j])) {
-                  boardcopy[i][j] = false;
-              }
-              if ((counter == 3) && (board[i][j] == false)) {
-                  boardcopy[i][j] = true;
-              }
-          }
-      }
-      for (int i = 0; i < BOARD_WIDTH; i++) {
-          for (int j = 0; j < BOARD_HEIGHT; j++){
-              board[i][j] = boardcopy[i][j];
-          }
-      }
-  }
+    for (int i = 0; i < BOARD_WIDTH; i++) {
+        for (int j = 0; j < BOARD_HEIGHT; j++) {
+            boardcopy[i][j] = board[i][j];
+            int counter = 0;
+            // counting the number of alive cells around the cell
+            if (i != 0 && board[i-1][j]) {
+                counter++;
+            }
+            if (i != BOARD_WIDTH - 1 && board[i+1][j]) {
+                counter++;
+            }
+            if (i != 0 && j != 0 && board[i-1][j-1]) {
+                counter++;
+            }
+            if (j != 0 && board[i][j-1]) {
+                counter++;
+            }
+            if (i != BOARD_WIDTH - 1 && j != 0 && board[i+1][j-1]) {
+                counter++;
+            }
+            if (i != 0 && j != BOARD_HEIGHT - 1 && board[i-1][j+1]) {
+                counter++;
+            }
+            if (j != BOARD_HEIGHT - 1 && board[i][j+1]) {
+                counter++;
+            }
+            if (j != BOARD_HEIGHT - 1 && i != BOARD_WIDTH - 1 && board[i+1][j+1]) {
+                counter++;
+            }
+            //Running through the rules
+            if ((counter < 2) && (board[i][j])) {
+                boardcopy[i][j] = false;
+            }
+            if ((counter > 3) && (board[i][j])) {
+                boardcopy[i][j] = false;
+            }
+            if ((counter == 3) && (board[i][j] == false)) {
+                boardcopy[i][j] = true;
+            }
+        }
+    }
+    for (int i = 0; i < BOARD_WIDTH; i++) {
+        for (int j = 0; j < BOARD_HEIGHT; j++){
+            board[i][j] = boardcopy[i][j];
+        }
+    }
 }

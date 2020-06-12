@@ -152,10 +152,12 @@ void draw()
     checkMousePressed();
     render(); // This renders everything on the screen
 
-    timeControl++;
-    if(timeControl == 8) // This limits how much it is updated
+    if(millis() - startToWaitTime >= waitTime && !paused) // This limits how much it is updated
     {
-        timeControl = 0;
+        int startTimer = millis();
         god(); // Runs the function for updating the board
+        int recordTime = millis() - startTimer;
+        waitTime = round((1000 / updatesPerSecond) - recordTime);
+        startToWaitTime = millis();
     }
 }

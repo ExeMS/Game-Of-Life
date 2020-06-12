@@ -34,7 +34,10 @@ boolean paused = true;
 boolean[][] board = new boolean[BOARD_HEIGHT][BOARD_WIDTH]; // Will probably change this to a boolean later
 boolean[][] boardcopy = new boolean[BOARD_HEIGHT][BOARD_WIDTH];
 
-int timeControl = 0;
+// Used for timings
+int updatesPerSecond = 7;
+int waitTime = 0;
+int startToWaitTime = 0;
 
 // Menus
 Menu[] menus;
